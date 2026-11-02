@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { LanguageSwitcher } from './LanguageSwitcher'
 import { Logo } from './Logo'
 import { SideNav } from './SideNav'
+import { UserBadge } from './UserBadge'
 
 /** Menu latéral mobile (bouton ☰ de la maquette) : tous les espaces + langue. */
 export function MobileDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
@@ -30,7 +31,8 @@ export function MobileDrawer({ open, onClose }: { open: boolean; onClose: () => 
         <nav className="mt-8 flex-1">
           <SideNav onNavigate={onClose} />
         </nav>
-        <LanguageSwitcher tone="dark" />
+        <UserBadge onNavigate={onClose} />
+        <LanguageSwitcher tone="dark" className="mt-3" />
       </div>
     </div>
   )

@@ -1,14 +1,15 @@
 import { useTranslation } from 'react-i18next'
 import { NavLink } from 'react-router-dom'
 import { cn } from '@/lib/cn'
-import { NAV_SECTIONS } from './navigation'
+import { useNavSections } from './navigation'
 
 /** Liste des espaces, utilisée par la barre latérale web et le menu mobile. */
 export function SideNav({ onNavigate }: { onNavigate?: () => void }) {
   const { t } = useTranslation()
+  const sections = useNavSections()
   return (
     <ul className="space-y-1">
-      {NAV_SECTIONS.map(({ id, path, icon: Icon }) => (
+      {sections.map(({ id, path, icon: Icon }) => (
         <li key={id}>
           <NavLink
             to={path}

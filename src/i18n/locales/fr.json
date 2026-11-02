@@ -15,7 +15,8 @@
     "closeMenu": "Fermer le menu",
     "search": "Rechercher",
     "closeSearch": "Fermer la recherche",
-    "settings": "Paramètres"
+    "settings": "Paramètres",
+    "admin": "Administration"
   },
   "page": {
     "veille": "Flux d'actualités",
@@ -23,7 +24,8 @@
     "ressources": "Base de données",
     "rediger": "Éditeur d'article",
     "dossiers": "Tableau de bord",
-    "profil": "Profil et paramètres"
+    "profil": "Profil et paramètres",
+    "admin": "Administration"
   },
   "network": {
     "online": "En ligne",
@@ -163,12 +165,106 @@
     "installed": "L'application est installée sur cet appareil.",
     "installUnavailable": "Utilisez le menu du navigateur : « Ajouter à l'écran d'accueil ».",
     "account": "Compte",
-    "accountHint": "La connexion et les rôles arrivent avec le module MOD-02.",
     "network": "Connexion",
     "version": "Version {{version}}"
   },
   "notFound": {
     "title": "Page introuvable",
-    "back": "Retour à la veille"
+    "back": "Retour à l'accueil"
+  },
+  "role": {
+    "public": "Invité",
+    "journalist": "Journaliste",
+    "fact_checker": "Fact-checker",
+    "editor_in_chief": "Rédacteur en chef",
+    "admin": "Administrateur"
+  },
+  "language": {
+    "fr": "Français",
+    "mg": "Malagasy",
+    "en": "English"
+  },
+  "auth": {
+    "title": "Connexion",
+    "subtitle": "Accédez à votre espace de vérification.",
+    "email": "Adresse e-mail",
+    "password": "Mot de passe",
+    "methodPassword": "Mot de passe",
+    "methodMagicLink": "Lien magique",
+    "submit": "Se connecter",
+    "sendLink": "Recevoir le lien",
+    "magicLinkSent": "Un lien de connexion a été envoyé à {{email}}. Ouvrez-le sur cet appareil.",
+    "forgot": "Mot de passe oublié ?",
+    "or": "ou",
+    "guest": "Continuer sans compte",
+    "guestHint": "Accès limité à l'annuaire public et aux statistiques.",
+    "demoTitle": "Mode démonstration",
+    "demoHint": "Supabase n'est pas configuré : comptes fictifs, données conservées sur cet appareil. Mot de passe : {{password}}",
+    "signIn": "Se connecter",
+    "signOut": "Se déconnecter",
+    "guestMode": "Mode invité",
+    "offlineSession": "Session hors ligne : vos actions seront synchronisées au retour du réseau.",
+    "loading": "Chargement…",
+    "forgotTitle": "Mot de passe oublié",
+    "forgotHint": "Saisissez votre adresse : vous recevrez un lien pour choisir un nouveau mot de passe.",
+    "sendReset": "Envoyer le lien",
+    "resetSent": "Si un compte existe pour {{email}}, un lien vient d'être envoyé.",
+    "backToLogin": "Retour à la connexion",
+    "resetTitle": "Nouveau mot de passe",
+    "newPassword": "Nouveau mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
+    "passwordRules": "8 caractères minimum.",
+    "passwordTooShort": "Le mot de passe doit contenir au moins 8 caractères.",
+    "passwordMismatch": "Les deux mots de passe ne correspondent pas.",
+    "savePassword": "Enregistrer",
+    "resetExpired": "Ce lien n'est plus valide. Demandez-en un nouveau.",
+    "error": {
+      "invalid_credentials": "Adresse e-mail ou mot de passe incorrect.",
+      "account_suspended": "Ce compte est suspendu. Contactez l'administrateur.",
+      "network": "Connexion au serveur impossible. Vérifiez votre réseau.",
+      "rate_limited": "Trop de tentatives. Réessayez dans quelques minutes.",
+      "role_not_allowed": "Action réservée à l'administrateur.",
+      "cannot_change_own_account": "Vous ne pouvez pas modifier votre propre compte.",
+      "already_exists": "Un compte existe déjà avec cette adresse.",
+      "unknown": "Une erreur est survenue. Réessayez.",
+      "email_not_confirmed": "Adresse e-mail non confirmée. Dans Supabase, confirmez le compte (Authentication → Users).",
+      "email_not_authorized": "Le service d'e-mail de Supabase refuse cette adresse : configurez un serveur SMTP ou créez le compte à la main.",
+      "profile_missing": "Ce compte n'a pas de profil MASO. Demandez à l'administrateur de le créer (voir la configuration Supabase).",
+      "configuration": "Supabase est mal configuré (clé, migrations ou fournisseur e-mail). Vérifiez le fichier .env et la configuration.",
+      "no_account": "Aucun compte MASO n'est associé à cette adresse. Vérifiez l'adresse ou demandez une invitation à l'administrateur."
+    }
+  },
+  "onboarding": {
+    "skip": "Passer",
+    "next": "Suivant",
+    "start": "Commencer",
+    "step": "Étape {{current}} sur {{total}}",
+    "chooseLanguage": "Choisissez votre langue",
+    "s1Title": "Vérifier un contenu suspect",
+    "s1Text": "Image, vidéo, lien ou texte reçu sur Facebook ou WhatsApp : MASO l'analyse et vous donne des indices, jamais un verdict automatique.",
+    "s2Title": "Documenter et faire valider",
+    "s2Text": "Preuves, sources, experts et chiffres officiels réunis dans un dossier. Le fact-checker propose, le rédacteur en chef valide et publie.",
+    "s3Title": "Sur le terrain, même hors connexion",
+    "s3Text": "Installez l'application : vos dossiers, l'annuaire et les statistiques restent disponibles sans réseau.",
+    "install": "Installer l'application"
+  },
+  "admin": {
+    "usage": "Utilisation",
+    "activeUsers": "Comptes actifs",
+    "suspendedUsers": "Comptes suspendus",
+    "inviteTitle": "Inviter un membre",
+    "fullName": "Nom complet",
+    "role": "Rôle",
+    "language": "Langue",
+    "invite": "Envoyer l'invitation",
+    "invited": "Invitation envoyée à {{email}}.",
+    "invitedDemo": "Compte créé pour {{email}} (démonstration). Mot de passe : {{password}}",
+    "usersTitle": "Membres",
+    "you": "vous",
+    "active": "Actif",
+    "suspended": "Suspendu",
+    "suspend": "Suspendre",
+    "reactivate": "Réactiver",
+    "updated": "Compte mis à jour."
   }
 }

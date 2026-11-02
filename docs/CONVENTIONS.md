@@ -25,7 +25,7 @@ Conventions communes aux 4 membres, conformes au Standard de livraison 42 Antana
 │   ├── lib/             # utilitaires sans React (clients, helpers)
 │   ├── styles/          # CSS global et jetons du thème
 │   └── types/           # types TypeScript partagés du domaine
-├── supabase/            # (MOD-02) migrations SQL, politiques RLS, seed
+├── supabase/            # migrations SQL, RLS, seed, fonctions serveur, tests pgTAP (supabase/tests/)
 ├── services/analyse/    # (MOD-03) service Python FastAPI
 └── tests/               # tests automatisés (Vitest ; pytest pour le service)
 ```

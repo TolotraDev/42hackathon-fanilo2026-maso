@@ -15,7 +15,8 @@
     "closeMenu": "Close menu",
     "search": "Search",
     "closeSearch": "Close search",
-    "settings": "Settings"
+    "settings": "Settings",
+    "admin": "Administration"
   },
   "page": {
     "veille": "News feed",
@@ -23,7 +24,8 @@
     "ressources": "Database",
     "rediger": "Article editor",
     "dossiers": "Dashboard",
-    "profil": "Profile and settings"
+    "profil": "Profile and settings",
+    "admin": "Administration"
   },
   "network": {
     "online": "Online",
@@ -163,12 +165,106 @@
     "installed": "The app is installed on this device.",
     "installUnavailable": "Use the browser menu: “Add to home screen”.",
     "account": "Account",
-    "accountHint": "Sign-in and roles arrive with module MOD-02.",
     "network": "Connection",
     "version": "Version {{version}}"
   },
   "notFound": {
     "title": "Page not found",
-    "back": "Back to monitoring"
+    "back": "Back to home"
+  },
+  "role": {
+    "public": "Guest",
+    "journalist": "Journalist",
+    "fact_checker": "Fact-checker",
+    "editor_in_chief": "Editor-in-chief",
+    "admin": "Administrator"
+  },
+  "language": {
+    "fr": "Français",
+    "mg": "Malagasy",
+    "en": "English"
+  },
+  "auth": {
+    "title": "Sign in",
+    "subtitle": "Access your verification workspace.",
+    "email": "Email address",
+    "password": "Password",
+    "methodPassword": "Password",
+    "methodMagicLink": "Magic link",
+    "submit": "Sign in",
+    "sendLink": "Send me the link",
+    "magicLinkSent": "A sign-in link was sent to {{email}}. Open it on this device.",
+    "forgot": "Forgot password?",
+    "or": "or",
+    "guest": "Continue without an account",
+    "guestHint": "Limited to the public directory and statistics.",
+    "demoTitle": "Demo mode",
+    "demoHint": "Supabase is not configured: fictional accounts, data kept on this device. Password: {{password}}",
+    "signIn": "Sign in",
+    "signOut": "Sign out",
+    "guestMode": "Guest mode",
+    "offlineSession": "Offline session: your actions will sync when the network is back.",
+    "loading": "Loading…",
+    "forgotTitle": "Forgot password",
+    "forgotHint": "Enter your address: you will receive a link to choose a new password.",
+    "sendReset": "Send the link",
+    "resetSent": "If an account exists for {{email}}, a link has just been sent.",
+    "backToLogin": "Back to sign in",
+    "resetTitle": "New password",
+    "newPassword": "New password",
+    "confirmPassword": "Confirm password",
+    "passwordRules": "At least 8 characters.",
+    "passwordTooShort": "The password must contain at least 8 characters.",
+    "passwordMismatch": "The two passwords do not match.",
+    "savePassword": "Save",
+    "resetExpired": "This link is no longer valid. Request a new one.",
+    "error": {
+      "invalid_credentials": "Incorrect email address or password.",
+      "account_suspended": "This account is suspended. Contact the administrator.",
+      "network": "Cannot reach the server. Check your network.",
+      "rate_limited": "Too many attempts. Try again in a few minutes.",
+      "role_not_allowed": "Action reserved for the administrator.",
+      "cannot_change_own_account": "You cannot modify your own account.",
+      "already_exists": "An account already exists with this address.",
+      "unknown": "Something went wrong. Please try again.",
+      "email_not_confirmed": "Email address not confirmed. In Supabase, confirm the account (Authentication → Users).",
+      "email_not_authorized": "Supabase's email service refuses this address: configure an SMTP server or create the account manually.",
+      "profile_missing": "This account has no MASO profile. Ask the administrator to create it (see the Supabase setup).",
+      "configuration": "Supabase is misconfigured (key, migrations or email provider). Check the .env file and the setup.",
+      "no_account": "No MASO account is linked to this address. Check the address or ask the administrator for an invitation."
+    }
+  },
+  "onboarding": {
+    "skip": "Skip",
+    "next": "Next",
+    "start": "Get started",
+    "step": "Step {{current}} of {{total}}",
+    "chooseLanguage": "Choose your language",
+    "s1Title": "Verify suspicious content",
+    "s1Text": "Image, video, link or text received on Facebook or WhatsApp: MASO analyses it and gives you clues, never an automatic verdict.",
+    "s2Title": "Document and get it approved",
+    "s2Text": "Evidence, sources, experts and official figures gathered in one case. The fact-checker proposes, the editor-in-chief validates and publishes.",
+    "s3Title": "In the field, even offline",
+    "s3Text": "Install the app: your cases, the directory and statistics stay available without network.",
+    "install": "Install the app"
+  },
+  "admin": {
+    "usage": "Usage",
+    "activeUsers": "Active accounts",
+    "suspendedUsers": "Suspended accounts",
+    "inviteTitle": "Invite a member",
+    "fullName": "Full name",
+    "role": "Role",
+    "language": "Language",
+    "invite": "Send invitation",
+    "invited": "Invitation sent to {{email}}.",
+    "invitedDemo": "Account created for {{email}} (demo). Password: {{password}}",
+    "usersTitle": "Members",
+    "you": "you",
+    "active": "Active",
+    "suspended": "Suspended",
+    "suspend": "Suspend",
+    "reactivate": "Reactivate",
+    "updated": "Account updated."
   }
 }

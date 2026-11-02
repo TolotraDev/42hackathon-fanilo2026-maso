@@ -15,7 +15,8 @@
     "closeMenu": "Hidio ny lisitra",
     "search": "Hikaroka",
     "closeSearch": "Hidio ny fikarohana",
-    "settings": "Fikirana"
+    "settings": "Fikirana",
+    "admin": "Fitantanana"
   },
   "page": {
     "veille": "Vaovao farany",
@@ -23,7 +24,8 @@
     "ressources": "Tahiry",
     "rediger": "Fanoratana lahatsoratra",
     "dossiers": "Tabilao fanaraha-maso",
-    "profil": "Momba ahy sy fikirana"
+    "profil": "Momba ahy sy fikirana",
+    "admin": "Fitantanana"
   },
   "network": {
     "online": "Mifandray",
@@ -163,12 +165,106 @@
     "installed": "Efa voapetraka amin'ity fitaovana ity ny fampiharana.",
     "installUnavailable": "Ampiasao ny lisitry ny mpitety : « Ampio amin'ny efijery fandraisana ».",
     "account": "Kaonty",
-    "accountHint": "Ho tonga miaraka amin'ny môdiola MOD-02 ny fidirana sy ny andraikitra.",
     "network": "Fifandraisana",
     "version": "Dika {{version}}"
   },
   "notFound": {
     "title": "Tsy hita ny pejy",
-    "back": "Hiverina amin'ny fanaraha-maso"
+    "back": "Hiverina amin'ny fandraisana"
+  },
+  "role": {
+    "public": "Vahiny",
+    "journalist": "Mpanao gazety",
+    "fact_checker": "Mpanamarina",
+    "editor_in_chief": "Lehiben'ny fanoratana",
+    "admin": "Mpitantana"
+  },
+  "language": {
+    "fr": "Français",
+    "mg": "Malagasy",
+    "en": "English"
+  },
+  "auth": {
+    "title": "Fidirana",
+    "subtitle": "Midira ao amin'ny toerana fanamarinanao.",
+    "email": "Adiresy mailaka",
+    "password": "Teny miafina",
+    "methodPassword": "Teny miafina",
+    "methodMagicLink": "Rohy mahagaga",
+    "submit": "Hiditra",
+    "sendLink": "Handray ny rohy",
+    "magicLinkSent": "Nalefa tany amin'i {{email}} ny rohy fidirana. Sokafy amin'ity fitaovana ity.",
+    "forgot": "Adino ny teny miafina ?",
+    "or": "na",
+    "guest": "Hanohy tsy misy kaonty",
+    "guestHint": "Ny lisitry ny olona ho an'ny besinimaro sy ny antontan'isa ihany no azo jerena.",
+    "demoTitle": "Fampisehoana",
+    "demoHint": "Tsy voalamina ny Supabase : kaonty noforonina, voatahiry amin'ity fitaovana ity ny angona. Teny miafina : {{password}}",
+    "signIn": "Hiditra",
+    "signOut": "Hivoaka",
+    "guestMode": "Fidirana vahiny",
+    "offlineSession": "Tsy mifandray : ho ampifanarahana rehefa miverina ny tambajotra ny asanao.",
+    "loading": "Mampiditra…",
+    "forgotTitle": "Adino ny teny miafina",
+    "forgotHint": "Ampidiro ny adiresinao : hahazo rohy hisafidianana teny miafina vaovao ianao.",
+    "sendReset": "Handefa ny rohy",
+    "resetSent": "Raha misy kaonty ho an'i {{email}}, vao nalefa ny rohy.",
+    "backToLogin": "Hiverina amin'ny fidirana",
+    "resetTitle": "Teny miafina vaovao",
+    "newPassword": "Teny miafina vaovao",
+    "confirmPassword": "Hamafiso ny teny miafina",
+    "passwordRules": "Litera 8 farafahakeliny.",
+    "passwordTooShort": "Tokony hisy litera 8 farafahakeliny ny teny miafina.",
+    "passwordMismatch": "Tsy mitovy ireo teny miafina roa.",
+    "savePassword": "Hitahiry",
+    "resetExpired": "Tsy manan-kery intsony ity rohy ity. Mangataha vaovao.",
+    "error": {
+      "invalid_credentials": "Diso ny adiresy mailaka na ny teny miafina.",
+      "account_suspended": "Nampiatoana ity kaonty ity. Mifandraisa amin'ny mpitantana.",
+      "network": "Tsy afaka mifandray amin'ny mpizara. Jereo ny tambajotrao.",
+      "rate_limited": "Be loatra ny andrana. Andramo indray afaka minitra vitsy.",
+      "role_not_allowed": "Ho an'ny mpitantana ihany io asa io.",
+      "cannot_change_own_account": "Tsy azonao ovaina ny kaontinao manokana.",
+      "already_exists": "Efa misy kaonty mampiasa io adiresy io.",
+      "unknown": "Nisy olana. Andramo indray.",
+      "email_not_confirmed": "Tsy voamarina ny adiresy mailaka. Ao amin'ny Supabase, hamafiso ny kaonty (Authentication → Users).",
+      "email_not_authorized": "Lavin'ny serivisy mailaky ny Supabase io adiresy io : alamino ny SMTP na foròny tanana ny kaonty.",
+      "profile_missing": "Tsy manana mombamomba MASO ity kaonty ity. Angataho amin'ny mpitantana ny hamorona azy.",
+      "configuration": "Diso ny fandrindrana ny Supabase (lakile, migrations na mailaka). Jereo ny rakitra .env sy ny fandrindrana.",
+      "no_account": "Tsy misy kaonty MASO mifandray amin'io adiresy io. Jereo ny adiresy na mangataha fanasana amin'ny mpitantana."
+    }
+  },
+  "onboarding": {
+    "skip": "Dingana",
+    "next": "Manaraka",
+    "start": "Hanomboka",
+    "step": "Dingana {{current}} amin'ny {{total}}",
+    "chooseLanguage": "Safidio ny fiteninao",
+    "s1Title": "Hamarino votoaty mampiahiahy",
+    "s1Text": "Sary, horonan-tsary, rohy na soratra voaray tamin'ny Facebook na WhatsApp : famakafakan'ny MASO ary manome famantarana anao, tsy didy mandeha ho azy mihitsy.",
+    "s2Title": "Mirakitra sy mampankatoavina",
+    "s2Text": "Porofo, loharano, manam-pahaizana ary isa ofisialy miangona ao anaty rakitra iray. Ny mpanamarina no manolotra, ny lehiben'ny fanoratana no manamarina sy mamoaka.",
+    "s3Title": "Any an-tsaha, na tsy mifandray aza",
+    "s3Text": "Apetraho ny fampiharana : mijanona azo ampiasaina tsy misy tambajotra ny rakitrao, ny lisitry ny olona ary ny antontan'isa.",
+    "install": "Hametraka ny fampiharana"
+  },
+  "admin": {
+    "usage": "Fampiasana",
+    "activeUsers": "Kaonty mavitrika",
+    "suspendedUsers": "Kaonty naato",
+    "inviteTitle": "Hanasa mpikambana",
+    "fullName": "Anarana feno",
+    "role": "Andraikitra",
+    "language": "Fiteny",
+    "invite": "Handefa ny fanasana",
+    "invited": "Nalefa tany amin'i {{email}} ny fanasana.",
+    "invitedDemo": "Kaonty noforonina ho an'i {{email}} (fampisehoana). Teny miafina : {{password}}",
+    "usersTitle": "Mpikambana",
+    "you": "ianao",
+    "active": "Mavitrika",
+    "suspended": "Naato",
+    "suspend": "Hampiato",
+    "reactivate": "Hamerina",
+    "updated": "Voavao ny kaonty."
   }
 }
