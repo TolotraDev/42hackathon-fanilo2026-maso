@@ -55,7 +55,6 @@
   "verifier": {
     "claimLabel": "Ampidiro ny filazana hamarinina",
     "claimPlaceholder": "Ohatra : « Tondra-drano ny tanànan'Antananarivo androany maraina »",
-    "submit": "Hamarino",
     "importTitle": "Hampiditra votoaty",
     "input": {
       "image": "Sary",
@@ -64,23 +63,301 @@
       "text": "Soratra"
     },
     "stepsTitle": "Dingana famakafakana",
-    "step": {
-      "claim": "Famakafakana ny filazana",
-      "claimHint": "Fakana ireo anarana, toerana, daty ary isa azo hamarinina",
-      "existing": "Fanamarinana efa nisy",
-      "existingHint": "Tahirin'ny MASO sy ireo tahirin'ny fanamarinana",
-      "clues": "Famakafakana ny vokatra",
-      "clueHint": "Famantarana miaraka amin'ny haavon'ny fahatokisana sy ny fetrany"
-    },
     "stepState": {
       "pending": "Miandry",
       "running": "Mandeha",
       "done": "Vita",
       "not_applicable": "Tsy mihatra",
-      "waiting_network": "Miandry tambajotra"
+      "waiting_network": "Miandry tambajotra",
+      "unavailable": "Tsy azo ampiasaina"
     },
     "verdictScale": "Ambaratongan'ny didy",
-    "verdictScaleHint": "Olombelona ihany no manome azy : manome famantarana ny fitaovana, ny matihanina no manapa-kevitra."
+    "verdictScaleHint": "Olombelona ihany no manome azy : manome famantarana ny fitaovana, ny matihanina no manapa-kevitra.",
+    "searchExisting": "Hitady fanamarinana efa nisy",
+    "existingResults_one": "Fanamarinana {{count}} efa nisy no hita",
+    "existingResults_other": "Fanamarinana {{count}} efa nisy no hita",
+    "noExisting": "Tsy misy fanamarinana efa nisy hita amin'ireo teny ireo.",
+    "soon": "Ho avy tsy ho ela",
+    "backToHub": "Hiverina amin'ny Hamarino",
+    "limitsAndTool": "Fetra sy fitaovana",
+    "tool": "Fitaovana",
+    "service": {
+      "title": "Serivisy famakafakana",
+      "checking": "Manamarina…",
+      "ok": "Mifandray",
+      "off": "Tsy azo ampiasaina",
+      "offHint": "Mandeha ihany ny famakafakana eo an-toerana (dian-tanana, mombamomba, famerenana famatrarana) ; hiverina ny fiaviana, horonan-tsary ary rohy rehefa tratra indray ny serivisy.",
+      "localHint": "Mandalo amin'ity serivisy ity ny fiaviana, ny horonan-tsary, ny rohy ary ny fanamarinana efa nisy.",
+      "on": "mandeha",
+      "notConfigured": "tsy voalamina",
+      "capability": {
+        "provenance": "Fiaviana C2PA",
+        "video": "Horonan-tsary",
+        "link": "Rohy",
+        "factcheck": "Fact Check",
+        "ai_clue": "Famantarana AI"
+      }
+    },
+    "summary": {
+      "waitingNetwork": "Miandry tambajotra : hitohy ity dingana ity rehefa miverina ny fifandraisana.",
+      "unavailable": "Tsy azo ampiasaina ny serivisy famakafakana : nandingana ity dingana ity, mbola manan-kery ny vokatra hafa.",
+      "needsDatabase": "Mila ny tahirin'ny MASO (Supabase)."
+    },
+    "drop": {
+      "imageTitle": "Hifidy sary hamarinina",
+      "videoTitle": "Hifidy horonan-tsary hamarinina",
+      "hint": "Sary voaray tamin'ny WhatsApp na Facebook, sary efijery… na atsipy eto ilay rakitra.",
+      "choose": "Hifidy rakitra",
+      "capture": {
+        "image": "Haka sary",
+        "video": "Haka horonan-tsary"
+      }
+    },
+    "image": {
+      "preview": "Sary jerena",
+      "phash": "Dian-tanana hita maso",
+      "step": {
+        "reception": "Fandraisana sy dian-tanana",
+        "already_seen": "Efa voamarina ve ?",
+        "metadata": "Mombamomba ny rakitra",
+        "provenance": "Fiaviana (Content Credentials)",
+        "recompression": "Famakafakana ny famatrarana",
+        "reverse_search": "Fikarohana mivadika",
+        "ai_clue": "Famantarana noforonin'ny AI"
+      },
+      "rejected": {
+        "unsupported_type": "Tsy sary fantatra ity rakitra ity (tsy mifanaraka ny karazany marina).",
+        "too_large": "Mavesatra loatra ny sary : 20 Mo farafahabetsany.",
+        "unreadable": "Tsy voavakin'ny mpitety ity sary ity (HEIC ? andramo sary efijery)."
+      },
+      "alreadySeen_one": "Mifanaraka amin'ny porofo {{count}} efa voatahiry ao amin'ny MASO ity sary ity.",
+      "alreadySeen_other": "Mifanaraka amin'ny porofo {{count}} efa voatahiry ao amin'ny MASO ity sary ity.",
+      "notSeen": "Tsy misy sary mitovy na akaiky ao amin'ny tahirin'ny MASO.",
+      "identical": "mitovy",
+      "distance_one": "elanelana {{count}} bit",
+      "distance_other": "elanelana {{count}} bit",
+      "metadata": {
+        "stripped": "Tsy misy mombamomba. Toy izany avokoa ny sary zaraina amin'ny WhatsApp na Facebook : tsy porofon'ny fanodikodinana izany.",
+        "generative_tool": "Fitaovana mamorona sary ny rindrambaiko voalaza : {{software}}.",
+        "editing_tool": "Fitaovana fanovana sary ny rindrambaiko voalaza : {{software}}. Tsy voatery ho fanodikodinana ny fanovana.",
+        "future_date": "Ho avy ny daty voalaza : mety ho diso ny famantaranandron'ilay fitaovana.",
+        "consistent": "Misy mombamomba, tsy misy tsy fitoviana miharihary."
+      },
+      "takenAt": "Daty voalaza",
+      "device": "Fitaovana",
+      "software": "Rindrambaiko",
+      "gps": "GPS",
+      "map": "Sarintany toerana",
+      "openMap": "Hanokatra ao amin'ny OpenStreetMap",
+      "provenanceAbsent": "Tsy misy mombamomba ny fiaviana (Content Credentials). Toy izany ny ankamaroan'ny sary ankehitriny.",
+      "provenanceAi": "Ilay rakitra mihitsy no milaza fa noforonina na novain'ny AI.",
+      "provenancePresent": "Fiaviana nosoniavin'i {{issuer}}.",
+      "generator": "Fitaovana namoronana",
+      "signedBy": "Nosoniavin'i",
+      "signedAt": "Nosoniavina tamin'ny",
+      "signature": "Sonia",
+      "signatureValid": "manan-kery",
+      "signatureInvalid": "tsy manan-kery na tsy azo hamarinina",
+      "elaJpegOnly": "Ho an'ny sary JPEG ihany ity famakafakana ity.",
+      "ela": {
+        "none": "Mitovy manerana ny sary ny haavon'ny hadisoana.",
+        "weak": "Faritra vitsivitsy no voafatotra hafa.",
+        "to_examine": "Misy faritra voafatotra tena hafa : jereo ao amin'ny sarintany."
+      },
+      "showElaMap": "Hampiseho ny sarintany",
+      "hideElaMap": "Hanafina ny sarintany",
+      "elaMap": "Sarintanin'ny haavon'ny hadisoana amin'ny famatrarana",
+      "reversePrefilled": "Mahazo mivantana ny adiresin'ny sary ireo motera.",
+      "reverseManual": "Sokafy ny motera iray dia apetraho ny sary : matetika ny famoahana taloha no manambara votoaty naverina nampiasaina.",
+      "foundLinks": "Famoahana taloha hita (rohy iray isaky ny andalana)",
+      "foundLinksPlaceholder": "https://…",
+      "aiNotConfigured": "Tsy voalamina ao amin'ny serivisy famakafakana ny famantarana AI.",
+      "aiScore": "Naotin'ny modely : {{percent}} %. Famantarana andrana : tsy fanapahan-kevitra mihitsy."
+    },
+    "limits": {
+      "reception": "Manaporofo ny dian-tanana SHA-256 fa tsy niova ilay rakitra hatramin'ny nandraisana azy ; tsy milaza na inona na inona momba ny maha-izy azy.",
+      "already_seen": "Ireo sary efa voatahiry ao amin'ny MASO ihany no hitany ; mety hanakana ny fitoviana ny fanapahana be.",
+      "metadata": "Mora fafana na ovaina ny mombamomba : tsy manaporofo na inona na inona irery na ny fisiany na ny tsy fisiany.",
+      "provenance": "Vitsy dia vitsy ny sary misy Content Credentials ; ara-dalàna ny tsy fisiany.",
+      "recompression": "Famantarana tokony hadika ny ELA : miteraka elanelana ihany koa ny sisiny maranitra, ny soratra ary ny famatrarana miverimberina.",
+      "reverse_search": "Tsy misy motera mahalala ny sary rehetra : tsy manaporofo fa vaovao ny sary ny tsy fahitana valiny.",
+      "ai_clue": "Voafetra sy miovaova ny fahatokisana ny mpitsikilo sary noforonin'ny AI : aza manapa-kevitra amin'ity famantarana ity irery.",
+      "video": "Mamaritra ilay rakitra voaray ny mombamomba ara-teknika, izay matetika novatrarin'ny sehatra indray.",
+      "keyframes": "Ampiasaina amin'ny fikarohana mivadika ny sary fototra : matetika no hita toy izany ny horonan-tsary avy any amin'ny firenena na taona hafa.",
+      "https": "Miaro ny fifandraisana ny HTTPS ; afaka mampiasa azy koa ny tranonkala ratsy fanahy.",
+      "domain": "Tsy voatery mamitaka ny anarana vaovao, saingy matetika no noforonina vao mialoha ny krizy ny tranonkala mpanararaotra.",
+      "hosting": "Milaza ny toerana misy ny mpizara ny mpampiantrano, fa tsy hoe iza no mamoaka.",
+      "directory": "Ny loharano ihany no tombanan'ny naoty, fa tsy ny maha-marina ny filazana mihitsy.",
+      "existing": "Ireo fanamarinana navoaka an-tserasera na voatahiry ao amin'ny MASO ihany no hitany.",
+      "archive": "Mitahiry ny pejy toy ny taloha ny tahiry : ilaina raha ovaina na fafana izy."
+    },
+    "video": {
+      "step": {
+        "technical": "Mombamomba ara-teknika",
+        "keyframes": "Sary fototra"
+      },
+      "rejected": {
+        "unsupported_type": "Tsy horonan-tsary fantatra ity rakitra ity.",
+        "too_large": "Mavesatra loatra ny horonan-tsary : 100 Mo farafahabetsany."
+      },
+      "duration": "Faharetana",
+      "resolution": "Habe",
+      "codec": "Codec",
+      "fps": "Sary isan-tsegondra",
+      "audio": "Feo",
+      "yes": "eny",
+      "no": "tsia",
+      "keyframesHint_one": "Sary fototra {{count}} : tsindrio mba hamakafaka sy hanao fikarohana mivadika.",
+      "keyframesHint_other": "Sary fototra {{count}} : tsindrio ny iray mba hamakafaka sy hanao fikarohana mivadika.",
+      "frameAt": "Sary amin'ny {{time}} s",
+      "sceneChange": "Fiovan'ny sehatra",
+      "analyseFrame": "Hamakafaka ity sary ity",
+      "frameOrigin": "Sary fototra avy amin'ny {{name}} amin'ny {{time}} s"
+    },
+    "link": {
+      "label": "Adiresin'ny pejy hamarinina",
+      "analyse": "Hamakafaka",
+      "invalid": "Diso ny adiresy. Ohatra : https://ohatra.mg/lahatsoratra",
+      "step": {
+        "https": "Fifandraisana voaaro (HTTPS)",
+        "domain": "Taonan'ny anarana",
+        "hosting": "Mpampiantrano",
+        "directory": "Lisitry ny haino aman-jery sy loharano",
+        "existing": "Fanamarinana efa nisy",
+        "archive": "Tahirin'ny pejy"
+      },
+      "httpsYes": "Manaiky fifandraisana voaaro (HTTPS) ny tranonkala.",
+      "httpsNo": "Tsy manaiky fifandraisana voaaro (HTTPS) ny tranonkala.",
+      "domainAge_one": "{{domain}} dia noforonina {{count}} andro lasa izay.",
+      "domainAge_other": "{{domain}} dia noforonina {{count}} andro lasa izay.",
+      "domainUnknown": "Tsy hita ny datin'ny namoronana ny anarana (tahiry tsy ampahibemaso).",
+      "domain": "Anarana",
+      "createdAt": "Noforonina tamin'ny",
+      "registrar": "Mpanoratra anarana",
+      "ip": "Adiresy IP",
+      "host": "Mpampiantrano",
+      "country": "Firenena",
+      "sourceKnown": "Taratasy « {{name}} » : naoty fahatokisana {{score}}/10.",
+      "sourceUnknown": "Mbola tsy manana taratasy ao amin'ny lisitry ny MASO ity tranonkala ity.",
+      "existingFound_one": "Fanamarinana {{count}} efa nisy momba ity rohy ity.",
+      "existingFound_other": "Fanamarinana {{count}} efa nisy momba ity rohy ity.",
+      "existingNone": "Tsy misy fanamarinana efa nisy momba ity rohy ity.",
+      "factcheckOff": "Tsy voalamina ao amin'ny serivisy famakafakana ny Google Fact Check.",
+      "archived": "Tahiry farany : {{date}}.",
+      "notArchived": "Tsy mbola voatahiry mihitsy ny pejy.",
+      "openArchive": "Hanokatra ny tahiry",
+      "archiveNow": "Hitahiry izao",
+      "archiving": "Am-pitahirizana (hatramin'ny iray minitra)…",
+      "archiveDone": "Voatahiry ny pejy : hampiarahina amin'ny rakitra ny tahiry.",
+      "archiveFailed": "Tsy nahomby ny fitahirizana : andramo indray any aoriana.",
+      "partUnavailable": "Tsy tratra amin'izao ny serivisy ivelany (tahiry na rakitra) : tsy misy valiny noforonina, andramo indray any aoriana.",
+      "rejected": {
+        "private_address": "Adiresy nolavina : tsy mamakafaka adiresin'ny tambajotra anatiny na manokana ny MASO.",
+        "unsupported_port": "Adiresy nolavina : tranonkala mahazatra ihany (seranana 80 sy 443) no famakafakana.",
+        "unsupported_scheme": "Adiresy nolavina : adiresy http sy https ihany no famakafakana.",
+        "invalid_host": "Adiresy nolavina : diso ny anaran'ny tranonkala.",
+        "host_not_found": "Tsy misy io anarana io na diso tsipelina.",
+        "too_many_redirects": "Be loatra ny fandefasana : tsy voavakafaka ny pejy."
+      }
+    },
+    "attach": {
+      "title": "Hampiditra ao amin'ny rakitra",
+      "existing": "Rakitra efa misy",
+      "new": "Rakitra vaovao",
+      "noOpenCase": "Tsy misy rakitra mandeha.",
+      "caseTitle": "Lohatenin'ny rakitra",
+      "claim": "Filazana hamarinina",
+      "origin": "Fiaviana (toerana nahitana ilay votoaty)",
+      "originPlaceholder": "Ohatra : pejy Facebook « … », vondrona WhatsApp",
+      "submit": "Hampiditra ao amin'ny rakitra",
+      "done": "Tafiditra ao amin'ny rakitra « {{title}} » ny porofo.",
+      "needsDatabase": "Mila ny tahirin'ny MASO (Supabase) ny fampidirana ao amin'ny rakitra. Mbola azo ampiasaina ny famakafakana.",
+      "offline": "Mila fifandraisana ny fampidirana ao amin'ny rakitra."
+    },
+    "visual": {
+      "title": "Lisitra fanamarinana amin'ny maso",
+      "hint": "Izay hitanao manokana eo amin'ny sary.",
+      "shadows": "Aloka sy ora",
+      "weather": "Toetr'andro",
+      "signs": "Takelaka sy soratra",
+      "language": "Fiteny hita",
+      "plates": "Laharan'ny fiara",
+      "vegetation": "Zavamaniry",
+      "note": "Izay hitanao",
+      "state": {
+        "unchecked": "Tsy nojerena",
+        "consistent": "Mifanaraka",
+        "inconsistent": "Tsy mifanaraka",
+        "not_applicable": "Tsy mihatra"
+      }
+    },
+    "share": {
+      "receiving": "Mandray ny votoaty nozaraina…",
+      "empty": "Tsy nisy voaray. Zarao amin'ny MASO avy amin'ny fampiharana hafa ny sary, horonan-tsary na rohy."
+    },
+    "source": {
+      "title": "Taratasy loharano",
+      "fromLinkHint": "Tombano ny fahatokisana ny tranonkala, isaky ny fepetra.",
+      "open": "Hanokatra ny taratasy loharano",
+      "create": "Hamorona taratasy loharano",
+      "verified": "Voamarina",
+      "name": "Anarana",
+      "type": "Karazany",
+      "url": "Adiresy",
+      "createdOn": "Daty namoronana",
+      "types": {
+        "media": "Haino aman-jery",
+        "page": "Pejy",
+        "site": "Tranonkala",
+        "account": "Kaonty",
+        "journalist": "Mpanao gazety",
+        "institution": "Andrim-panjakana",
+        "person": "Olona"
+      },
+      "criteriaTitle": "Fepetra fahatokisana",
+      "criteriaHint": "Mpikambana ao amin'ny ekipa no mameno ny fepetra tsirairay, miaraka amin'ny fanazavana.",
+      "criteria": {
+        "identity": "Mazava ny maha-izy azy",
+        "transparency": "Mangarahara",
+        "seniority": "Faharetana",
+        "corrections_history": "Tantaran'ny fandavana",
+        "competence": "Fahaiza-manao",
+        "proximity": "Akaiky ny zava-nitranga",
+        "independence": "Fahaleovan-tena",
+        "corroboration": "Fanamafisana"
+      },
+      "criteriaHelp": {
+        "identity": "Fantatra ve ny tompon'andraikitra, ny adiresy, ny fampahalalana ara-dalàna ?",
+        "transparency": "Aseho ve ny loharano, ny fomba fiasa ary ny famatsiam-bola ?",
+        "seniority": "Hatramin'ny oviana no misy ilay loharano ?",
+        "corrections_history": "Efa namoaka votoaty nolavina ve izy ? Manitsy ny hadisoany ve izy ?",
+        "competence": "Manana fahaizana voaray momba ny lohahevitra ve ?",
+        "proximity": "Afaka mahatratra mivantana ny zava-nitranga ve izy ?",
+        "independence": "Misy fifandraisana ara-politika, ara-barotra na ara-antoko ve ?",
+        "corroboration": "Hamafisin'ny loharano hafa ve ny vaovaony ?"
+      },
+      "scoreLabel": {
+        "none": "Tsy notombanana",
+        "0": "Ratsy",
+        "1": "Ampahany",
+        "2": "Tsara"
+      },
+      "justification": "Fanazavana (tsy maintsy atao)",
+      "missingJustification": "Tsy maintsy hazavaina ny fepetra rehetra notombanana.",
+      "save": "Hitahiry ny taratasy",
+      "saved": "Voatahiry ny taratasy.",
+      "score": "Naoty fahatokisana",
+      "scoreHint": "Salanisan'ny fepetra notombanana. Ny loharano ihany no tombanan'ny naoty, fa tsy ny maha-marina ny filazana mihitsy.",
+      "verify": "Hanamarika ho voamarina",
+      "unverify": "Hanala ny marika « voamarina »",
+      "confidentialTitle": "Antsipiriany tsiambaratelo",
+      "confidentialHint": "Fifandraisana na maha-izy azy tokony harovana. Voasoratra ao amin'ny diarin'ny fanaraha-maso ny fijerena rehetra.",
+      "reveal": "Hampiseho (voasoratra ny fijerena)",
+      "confidentialLogged": "Voasoratra ao amin'ny diarin'ny fanaraha-maso ny fijerena.",
+      "saveConfidential": "Hitahiry ny antsipiriany tsiambaratelo",
+      "linkedCases": "Rakitra mifandray",
+      "noLinkedCase": "Mbola tsy misy rakitra mifandray."
+    }
   },
   "verdict": {
     "confirmed": "Voamarina",
@@ -266,5 +543,10 @@
     "suspend": "Hampiato",
     "reactivate": "Hamerina",
     "updated": "Voavao ny kaonty."
+  },
+  "clue": {
+    "none": "Tsy misy famantarana",
+    "weak": "Famantarana malemy",
+    "to_examine": "Famantarana tokony hojerena"
   }
 }

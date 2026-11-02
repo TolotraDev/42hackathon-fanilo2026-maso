@@ -173,7 +173,7 @@ Critères d'acceptation : checklist finale du Standard de livraison 42 Antananar
 |---|---|---|---|---|
 | MOD-01 | Tolotra | Terminé (branche `tolotra`) | Non | Non |
 | MOD-02 | Lorraine | Terminé | Non | Non |
-| MOD-03 | Lucia | À faire | Non | Non |
+| MOD-03 | Lucia | Terminé | Non | Non |
 | MOD-04 | Joba | À faire | Non | Non |
 | MOD-05 | Tolotra | À faire | Non | Non |
 | MOD-06 | Lorraine | À faire | Non | Non |

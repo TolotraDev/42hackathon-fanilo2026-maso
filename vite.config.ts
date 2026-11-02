@@ -13,6 +13,10 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
+      // Service worker écrit à la main (src/sw/sw.ts) pour recevoir les partages du téléphone.
+      strategies: 'injectManifest',
+      srcDir: 'src/sw',
+      filename: 'sw.ts',
       includeAssets: ['favicon.svg', 'apple-touch-icon.png'],
       manifest: {
         name: "MASO — Module d'Authentification et de Source Originale",
@@ -25,15 +29,26 @@ export default defineConfig({
         orientation: 'portrait',
         background_color: '#F3F5F8',
         theme_color: '#0A2F4F',
+        // MASO apparaît dans le menu « Partager » du téléphone (Facebook, WhatsApp, galerie).
+        share_target: {
+          action: '/partage',
+          method: 'POST',
+          enctype: 'multipart/form-data',
+          params: {
+            title: 'title',
+            text: 'text',
+            url: 'url',
+            files: [{ name: 'media', accept: ['image/*', 'video/*'] }],
+          },
+        },
         icons: [
           { src: 'pwa-192x192.png', sizes: '192x192', type: 'image/png' },
           { src: 'pwa-512x512.png', sizes: '512x512', type: 'image/png' },
           { src: 'pwa-512x512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
         ],
       },
-      workbox: {
+      injectManifest: {
         globPatterns: ['**/*.{js,css,html,svg,png,woff2}'],
-        navigateFallback: '/index.html',
       },
     }),
   ],

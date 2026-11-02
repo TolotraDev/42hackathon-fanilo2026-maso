@@ -29,7 +29,8 @@ enable_signup = false
 jwt_expiry = 3600
 
 [auth.email]
-enable_signup = false
+# Attention : « enable_signup » de cette section désactiverait toute connexion par e-mail.
+# Les inscriptions libres sont déjà bloquées par [auth] enable_signup = false.
 enable_confirmations = false
 
 [functions.invite-user]

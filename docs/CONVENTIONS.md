@@ -24,9 +24,10 @@ Conventions communes aux 4 membres, conformes au Standard de livraison 42 Antana
 │   ├── i18n/            # configuration et traductions fr / mg / en
 │   ├── lib/             # utilitaires sans React (clients, helpers)
 │   ├── styles/          # CSS global et jetons du thème
+│   ├── sw/              # service worker (cache hors ligne, partage depuis le téléphone)
 │   └── types/           # types TypeScript partagés du domaine
 ├── supabase/            # migrations SQL, RLS, seed, fonctions serveur, tests pgTAP (supabase/tests/)
-├── services/analyse/    # (MOD-03) service Python FastAPI
+├── services/analyse/    # service d'analyse Python (FastAPI) — voir son README
 └── tests/               # tests automatisés (Vitest ; pytest pour le service)
 ```
 
@@ -55,7 +56,7 @@ Règles :
 
 ## Nommage côté Python (MOD-03)
 
-Modules et fonctions en `snake_case`, classes en `PascalCase`, fichier d'entrée `services/analyse/main.py`.
+Modules et fonctions en `snake_case`, classes en `PascalCase`, point d'entrée `services/analyse/app/main.py`, tests dans `services/analyse/tests/` (pytest).
 
 ## Nommage côté base de données (MOD-02)
 
