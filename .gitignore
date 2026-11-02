@@ -2,6 +2,7 @@
 node_modules/
 .venv/
 __pycache__/
+.pytest_cache/
 *.pyc
 
 # Build
@@ -25,3 +26,4 @@ supabase/.branches/
 .idea/
 .DS_Store
 *.log
+.andromity/

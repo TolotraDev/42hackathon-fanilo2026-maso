@@ -1,6 +1,6 @@
-import { BriefcaseBusiness, FolderOpen, Megaphone, PenLine, ShieldCheck, UserRound, type LucideIcon } from 'lucide-react'
-
-export type SectionId = 'veille' | 'verifier' | 'ressources' | 'rediger' | 'dossiers' | 'profil'
+import { BriefcaseBusiness, FolderOpen, Megaphone, PenLine, ShieldCheck, UserCog, UserRound, type LucideIcon } from 'lucide-react'
+import { useAuth } from '@/features/auth/AuthProvider'
+import { canAccessSection, type SectionId } from '@/lib/permissions'
 
 export interface NavSection {
   id: SectionId
@@ -15,16 +15,33 @@ export const NAV_SECTIONS: NavSection[] = [
   { id: 'ressources', path: '/ressources', icon: BriefcaseBusiness },
   { id: 'rediger', path: '/rediger', icon: PenLine },
   { id: 'dossiers', path: '/dossiers', icon: FolderOpen },
+  { id: 'admin', path: '/admin', icon: UserCog },
   { id: 'profil', path: '/profil', icon: UserRound },
 ]
 
 const byId = (id: SectionId) => NAV_SECTIONS.find((section) => section.id === id)!
 
-/** Barre du bas sur mobile : Vérifier, l'action principale, est le bouton central rond. */
-export const BOTTOM_NAV = {
-  left: [byId('veille'), byId('ressources')],
-  center: byId('verifier'),
-  right: [byId('rediger'), byId('dossiers')],
+/** Espaces accessibles au rôle de l'utilisateur connecté. */
+export function useNavSections(): NavSection[] {
+  const { role } = useAuth()
+  return NAV_SECTIONS.filter((section) => canAccessSection(role, section.id))
+}
+
+/**
+ * Barre du bas sur mobile. Pour l'équipe éditoriale : Vérifier, l'action principale, est le bouton central rond.
+ * Pour les autres rôles (admin, invité) : les espaces accessibles, sans bouton central.
+ */
+export function useBottomNav(): { left: NavSection[]; center: NavSection | null; right: NavSection[] } {
+  const sections = useNavSections()
+  const allowed = (id: SectionId) => sections.some((section) => section.id === id)
+  if (allowed('verifier')) {
+    return {
+      left: (['veille', 'ressources'] as const).filter(allowed).map(byId),
+      center: byId('verifier'),
+      right: (['rediger', 'dossiers'] as const).filter(allowed).map(byId),
+    }
+  }
+  return { left: sections, center: null, right: [] }
 }
 
 export function sectionFromPath(pathname: string): NavSection | undefined {

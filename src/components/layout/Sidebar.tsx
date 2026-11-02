@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { Logo } from './Logo'
 import { NetworkStatus } from './NetworkStatus'
 import { SideNav } from './SideNav'
+import { UserBadge } from './UserBadge'
 
 /** Barre latérale bleu marine de la version web (≥ 1024 px). */
 export function Sidebar() {
@@ -12,7 +13,8 @@ export function Sidebar() {
       <nav aria-label={t('nav.main')} className="mt-8 flex-1">
         <SideNav />
       </nav>
-      <NetworkStatus className="px-3 text-white/70" />
+      <UserBadge />
+      <NetworkStatus className="mt-3 px-3 text-white/70" />
     </aside>
   )
 }

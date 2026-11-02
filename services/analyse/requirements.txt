@@ -1,0 +1,8 @@
+# Service d'analyse MASO — dépendances (versions minimales testées)
+fastapi>=0.115
+uvicorn[standard]>=0.30
+httpx>=0.27
+python-multipart>=0.0.9
+av>=12.0          # FFmpeg embarqué : informations vidéo et images clés
+Pillow>=10.0
+c2pa-python>=0.5  # Content Credentials (C2PA)

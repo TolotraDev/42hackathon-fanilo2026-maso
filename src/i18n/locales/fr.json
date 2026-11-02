@@ -15,7 +15,8 @@
     "closeMenu": "Fermer le menu",
     "search": "Rechercher",
     "closeSearch": "Fermer la recherche",
-    "settings": "Paramètres"
+    "settings": "Paramètres",
+    "admin": "Administration"
   },
   "page": {
     "veille": "Flux d'actualités",
@@ -23,7 +24,8 @@
     "ressources": "Base de données",
     "rediger": "Éditeur d'article",
     "dossiers": "Tableau de bord",
-    "profil": "Profil et paramètres"
+    "profil": "Profil et paramètres",
+    "admin": "Administration"
   },
   "network": {
     "online": "En ligne",
@@ -53,7 +55,6 @@
   "verifier": {
     "claimLabel": "Entrez une affirmation à vérifier",
     "claimPlaceholder": "Ex. : « Antananarivo inondée ce matin »",
-    "submit": "Vérifier",
     "importTitle": "Importer un contenu",
     "input": {
       "image": "Image",
@@ -62,23 +63,301 @@
       "text": "Texte"
     },
     "stepsTitle": "Étapes d'analyse",
-    "step": {
-      "claim": "Analyse de l'affirmation",
-      "claimHint": "Extraction des noms, lieux, dates et chiffres vérifiables",
-      "existing": "Vérifications existantes",
-      "existingHint": "Bibliothèque MASO et bases de fact-checks",
-      "clues": "Analyse des résultats",
-      "clueHint": "Indices avec niveau de confiance et limites"
-    },
     "stepState": {
       "pending": "En attente",
       "running": "En cours",
       "done": "Terminée",
       "not_applicable": "Non applicable",
-      "waiting_network": "En attente de réseau"
+      "waiting_network": "En attente de réseau",
+      "unavailable": "Indisponible"
     },
     "verdictScale": "Échelle des verdicts",
-    "verdictScaleHint": "Attribués uniquement par des humains : l'outil fournit des indices, les professionnels décident."
+    "verdictScaleHint": "Attribués uniquement par des humains : l'outil fournit des indices, les professionnels décident.",
+    "searchExisting": "Rechercher des vérifications existantes",
+    "existingResults_one": "{{count}} vérification existante trouvée",
+    "existingResults_other": "{{count}} vérifications existantes trouvées",
+    "noExisting": "Aucune vérification existante trouvée pour ces mots.",
+    "soon": "Bientôt",
+    "backToHub": "Retour à Vérifier",
+    "limitsAndTool": "Limites et outil",
+    "tool": "Outil",
+    "service": {
+      "title": "Service d'analyse",
+      "checking": "Vérification…",
+      "ok": "Connecté",
+      "off": "Indisponible",
+      "offHint": "Les analyses locales (empreinte, métadonnées, recompression) fonctionnent ; provenance, vidéo et lien reprendront quand le service sera joignable.",
+      "localHint": "Provenance, vidéo, lien et vérifications existantes passent par ce service.",
+      "on": "actif",
+      "notConfigured": "non configuré",
+      "capability": {
+        "provenance": "Provenance C2PA",
+        "video": "Vidéo",
+        "link": "Lien",
+        "factcheck": "Fact Check",
+        "ai_clue": "Indice IA"
+      }
+    },
+    "summary": {
+      "waitingNetwork": "En attente de réseau : l'étape reprendra au retour de la connexion.",
+      "unavailable": "Service d'analyse indisponible : étape ignorée, les autres résultats restent valables.",
+      "needsDatabase": "Nécessite la base de données MASO (Supabase)."
+    },
+    "drop": {
+      "imageTitle": "Choisir une image à vérifier",
+      "videoTitle": "Choisir une vidéo à vérifier",
+      "hint": "Photo reçue sur WhatsApp ou Facebook, capture d'écran… ou glissez le fichier ici.",
+      "choose": "Choisir un fichier",
+      "capture": {
+        "image": "Prendre une photo",
+        "video": "Filmer"
+      }
+    },
+    "image": {
+      "preview": "Image analysée",
+      "phash": "Empreinte perceptuelle",
+      "step": {
+        "reception": "Réception et empreinte",
+        "already_seen": "Déjà vérifiée ?",
+        "metadata": "Métadonnées",
+        "provenance": "Provenance (Content Credentials)",
+        "recompression": "Analyse de recompression",
+        "reverse_search": "Recherche inversée",
+        "ai_clue": "Indice de génération par IA"
+      },
+      "rejected": {
+        "unsupported_type": "Ce fichier n'est pas une image reconnue (le type réel ne correspond pas).",
+        "too_large": "Image trop lourde : 20 Mo maximum.",
+        "unreadable": "Le navigateur n'arrive pas à lire cette image (format HEIC ? essayez une capture d'écran)."
+      },
+      "alreadySeen_one": "Cette image correspond à {{count}} preuve déjà enregistrée dans MASO.",
+      "alreadySeen_other": "Cette image correspond à {{count}} preuves déjà enregistrées dans MASO.",
+      "notSeen": "Aucune image identique ou proche dans la base MASO.",
+      "identical": "identique",
+      "distance_one": "{{count}} bit d'écart",
+      "distance_other": "{{count}} bits d'écart",
+      "metadata": {
+        "stripped": "Aucune métadonnée. C'est le cas de presque toute image partagée sur WhatsApp ou Facebook : ce n'est pas une preuve de manipulation.",
+        "generative_tool": "Le logiciel déclaré est un outil de génération d'images : {{software}}.",
+        "editing_tool": "Le logiciel déclaré est un outil de retouche : {{software}}. Une retouche n'est pas forcément une manipulation.",
+        "future_date": "La date déclarée est dans le futur : l'horloge de l'appareil était peut-être mal réglée.",
+        "consistent": "Métadonnées présentes, sans incohérence évidente."
+      },
+      "takenAt": "Date déclarée",
+      "device": "Appareil",
+      "software": "Logiciel",
+      "gps": "GPS",
+      "map": "Carte de géolocalisation",
+      "openMap": "Ouvrir dans OpenStreetMap",
+      "provenanceAbsent": "Aucune information de provenance (Content Credentials). C'est le cas de la plupart des images aujourd'hui.",
+      "provenanceAi": "Le fichier déclare lui-même avoir été créé ou modifié par IA générative.",
+      "provenancePresent": "Provenance signée par {{issuer}}.",
+      "generator": "Outil de création",
+      "signedBy": "Signé par",
+      "signedAt": "Signé le",
+      "signature": "Signature",
+      "signatureValid": "valide",
+      "signatureInvalid": "invalide ou non vérifiable",
+      "elaJpegOnly": "Analyse réservée aux images JPEG.",
+      "ela": {
+        "none": "Niveau d'erreur homogène sur toute l'image.",
+        "weak": "Quelques zones se recompressent différemment.",
+        "to_examine": "Des zones se recompressent nettement différemment : à examiner sur la carte."
+      },
+      "showElaMap": "Afficher la carte",
+      "hideElaMap": "Masquer la carte",
+      "elaMap": "Carte du niveau d'erreur de compression",
+      "reversePrefilled": "Les moteurs reçoivent directement l'adresse de l'image.",
+      "reverseManual": "Ouvrez un moteur puis déposez l'image : une publication plus ancienne trahit souvent un contenu recyclé.",
+      "foundLinks": "Publications antérieures trouvées (un lien par ligne)",
+      "foundLinksPlaceholder": "https://…",
+      "aiNotConfigured": "Indice IA non configuré sur le service d'analyse.",
+      "aiScore": "Score du modèle : {{percent}} %. Indice expérimental : ce n'est jamais une conclusion."
+    },
+    "limits": {
+      "reception": "L'empreinte SHA-256 prouve que le fichier n'a pas été modifié depuis sa réception ; elle ne dit rien de son authenticité.",
+      "already_seen": "Ne retrouve que les images déjà enregistrées dans MASO ; un recadrage important peut empêcher la correspondance.",
+      "metadata": "Les métadonnées s'effacent ou se modifient facilement : ni leur présence ni leur absence ne prouve quelque chose à elle seule.",
+      "provenance": "Très peu d'images portent des Content Credentials ; leur absence est normale.",
+      "recompression": "L'ELA est un indice à interpréter : contours nets, textes et recompressions successives produisent aussi des écarts.",
+      "reverse_search": "Aucun moteur ne connaît toutes les images : une absence de résultat ne prouve pas que l'image est récente.",
+      "ai_clue": "La fiabilité des détecteurs d'images générées est limitée et variable : ne jamais conclure sur ce seul indice.",
+      "video": "Les informations techniques décrivent le fichier reçu, souvent recompressé par la plateforme.",
+      "keyframes": "Les images clés servent à la recherche inversée : une vidéo d'un autre pays ou d'une autre année y est souvent retrouvée.",
+      "https": "HTTPS protège la connexion ; un site malveillant peut aussi l'utiliser.",
+      "domain": "Un domaine récent n'est pas forcément trompeur, mais les sites opportunistes sont souvent créés peu avant une crise.",
+      "hosting": "L'hébergeur indique où se trouve le serveur, pas qui publie.",
+      "directory": "Le score n'évalue que la source, jamais la vérité d'une affirmation.",
+      "existing": "Ne trouve que les vérifications publiées en ligne ou enregistrées dans MASO.",
+      "archive": "L'archive conserve la page telle qu'elle était : utile si elle est modifiée ou supprimée."
+    },
+    "video": {
+      "step": {
+        "technical": "Informations techniques",
+        "keyframes": "Images clés"
+      },
+      "rejected": {
+        "unsupported_type": "Ce fichier n'est pas une vidéo reconnue.",
+        "too_large": "Vidéo trop lourde : 100 Mo maximum."
+      },
+      "duration": "Durée",
+      "resolution": "Résolution",
+      "codec": "Codec",
+      "fps": "Images par seconde",
+      "audio": "Son",
+      "yes": "oui",
+      "no": "non",
+      "keyframesHint_one": "{{count}} image clé : touchez-la pour l'analyser et lancer une recherche inversée.",
+      "keyframesHint_other": "{{count}} images clés : touchez-en une pour l'analyser et lancer une recherche inversée.",
+      "frameAt": "Image à {{time}} s",
+      "sceneChange": "Changement de plan",
+      "analyseFrame": "Analyser cette image",
+      "frameOrigin": "Image clé de {{name}} à {{time}} s"
+    },
+    "link": {
+      "label": "Adresse de la page à vérifier",
+      "analyse": "Analyser",
+      "invalid": "Adresse invalide. Exemple : https://exemple.mg/article",
+      "step": {
+        "https": "Connexion sécurisée (HTTPS)",
+        "domain": "Âge du domaine",
+        "hosting": "Hébergeur",
+        "directory": "Annuaire des médias et sources",
+        "existing": "Vérifications existantes",
+        "archive": "Archive de la page"
+      },
+      "httpsYes": "Le site accepte les connexions sécurisées (HTTPS).",
+      "httpsNo": "Le site n'accepte pas les connexions sécurisées (HTTPS).",
+      "domainAge_one": "{{domain}} a été créé il y a {{count}} jour.",
+      "domainAge_other": "{{domain}} a été créé il y a {{count}} jours.",
+      "domainUnknown": "Date de création du domaine introuvable (registre non public).",
+      "domain": "Domaine",
+      "createdAt": "Créé le",
+      "registrar": "Bureau d'enregistrement",
+      "ip": "Adresse IP",
+      "host": "Hébergeur",
+      "country": "Pays",
+      "sourceKnown": "Fiche « {{name}} » : score de fiabilité {{score}}/10.",
+      "sourceUnknown": "Ce site n'a pas encore de fiche dans l'annuaire MASO.",
+      "existingFound_one": "{{count}} vérification existante sur ce lien.",
+      "existingFound_other": "{{count}} vérifications existantes sur ce lien.",
+      "existingNone": "Aucune vérification existante sur ce lien.",
+      "factcheckOff": "Google Fact Check n'est pas configuré sur le service d'analyse.",
+      "archived": "Dernière archive : {{date}}.",
+      "notArchived": "Page jamais archivée.",
+      "openArchive": "Ouvrir l'archive",
+      "archiveNow": "Archiver maintenant",
+      "archiving": "Archivage en cours (jusqu'à une minute)…",
+      "archiveDone": "Page archivée : l'archive sera jointe au dossier.",
+      "archiveFailed": "L'archivage a échoué : réessayez plus tard.",
+      "partUnavailable": "Service externe injoignable pour le moment (registre ou archive) : aucun résultat n'est inventé, réessayez plus tard.",
+      "rejected": {
+        "private_address": "Adresse refusée : MASO n'analyse pas les adresses de réseaux internes ou privés.",
+        "unsupported_port": "Adresse refusée : seuls les sites web standard (ports 80 et 443) sont analysés.",
+        "unsupported_scheme": "Adresse refusée : seules les adresses http et https sont analysées.",
+        "invalid_host": "Adresse refusée : nom de site invalide.",
+        "host_not_found": "Ce domaine n'existe pas ou est mal orthographié.",
+        "too_many_redirects": "Trop de redirections : la page n'a pas pu être analysée."
+      }
+    },
+    "attach": {
+      "title": "Ajouter au dossier",
+      "existing": "Dossier existant",
+      "new": "Nouveau dossier",
+      "noOpenCase": "Aucun dossier en cours.",
+      "caseTitle": "Titre du dossier",
+      "claim": "Affirmation à vérifier",
+      "origin": "Origine (où le contenu a été trouvé)",
+      "originPlaceholder": "Ex. : page Facebook « … », groupe WhatsApp",
+      "submit": "Ajouter au dossier",
+      "done": "Preuve ajoutée au dossier « {{title}} ».",
+      "needsDatabase": "L'ajout au dossier nécessite la base de données MASO (Supabase). Les analyses restent utilisables.",
+      "offline": "Connexion nécessaire pour ajouter au dossier."
+    },
+    "visual": {
+      "title": "Checklist visuelle",
+      "hint": "Ce que vous observez vous-même sur l'image.",
+      "shadows": "Ombres et heure",
+      "weather": "Météo",
+      "signs": "Panneaux et enseignes",
+      "language": "Langue visible",
+      "plates": "Plaques d'immatriculation",
+      "vegetation": "Végétation",
+      "note": "Ce que vous avez observé",
+      "state": {
+        "unchecked": "Non examiné",
+        "consistent": "Cohérent",
+        "inconsistent": "Incohérent",
+        "not_applicable": "Non applicable"
+      }
+    },
+    "share": {
+      "receiving": "Réception du contenu partagé…",
+      "empty": "Aucun contenu reçu. Partagez une image, une vidéo ou un lien vers MASO depuis une autre application."
+    },
+    "source": {
+      "title": "Fiche source",
+      "fromLinkHint": "Évaluez la fiabilité du site, critère par critère.",
+      "open": "Ouvrir la fiche source",
+      "create": "Créer la fiche source",
+      "verified": "Vérifiée",
+      "name": "Nom",
+      "type": "Type",
+      "url": "Adresse",
+      "createdOn": "Date de création",
+      "types": {
+        "media": "Média",
+        "page": "Page",
+        "site": "Site",
+        "account": "Compte",
+        "journalist": "Journaliste",
+        "institution": "Institution",
+        "person": "Personne"
+      },
+      "criteriaTitle": "Critères de fiabilité",
+      "criteriaHint": "Chaque critère est renseigné par un membre de l'équipe, avec une justification.",
+      "criteria": {
+        "identity": "Identité claire",
+        "transparency": "Transparence",
+        "seniority": "Ancienneté",
+        "corrections_history": "Historique de démentis",
+        "competence": "Compétence",
+        "proximity": "Proximité avec les faits",
+        "independence": "Indépendance",
+        "corroboration": "Corroboration"
+      },
+      "criteriaHelp": {
+        "identity": "Responsable de publication, adresse, mentions légales identifiables ?",
+        "transparency": "Sources, méthode et financements affichés ?",
+        "seniority": "Depuis quand la source existe-t-elle ?",
+        "corrections_history": "A-t-elle déjà diffusé des contenus démentis ? Corrige-t-elle ses erreurs ?",
+        "competence": "Expertise reconnue sur le sujet ?",
+        "proximity": "A-t-elle un accès direct aux faits ?",
+        "independence": "Liens politiques, commerciaux ou partisans ?",
+        "corroboration": "Ses informations sont-elles confirmées par d'autres sources ?"
+      },
+      "scoreLabel": {
+        "none": "Non évalué",
+        "0": "Défavorable",
+        "1": "Partiel",
+        "2": "Favorable"
+      },
+      "justification": "Justification (obligatoire)",
+      "missingJustification": "Chaque critère évalué doit être justifié.",
+      "save": "Enregistrer la fiche",
+      "saved": "Fiche enregistrée.",
+      "score": "Score de fiabilité",
+      "scoreHint": "Moyenne des critères évalués. Le score n'évalue que la source, jamais la vérité d'une affirmation.",
+      "verify": "Marquer comme vérifiée",
+      "unverify": "Retirer la mention « vérifiée »",
+      "confidentialTitle": "Détails confidentiels",
+      "confidentialHint": "Coordonnées ou identité à protéger. Chaque consultation est enregistrée dans le journal d'audit.",
+      "reveal": "Afficher (consultation journalisée)",
+      "confidentialLogged": "Consultation enregistrée dans le journal d'audit.",
+      "saveConfidential": "Enregistrer les détails confidentiels",
+      "linkedCases": "Dossiers liés",
+      "noLinkedCase": "Aucun dossier lié pour l'instant."
+    }
   },
   "verdict": {
     "confirmed": "Confirmé",
@@ -163,12 +442,111 @@
     "installed": "L'application est installée sur cet appareil.",
     "installUnavailable": "Utilisez le menu du navigateur : « Ajouter à l'écran d'accueil ».",
     "account": "Compte",
-    "accountHint": "La connexion et les rôles arrivent avec le module MOD-02.",
     "network": "Connexion",
     "version": "Version {{version}}"
   },
   "notFound": {
     "title": "Page introuvable",
-    "back": "Retour à la veille"
+    "back": "Retour à l'accueil"
+  },
+  "role": {
+    "public": "Invité",
+    "journalist": "Journaliste",
+    "fact_checker": "Fact-checker",
+    "editor_in_chief": "Rédacteur en chef",
+    "admin": "Administrateur"
+  },
+  "language": {
+    "fr": "Français",
+    "mg": "Malagasy",
+    "en": "English"
+  },
+  "auth": {
+    "title": "Connexion",
+    "subtitle": "Accédez à votre espace de vérification.",
+    "email": "Adresse e-mail",
+    "password": "Mot de passe",
+    "methodPassword": "Mot de passe",
+    "methodMagicLink": "Lien magique",
+    "submit": "Se connecter",
+    "sendLink": "Recevoir le lien",
+    "magicLinkSent": "Un lien de connexion a été envoyé à {{email}}. Ouvrez-le sur cet appareil.",
+    "forgot": "Mot de passe oublié ?",
+    "or": "ou",
+    "guest": "Continuer sans compte",
+    "guestHint": "Accès limité à l'annuaire public et aux statistiques.",
+    "demoTitle": "Mode démonstration",
+    "demoHint": "Supabase n'est pas configuré : comptes fictifs, données conservées sur cet appareil. Mot de passe : {{password}}",
+    "signIn": "Se connecter",
+    "signOut": "Se déconnecter",
+    "guestMode": "Mode invité",
+    "offlineSession": "Session hors ligne : vos actions seront synchronisées au retour du réseau.",
+    "loading": "Chargement…",
+    "forgotTitle": "Mot de passe oublié",
+    "forgotHint": "Saisissez votre adresse : vous recevrez un lien pour choisir un nouveau mot de passe.",
+    "sendReset": "Envoyer le lien",
+    "resetSent": "Si un compte existe pour {{email}}, un lien vient d'être envoyé.",
+    "backToLogin": "Retour à la connexion",
+    "resetTitle": "Nouveau mot de passe",
+    "newPassword": "Nouveau mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
+    "passwordRules": "8 caractères minimum.",
+    "passwordTooShort": "Le mot de passe doit contenir au moins 8 caractères.",
+    "passwordMismatch": "Les deux mots de passe ne correspondent pas.",
+    "savePassword": "Enregistrer",
+    "resetExpired": "Ce lien n'est plus valide. Demandez-en un nouveau.",
+    "error": {
+      "invalid_credentials": "Adresse e-mail ou mot de passe incorrect.",
+      "account_suspended": "Ce compte est suspendu. Contactez l'administrateur.",
+      "network": "Connexion au serveur impossible. Vérifiez votre réseau.",
+      "rate_limited": "Trop de tentatives. Réessayez dans quelques minutes.",
+      "role_not_allowed": "Action réservée à l'administrateur.",
+      "cannot_change_own_account": "Vous ne pouvez pas modifier votre propre compte.",
+      "already_exists": "Un compte existe déjà avec cette adresse.",
+      "unknown": "Une erreur est survenue. Réessayez.",
+      "email_not_confirmed": "Adresse e-mail non confirmée. Dans Supabase, confirmez le compte (Authentication → Users).",
+      "email_not_authorized": "Le service d'e-mail de Supabase refuse cette adresse : configurez un serveur SMTP ou créez le compte à la main.",
+      "profile_missing": "Ce compte n'a pas de profil MASO. Demandez à l'administrateur de le créer (voir la configuration Supabase).",
+      "configuration": "Supabase est mal configuré (clé, migrations ou fournisseur e-mail). Vérifiez le fichier .env et la configuration.",
+      "no_account": "Aucun compte MASO n'est associé à cette adresse. Vérifiez l'adresse ou demandez une invitation à l'administrateur."
+    }
+  },
+  "onboarding": {
+    "skip": "Passer",
+    "next": "Suivant",
+    "start": "Commencer",
+    "step": "Étape {{current}} sur {{total}}",
+    "chooseLanguage": "Choisissez votre langue",
+    "s1Title": "Vérifier un contenu suspect",
+    "s1Text": "Image, vidéo, lien ou texte reçu sur Facebook ou WhatsApp : MASO l'analyse et vous donne des indices, jamais un verdict automatique.",
+    "s2Title": "Documenter et faire valider",
+    "s2Text": "Preuves, sources, experts et chiffres officiels réunis dans un dossier. Le fact-checker propose, le rédacteur en chef valide et publie.",
+    "s3Title": "Sur le terrain, même hors connexion",
+    "s3Text": "Installez l'application : vos dossiers, l'annuaire et les statistiques restent disponibles sans réseau.",
+    "install": "Installer l'application"
+  },
+  "admin": {
+    "usage": "Utilisation",
+    "activeUsers": "Comptes actifs",
+    "suspendedUsers": "Comptes suspendus",
+    "inviteTitle": "Inviter un membre",
+    "fullName": "Nom complet",
+    "role": "Rôle",
+    "language": "Langue",
+    "invite": "Envoyer l'invitation",
+    "invited": "Invitation envoyée à {{email}}.",
+    "invitedDemo": "Compte créé pour {{email}} (démonstration). Mot de passe : {{password}}",
+    "usersTitle": "Membres",
+    "you": "vous",
+    "active": "Actif",
+    "suspended": "Suspendu",
+    "suspend": "Suspendre",
+    "reactivate": "Réactiver",
+    "updated": "Compte mis à jour."
+  },
+  "clue": {
+    "none": "Aucun indice",
+    "weak": "Indice faible",
+    "to_examine": "Indice à examiner"
   }
 }

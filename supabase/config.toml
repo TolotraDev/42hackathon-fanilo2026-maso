@@ -1,0 +1,37 @@
+# MASO — Configuration Supabase locale (npx supabase start)
+# Les valeurs absentes reprennent les réglages par défaut de Supabase.
+
+project_id = "maso"
+
+[api]
+port = 54321
+
+[db]
+port = 54322
+major_version = 17
+
+[db.seed]
+enabled = true
+sql_paths = ["./seed.sql"]
+
+[studio]
+port = 54323
+
+[inbucket]
+# Boîte de réception de test : les e-mails (lien magique, invitation, mot de passe) arrivent ici.
+port = 54324
+
+[auth]
+site_url = "http://localhost:5173"
+additional_redirect_urls = ["http://localhost:5173/**", "http://localhost:4173/**"]
+# Pas d'inscription libre : les comptes sont créés par invitation de l'administrateur.
+enable_signup = false
+jwt_expiry = 3600
+
+[auth.email]
+# Attention : « enable_signup » de cette section désactiverait toute connexion par e-mail.
+# Les inscriptions libres sont déjà bloquées par [auth] enable_signup = false.
+enable_confirmations = false
+
+[functions.invite-user]
+verify_jwt = true
