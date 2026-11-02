@@ -1,0 +1,174 @@
+{
+  "app": {
+    "name": "MASO",
+    "tagline": "Authentication and Original Source Module"
+  },
+  "nav": {
+    "main": "Main navigation",
+    "veille": "Monitoring",
+    "verifier": "Verify",
+    "ressources": "Resources",
+    "rediger": "Write",
+    "dossiers": "Cases",
+    "profil": "Profile",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "search": "Search",
+    "closeSearch": "Close search",
+    "settings": "Settings"
+  },
+  "page": {
+    "veille": "News feed",
+    "verifier": "Fact-checking tool",
+    "ressources": "Database",
+    "rediger": "Article editor",
+    "dossiers": "Dashboard",
+    "profil": "Profile and settings"
+  },
+  "network": {
+    "online": "Online",
+    "offline": "Offline",
+    "offlineBanner": "You are offline: the app keeps working with the data stored on this device."
+  },
+  "common": {
+    "searchPlaceholder": "Search…",
+    "demoData": "Demo data",
+    "minutesAgo_one": "{{count}} min ago",
+    "minutesAgo_other": "{{count}} min ago",
+    "noResult": "No result for this search.",
+    "comingWith": "Available with module {{module}}."
+  },
+  "veille": {
+    "realtime": "Real time",
+    "all": "All",
+    "urgent": "Urgent",
+    "takeCharge": "Take charge",
+    "reportRumor": "Report a rumour"
+  },
+  "alertLevel": {
+    "low": "Low",
+    "medium": "Medium",
+    "high": "High"
+  },
+  "verifier": {
+    "claimLabel": "Enter a claim to verify",
+    "claimPlaceholder": "E.g. “Antananarivo flooded this morning”",
+    "submit": "Verify",
+    "importTitle": "Import content",
+    "input": {
+      "image": "Image",
+      "video": "Video",
+      "link": "Link",
+      "text": "Text"
+    },
+    "stepsTitle": "Analysis steps",
+    "step": {
+      "claim": "Claim analysis",
+      "claimHint": "Extracting verifiable names, places, dates and figures",
+      "existing": "Existing fact-checks",
+      "existingHint": "MASO library and fact-check databases",
+      "clues": "Results analysis",
+      "clueHint": "Clues with confidence level and limits"
+    },
+    "stepState": {
+      "pending": "Pending",
+      "running": "Running",
+      "done": "Done",
+      "not_applicable": "Not applicable",
+      "waiting_network": "Waiting for network"
+    },
+    "verdictScale": "Verdict scale",
+    "verdictScaleHint": "Assigned only by humans: the tool provides clues, professionals decide."
+  },
+  "verdict": {
+    "confirmed": "Confirmed",
+    "mostly_true": "Mostly true",
+    "misleading": "Misleading",
+    "out_of_context": "Out of context",
+    "false": "False",
+    "fabricated": "Fabricated content",
+    "unverifiable": "Unverifiable"
+  },
+  "verdictDefinition": {
+    "confirmed": "The claim is accurate and supported by evidence.",
+    "mostly_true": "Accurate overall, with minor inaccuracies.",
+    "misleading": "Contains accurate elements but gives a false impression.",
+    "out_of_context": "Authentic content presented with a date, place or meaning that is not its own.",
+    "false": "The claim is contradicted by the evidence.",
+    "fabricated": "Content created or altered to deceive, including with generative AI.",
+    "unverifiable": "The available elements do not allow a conclusion to date."
+  },
+  "caseStatus": {
+    "new": "New",
+    "in_analysis": "In analysis",
+    "awaiting_response": "Awaiting response",
+    "to_review": "To review",
+    "correction_requested": "Correction requested",
+    "validated": "Validated",
+    "published": "Published",
+    "closed": "Closed"
+  },
+  "ressources": {
+    "statistics": "Official statistics",
+    "statisticsHint": "Sourced and dated indicators",
+    "mediaDirectory": "Media and sources directory",
+    "mediaDirectoryHint": "Profiles and reliability score",
+    "reportLibrary": "Report library",
+    "reportLibraryHint": "Already published fact-checks",
+    "categories": "Categories",
+    "people": "Resource people",
+    "peopleCount_one": "{{count}} contact",
+    "peopleCount_other": "{{count}} contacts"
+  },
+  "rediger": {
+    "format": "Format",
+    "formats": {
+      "radio": "Radio brief",
+      "post": "Social post",
+      "article": "Short article",
+      "debunk": "Debunk"
+    },
+    "toolbar": {
+      "bold": "Bold",
+      "italic": "Italic",
+      "list": "List",
+      "quote": "Quote"
+    },
+    "note": "Note",
+    "notePlaceholder": "Internal note (not published)…",
+    "titlePlaceholder": "Article title",
+    "bodyPlaceholder": "Write your text…",
+    "words_one": "{{count}} word",
+    "words_other": "{{count}} words",
+    "radioDuration": "≈ {{seconds}} s on air",
+    "savedLocally": "Draft saved on this device"
+  },
+  "dossiers": {
+    "tabActive": "Ongoing",
+    "tabDone": "Completed",
+    "progress": "Progress",
+    "due": "Due: {{date}}",
+    "countInProgress": "Ongoing",
+    "countToReview": "To review",
+    "countPublished": "Published"
+  },
+  "profil": {
+    "language": "Language",
+    "theme": "Appearance",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "themeSystem": "System",
+    "install": "Install the app",
+    "installHint": "Add MASO to your home screen to use it in the field, even offline.",
+    "installed": "The app is installed on this device.",
+    "installUnavailable": "Use the browser menu: “Add to home screen”.",
+    "account": "Account",
+    "accountHint": "Sign-in and roles arrive with module MOD-02.",
+    "network": "Connection",
+    "version": "Version {{version}}"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "back": "Back to monitoring"
+  }
+}

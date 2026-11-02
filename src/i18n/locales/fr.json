@@ -1,0 +1,174 @@
+{
+  "app": {
+    "name": "MASO",
+    "tagline": "Module d'Authentification et de Source Originale"
+  },
+  "nav": {
+    "main": "Navigation principale",
+    "veille": "Veille",
+    "verifier": "Vérifier",
+    "ressources": "Ressources",
+    "rediger": "Rédiger",
+    "dossiers": "Dossiers",
+    "profil": "Profil",
+    "openMenu": "Ouvrir le menu",
+    "closeMenu": "Fermer le menu",
+    "search": "Rechercher",
+    "closeSearch": "Fermer la recherche",
+    "settings": "Paramètres"
+  },
+  "page": {
+    "veille": "Flux d'actualités",
+    "verifier": "Outil de vérification",
+    "ressources": "Base de données",
+    "rediger": "Éditeur d'article",
+    "dossiers": "Tableau de bord",
+    "profil": "Profil et paramètres"
+  },
+  "network": {
+    "online": "En ligne",
+    "offline": "Hors ligne",
+    "offlineBanner": "Vous êtes hors ligne : l'application continue de fonctionner avec les données de cet appareil."
+  },
+  "common": {
+    "searchPlaceholder": "Rechercher…",
+    "demoData": "Données de démonstration",
+    "minutesAgo_one": "il y a {{count}} min",
+    "minutesAgo_other": "il y a {{count}} min",
+    "noResult": "Aucun résultat pour cette recherche.",
+    "comingWith": "Disponible avec le module {{module}}."
+  },
+  "veille": {
+    "realtime": "En temps réel",
+    "all": "Toutes",
+    "urgent": "Urgent",
+    "takeCharge": "Prendre en charge",
+    "reportRumor": "Signaler une rumeur"
+  },
+  "alertLevel": {
+    "low": "Faible",
+    "medium": "Moyen",
+    "high": "Élevé"
+  },
+  "verifier": {
+    "claimLabel": "Entrez une affirmation à vérifier",
+    "claimPlaceholder": "Ex. : « Antananarivo inondée ce matin »",
+    "submit": "Vérifier",
+    "importTitle": "Importer un contenu",
+    "input": {
+      "image": "Image",
+      "video": "Vidéo",
+      "link": "Lien",
+      "text": "Texte"
+    },
+    "stepsTitle": "Étapes d'analyse",
+    "step": {
+      "claim": "Analyse de l'affirmation",
+      "claimHint": "Extraction des noms, lieux, dates et chiffres vérifiables",
+      "existing": "Vérifications existantes",
+      "existingHint": "Bibliothèque MASO et bases de fact-checks",
+      "clues": "Analyse des résultats",
+      "clueHint": "Indices avec niveau de confiance et limites"
+    },
+    "stepState": {
+      "pending": "En attente",
+      "running": "En cours",
+      "done": "Terminée",
+      "not_applicable": "Non applicable",
+      "waiting_network": "En attente de réseau"
+    },
+    "verdictScale": "Échelle des verdicts",
+    "verdictScaleHint": "Attribués uniquement par des humains : l'outil fournit des indices, les professionnels décident."
+  },
+  "verdict": {
+    "confirmed": "Confirmé",
+    "mostly_true": "Plutôt vrai",
+    "misleading": "Trompeur",
+    "out_of_context": "Hors contexte",
+    "false": "Faux",
+    "fabricated": "Contenu fabriqué",
+    "unverifiable": "Non vérifiable"
+  },
+  "verdictDefinition": {
+    "confirmed": "L'affirmation est exacte et étayée par des preuves.",
+    "mostly_true": "Exacte pour l'essentiel, avec des imprécisions mineures.",
+    "misleading": "Contient des éléments exacts mais donne une impression fausse.",
+    "out_of_context": "Contenu authentique présenté avec une date, un lieu ou un sens qui ne sont pas les siens.",
+    "false": "L'affirmation est contredite par les preuves.",
+    "fabricated": "Contenu créé ou modifié pour tromper, dont par IA générative.",
+    "unverifiable": "Les éléments disponibles ne permettent pas de conclure à ce jour."
+  },
+  "caseStatus": {
+    "new": "Nouveau",
+    "in_analysis": "En analyse",
+    "awaiting_response": "En attente de réponse",
+    "to_review": "À relire",
+    "correction_requested": "Correction demandée",
+    "validated": "Validé",
+    "published": "Publié",
+    "closed": "Classé"
+  },
+  "ressources": {
+    "statistics": "Statistiques officielles",
+    "statisticsHint": "Indicateurs sourcés et datés",
+    "mediaDirectory": "Annuaire des médias et sources",
+    "mediaDirectoryHint": "Fiches et score de fiabilité",
+    "reportLibrary": "Bibliothèque des rapports",
+    "reportLibraryHint": "Vérifications déjà publiées",
+    "categories": "Catégories",
+    "people": "Personnes-ressources",
+    "peopleCount_one": "{{count}} contact",
+    "peopleCount_other": "{{count}} contacts"
+  },
+  "rediger": {
+    "format": "Format",
+    "formats": {
+      "radio": "Brève radio",
+      "post": "Post réseau",
+      "article": "Article court",
+      "debunk": "Démenti"
+    },
+    "toolbar": {
+      "bold": "Gras",
+      "italic": "Italique",
+      "list": "Liste",
+      "quote": "Citation"
+    },
+    "note": "Note",
+    "notePlaceholder": "Note interne (non publiée)…",
+    "titlePlaceholder": "Titre de l'article",
+    "bodyPlaceholder": "Rédigez votre texte…",
+    "words_one": "{{count}} mot",
+    "words_other": "{{count}} mots",
+    "radioDuration": "≈ {{seconds}} s à l'antenne",
+    "savedLocally": "Brouillon enregistré sur cet appareil"
+  },
+  "dossiers": {
+    "tabActive": "En cours",
+    "tabDone": "Terminés",
+    "progress": "Progression",
+    "due": "Échéance : {{date}}",
+    "countInProgress": "En cours",
+    "countToReview": "À relire",
+    "countPublished": "Publiés"
+  },
+  "profil": {
+    "language": "Langue",
+    "theme": "Apparence",
+    "themeLight": "Clair",
+    "themeDark": "Sombre",
+    "themeSystem": "Système",
+    "install": "Installer l'application",
+    "installHint": "Ajoutez MASO à l'écran d'accueil pour l'utiliser sur le terrain, même sans connexion.",
+    "installed": "L'application est installée sur cet appareil.",
+    "installUnavailable": "Utilisez le menu du navigateur : « Ajouter à l'écran d'accueil ».",
+    "account": "Compte",
+    "accountHint": "La connexion et les rôles arrivent avec le module MOD-02.",
+    "network": "Connexion",
+    "version": "Version {{version}}"
+  },
+  "notFound": {
+    "title": "Page introuvable",
+    "back": "Retour à la veille"
+  }
+}

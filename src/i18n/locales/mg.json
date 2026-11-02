@@ -1,0 +1,174 @@
+{
+  "app": {
+    "name": "MASO",
+    "tagline": "Fitaovana fanamarinana ny maha-izy azy sy ny loharano tany am-boalohany"
+  },
+  "nav": {
+    "main": "Fitetezana lehibe",
+    "veille": "Fanaraha-maso",
+    "verifier": "Hamarino",
+    "ressources": "Loharano",
+    "rediger": "Hanoratra",
+    "dossiers": "Rakitra",
+    "profil": "Momba ahy",
+    "openMenu": "Sokafy ny lisitra",
+    "closeMenu": "Hidio ny lisitra",
+    "search": "Hikaroka",
+    "closeSearch": "Hidio ny fikarohana",
+    "settings": "Fikirana"
+  },
+  "page": {
+    "veille": "Vaovao farany",
+    "verifier": "Fitaovana fanamarinana",
+    "ressources": "Tahiry",
+    "rediger": "Fanoratana lahatsoratra",
+    "dossiers": "Tabilao fanaraha-maso",
+    "profil": "Momba ahy sy fikirana"
+  },
+  "network": {
+    "online": "Mifandray",
+    "offline": "Tsy mifandray",
+    "offlineBanner": "Tsy mifandray ianao : mandeha ihany ny fampiharana amin'ny angona voatahiry amin'ity fitaovana ity."
+  },
+  "common": {
+    "searchPlaceholder": "Hikaroka…",
+    "demoData": "Angona fampisehoana",
+    "minutesAgo_one": "{{count}} min lasa izay",
+    "minutesAgo_other": "{{count}} min lasa izay",
+    "noResult": "Tsy misy valiny amin'ity fikarohana ity.",
+    "comingWith": "Ho azo ampiasaina amin'ny môdiola {{module}}."
+  },
+  "veille": {
+    "realtime": "Amin'izao fotoana izao",
+    "all": "Rehetra",
+    "urgent": "Maika",
+    "takeCharge": "Raisina an-tanana",
+    "reportRumor": "Hitatitra tsaho"
+  },
+  "alertLevel": {
+    "low": "Ambany",
+    "medium": "Antonony",
+    "high": "Ambony"
+  },
+  "verifier": {
+    "claimLabel": "Ampidiro ny filazana hamarinina",
+    "claimPlaceholder": "Ohatra : « Tondra-drano ny tanànan'Antananarivo androany maraina »",
+    "submit": "Hamarino",
+    "importTitle": "Hampiditra votoaty",
+    "input": {
+      "image": "Sary",
+      "video": "Horonan-tsary",
+      "link": "Rohy",
+      "text": "Soratra"
+    },
+    "stepsTitle": "Dingana famakafakana",
+    "step": {
+      "claim": "Famakafakana ny filazana",
+      "claimHint": "Fakana ireo anarana, toerana, daty ary isa azo hamarinina",
+      "existing": "Fanamarinana efa nisy",
+      "existingHint": "Tahirin'ny MASO sy ireo tahirin'ny fanamarinana",
+      "clues": "Famakafakana ny vokatra",
+      "clueHint": "Famantarana miaraka amin'ny haavon'ny fahatokisana sy ny fetrany"
+    },
+    "stepState": {
+      "pending": "Miandry",
+      "running": "Mandeha",
+      "done": "Vita",
+      "not_applicable": "Tsy mihatra",
+      "waiting_network": "Miandry tambajotra"
+    },
+    "verdictScale": "Ambaratongan'ny didy",
+    "verdictScaleHint": "Olombelona ihany no manome azy : manome famantarana ny fitaovana, ny matihanina no manapa-kevitra."
+  },
+  "verdict": {
+    "confirmed": "Voamarina",
+    "mostly_true": "Marina ny ankamaroany",
+    "misleading": "Mamitaka",
+    "out_of_context": "Tsy amin'ny toerany",
+    "false": "Diso",
+    "fabricated": "Votoaty noforonina",
+    "unverifiable": "Tsy azo hamarinina"
+  },
+  "verdictDefinition": {
+    "confirmed": "Marina ny filazana ary misy porofo manamafy azy.",
+    "mostly_true": "Marina ny ankamaroany, misy tsipiriany kely tsy mazava.",
+    "misleading": "Misy singa marina saingy manome hevitra diso.",
+    "out_of_context": "Votoaty tena izy nefa naseho tamin'ny daty, toerana na dika tsy azy.",
+    "false": "Toherin'ny porofo ny filazana.",
+    "fabricated": "Votoaty noforonina na novana hamitahana, anisan'izany ny AI.",
+    "unverifiable": "Tsy ampy hanapahana hevitra ireo singa misy hatramin'izao."
+  },
+  "caseStatus": {
+    "new": "Vaovao",
+    "in_analysis": "Am-pamakafakana",
+    "awaiting_response": "Miandry valiny",
+    "to_review": "Hojerena indray",
+    "correction_requested": "Angatahina fanitsiana",
+    "validated": "Nekena",
+    "published": "Navoaka",
+    "closed": "Nakatona"
+  },
+  "ressources": {
+    "statistics": "Antontan'isa ofisialy",
+    "statisticsHint": "Tondro misy loharano sy daty",
+    "mediaDirectory": "Lisitry ny haino aman-jery sy loharano",
+    "mediaDirectoryHint": "Taratasy sy naoty fahatokisana",
+    "reportLibrary": "Tahirin'ny tatitra",
+    "reportLibraryHint": "Fanamarinana efa navoaka",
+    "categories": "Sokajy",
+    "people": "Olona loharanom-baovao",
+    "peopleCount_one": "{{count}} olona",
+    "peopleCount_other": "{{count}} olona"
+  },
+  "rediger": {
+    "format": "Endrika",
+    "formats": {
+      "radio": "Vaovao fohy amin'ny radio",
+      "post": "Hafatra amin'ny tambajotra",
+      "article": "Lahatsoratra fohy",
+      "debunk": "Fandavana"
+    },
+    "toolbar": {
+      "bold": "Matevina",
+      "italic": "Mitongilana",
+      "list": "Lisitra",
+      "quote": "Teny nalaina"
+    },
+    "note": "Fanamarihana",
+    "notePlaceholder": "Fanamarihana anatiny (tsy avoaka)…",
+    "titlePlaceholder": "Lohatenin'ny lahatsoratra",
+    "bodyPlaceholder": "Soraty eto ny lahatsoratrao…",
+    "words_one": "{{count}} teny",
+    "words_other": "{{count}} teny",
+    "radioDuration": "≈ {{seconds}} s amin'ny onjam-peo",
+    "savedLocally": "Voatahiry amin'ity fitaovana ity ny drafitra"
+  },
+  "dossiers": {
+    "tabActive": "Mbola mandeha",
+    "tabDone": "Vita",
+    "progress": "Fandrosoana",
+    "due": "Fe-potoana : {{date}}",
+    "countInProgress": "Mandeha",
+    "countToReview": "Hojerena",
+    "countPublished": "Navoaka"
+  },
+  "profil": {
+    "language": "Fiteny",
+    "theme": "Endrika",
+    "themeLight": "Mazava",
+    "themeDark": "Maizina",
+    "themeSystem": "Araka ny fitaovana",
+    "install": "Hametraka ny fampiharana",
+    "installHint": "Ampio amin'ny efijery fandraisana ny MASO mba hampiasana azy any an-tsaha, na tsy mifandray aza.",
+    "installed": "Efa voapetraka amin'ity fitaovana ity ny fampiharana.",
+    "installUnavailable": "Ampiasao ny lisitry ny mpitety : « Ampio amin'ny efijery fandraisana ».",
+    "account": "Kaonty",
+    "accountHint": "Ho tonga miaraka amin'ny môdiola MOD-02 ny fidirana sy ny andraikitra.",
+    "network": "Fifandraisana",
+    "version": "Dika {{version}}"
+  },
+  "notFound": {
+    "title": "Tsy hita ny pejy",
+    "back": "Hiverina amin'ny fanaraha-maso"
+  }
+}
