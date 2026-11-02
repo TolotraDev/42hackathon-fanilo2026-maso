@@ -15,7 +15,8 @@
     "closeMenu": "Close menu",
     "search": "Search",
     "closeSearch": "Close search",
-    "settings": "Settings"
+    "settings": "Settings",
+    "admin": "Administration"
   },
   "page": {
     "veille": "News feed",
@@ -23,7 +24,8 @@
     "ressources": "Database",
     "rediger": "Article editor",
     "dossiers": "Dashboard",
-    "profil": "Profile and settings"
+    "profil": "Profile and settings",
+    "admin": "Administration"
   },
   "network": {
     "online": "Online",
@@ -53,7 +55,6 @@
   "verifier": {
     "claimLabel": "Enter a claim to verify",
     "claimPlaceholder": "E.g. “Antananarivo flooded this morning”",
-    "submit": "Verify",
     "importTitle": "Import content",
     "input": {
       "image": "Image",
@@ -62,23 +63,301 @@
       "text": "Text"
     },
     "stepsTitle": "Analysis steps",
-    "step": {
-      "claim": "Claim analysis",
-      "claimHint": "Extracting verifiable names, places, dates and figures",
-      "existing": "Existing fact-checks",
-      "existingHint": "MASO library and fact-check databases",
-      "clues": "Results analysis",
-      "clueHint": "Clues with confidence level and limits"
-    },
     "stepState": {
       "pending": "Pending",
       "running": "Running",
       "done": "Done",
       "not_applicable": "Not applicable",
-      "waiting_network": "Waiting for network"
+      "waiting_network": "Waiting for network",
+      "unavailable": "Unavailable"
     },
     "verdictScale": "Verdict scale",
-    "verdictScaleHint": "Assigned only by humans: the tool provides clues, professionals decide."
+    "verdictScaleHint": "Assigned only by humans: the tool provides clues, professionals decide.",
+    "searchExisting": "Search existing fact-checks",
+    "existingResults_one": "{{count}} existing fact-check found",
+    "existingResults_other": "{{count}} existing fact-checks found",
+    "noExisting": "No existing fact-check found for these words.",
+    "soon": "Coming soon",
+    "backToHub": "Back to Verify",
+    "limitsAndTool": "Limits and tool",
+    "tool": "Tool",
+    "service": {
+      "title": "Analysis service",
+      "checking": "Checking…",
+      "ok": "Connected",
+      "off": "Unavailable",
+      "offHint": "Local analyses (fingerprint, metadata, recompression) still work; provenance, video and link will resume when the service is reachable.",
+      "localHint": "Provenance, video, link and existing fact-checks go through this service.",
+      "on": "on",
+      "notConfigured": "not configured",
+      "capability": {
+        "provenance": "C2PA provenance",
+        "video": "Video",
+        "link": "Link",
+        "factcheck": "Fact Check",
+        "ai_clue": "AI clue"
+      }
+    },
+    "summary": {
+      "waitingNetwork": "Waiting for network: this step will resume when the connection is back.",
+      "unavailable": "Analysis service unavailable: step skipped, the other results remain valid.",
+      "needsDatabase": "Requires the MASO database (Supabase)."
+    },
+    "drop": {
+      "imageTitle": "Choose an image to verify",
+      "videoTitle": "Choose a video to verify",
+      "hint": "Photo received on WhatsApp or Facebook, screenshot… or drop the file here.",
+      "choose": "Choose a file",
+      "capture": {
+        "image": "Take a photo",
+        "video": "Record"
+      }
+    },
+    "image": {
+      "preview": "Analysed image",
+      "phash": "Perceptual fingerprint",
+      "step": {
+        "reception": "Reception and fingerprint",
+        "already_seen": "Already verified?",
+        "metadata": "Metadata",
+        "provenance": "Provenance (Content Credentials)",
+        "recompression": "Recompression analysis",
+        "reverse_search": "Reverse search",
+        "ai_clue": "AI generation clue"
+      },
+      "rejected": {
+        "unsupported_type": "This file is not a recognised image (its real type does not match).",
+        "too_large": "Image too large: 20 MB maximum.",
+        "unreadable": "The browser cannot read this image (HEIC format? try a screenshot)."
+      },
+      "alreadySeen_one": "This image matches {{count}} piece of evidence already stored in MASO.",
+      "alreadySeen_other": "This image matches {{count}} pieces of evidence already stored in MASO.",
+      "notSeen": "No identical or similar image in the MASO database.",
+      "identical": "identical",
+      "distance_one": "{{count}} bit apart",
+      "distance_other": "{{count}} bits apart",
+      "metadata": {
+        "stripped": "No metadata. This is the case for almost every image shared on WhatsApp or Facebook: it is not proof of manipulation.",
+        "generative_tool": "The declared software is an image generation tool: {{software}}.",
+        "editing_tool": "The declared software is an editing tool: {{software}}. Editing is not necessarily manipulation.",
+        "future_date": "The declared date is in the future: the device's clock may have been wrong.",
+        "consistent": "Metadata present, with no obvious inconsistency."
+      },
+      "takenAt": "Declared date",
+      "device": "Device",
+      "software": "Software",
+      "gps": "GPS",
+      "map": "Geolocation map",
+      "openMap": "Open in OpenStreetMap",
+      "provenanceAbsent": "No provenance information (Content Credentials). This is the case for most images today.",
+      "provenanceAi": "The file itself declares it was created or edited with generative AI.",
+      "provenancePresent": "Provenance signed by {{issuer}}.",
+      "generator": "Creation tool",
+      "signedBy": "Signed by",
+      "signedAt": "Signed on",
+      "signature": "Signature",
+      "signatureValid": "valid",
+      "signatureInvalid": "invalid or not verifiable",
+      "elaJpegOnly": "Analysis available for JPEG images only.",
+      "ela": {
+        "none": "Uniform error level across the image.",
+        "weak": "A few areas recompress differently.",
+        "to_examine": "Some areas recompress clearly differently: examine them on the map."
+      },
+      "showElaMap": "Show the map",
+      "hideElaMap": "Hide the map",
+      "elaMap": "Compression error level map",
+      "reversePrefilled": "The engines receive the image address directly.",
+      "reverseManual": "Open an engine and drop the image: an older publication often reveals recycled content.",
+      "foundLinks": "Earlier publications found (one link per line)",
+      "foundLinksPlaceholder": "https://…",
+      "aiNotConfigured": "AI clue not configured on the analysis service.",
+      "aiScore": "Model score: {{percent}}%. Experimental clue: never a conclusion."
+    },
+    "limits": {
+      "reception": "The SHA-256 fingerprint proves the file has not changed since it was received; it says nothing about its authenticity.",
+      "already_seen": "Only finds images already stored in MASO; heavy cropping can prevent a match.",
+      "metadata": "Metadata is easily removed or edited: neither its presence nor its absence proves anything on its own.",
+      "provenance": "Very few images carry Content Credentials; their absence is normal.",
+      "recompression": "ELA is a clue to interpret: sharp edges, text and repeated recompression also create differences.",
+      "reverse_search": "No engine knows every image: no result does not prove the image is recent.",
+      "ai_clue": "Generated-image detectors have limited and variable reliability: never conclude on this clue alone.",
+      "video": "Technical information describes the received file, often recompressed by the platform.",
+      "keyframes": "Keyframes are used for reverse search: a video from another country or year is often found this way.",
+      "https": "HTTPS protects the connection; a malicious site can use it too.",
+      "domain": "A recent domain is not necessarily misleading, but opportunistic sites are often created shortly before a crisis.",
+      "hosting": "The host shows where the server is, not who publishes.",
+      "directory": "The score only assesses the source, never the truth of a claim.",
+      "existing": "Only finds fact-checks published online or stored in MASO.",
+      "archive": "The archive keeps the page as it was: useful if it is edited or deleted."
+    },
+    "video": {
+      "step": {
+        "technical": "Technical information",
+        "keyframes": "Keyframes"
+      },
+      "rejected": {
+        "unsupported_type": "This file is not a recognised video.",
+        "too_large": "Video too large: 100 MB maximum."
+      },
+      "duration": "Duration",
+      "resolution": "Resolution",
+      "codec": "Codec",
+      "fps": "Frames per second",
+      "audio": "Sound",
+      "yes": "yes",
+      "no": "no",
+      "keyframesHint_one": "{{count}} keyframe: tap it to analyse it and run a reverse search.",
+      "keyframesHint_other": "{{count}} keyframes: tap one to analyse it and run a reverse search.",
+      "frameAt": "Frame at {{time}} s",
+      "sceneChange": "Scene change",
+      "analyseFrame": "Analyse this frame",
+      "frameOrigin": "Keyframe of {{name}} at {{time}} s"
+    },
+    "link": {
+      "label": "Address of the page to verify",
+      "analyse": "Analyse",
+      "invalid": "Invalid address. Example: https://example.mg/article",
+      "step": {
+        "https": "Secure connection (HTTPS)",
+        "domain": "Domain age",
+        "hosting": "Host",
+        "directory": "Media and sources directory",
+        "existing": "Existing fact-checks",
+        "archive": "Page archive"
+      },
+      "httpsYes": "The site accepts secure connections (HTTPS).",
+      "httpsNo": "The site does not accept secure connections (HTTPS).",
+      "domainAge_one": "{{domain}} was created {{count}} day ago.",
+      "domainAge_other": "{{domain}} was created {{count}} days ago.",
+      "domainUnknown": "Domain creation date not found (registry not public).",
+      "domain": "Domain",
+      "createdAt": "Created on",
+      "registrar": "Registrar",
+      "ip": "IP address",
+      "host": "Host",
+      "country": "Country",
+      "sourceKnown": "Profile “{{name}}”: reliability score {{score}}/10.",
+      "sourceUnknown": "This site has no profile in the MASO directory yet.",
+      "existingFound_one": "{{count}} existing fact-check on this link.",
+      "existingFound_other": "{{count}} existing fact-checks on this link.",
+      "existingNone": "No existing fact-check on this link.",
+      "factcheckOff": "Google Fact Check is not configured on the analysis service.",
+      "archived": "Latest archive: {{date}}.",
+      "notArchived": "Page never archived.",
+      "openArchive": "Open the archive",
+      "archiveNow": "Archive now",
+      "archiving": "Archiving (up to a minute)…",
+      "archiveDone": "Page archived: the archive will be attached to the case.",
+      "archiveFailed": "Archiving failed: try again later.",
+      "partUnavailable": "External service unreachable for now (registry or archive): no result is invented, try again later.",
+      "rejected": {
+        "private_address": "Address refused: MASO does not analyse internal or private network addresses.",
+        "unsupported_port": "Address refused: only standard websites (ports 80 and 443) are analysed.",
+        "unsupported_scheme": "Address refused: only http and https addresses are analysed.",
+        "invalid_host": "Address refused: invalid site name.",
+        "host_not_found": "This domain does not exist or is misspelled.",
+        "too_many_redirects": "Too many redirects: the page could not be analysed."
+      }
+    },
+    "attach": {
+      "title": "Add to case",
+      "existing": "Existing case",
+      "new": "New case",
+      "noOpenCase": "No ongoing case.",
+      "caseTitle": "Case title",
+      "claim": "Claim to verify",
+      "origin": "Origin (where the content was found)",
+      "originPlaceholder": "E.g. Facebook page “…”, WhatsApp group",
+      "submit": "Add to case",
+      "done": "Evidence added to case “{{title}}”.",
+      "needsDatabase": "Adding to a case requires the MASO database (Supabase). Analyses remain usable.",
+      "offline": "A connection is needed to add to a case."
+    },
+    "visual": {
+      "title": "Visual checklist",
+      "hint": "What you observe yourself in the image.",
+      "shadows": "Shadows and time of day",
+      "weather": "Weather",
+      "signs": "Signs and shopfronts",
+      "language": "Visible language",
+      "plates": "Licence plates",
+      "vegetation": "Vegetation",
+      "note": "What you observed",
+      "state": {
+        "unchecked": "Not examined",
+        "consistent": "Consistent",
+        "inconsistent": "Inconsistent",
+        "not_applicable": "Not applicable"
+      }
+    },
+    "share": {
+      "receiving": "Receiving shared content…",
+      "empty": "Nothing received. Share an image, a video or a link to MASO from another app."
+    },
+    "source": {
+      "title": "Source profile",
+      "fromLinkHint": "Assess the site's reliability, criterion by criterion.",
+      "open": "Open the source profile",
+      "create": "Create the source profile",
+      "verified": "Verified",
+      "name": "Name",
+      "type": "Type",
+      "url": "Address",
+      "createdOn": "Creation date",
+      "types": {
+        "media": "Media",
+        "page": "Page",
+        "site": "Site",
+        "account": "Account",
+        "journalist": "Journalist",
+        "institution": "Institution",
+        "person": "Person"
+      },
+      "criteriaTitle": "Reliability criteria",
+      "criteriaHint": "Each criterion is filled in by a team member, with a justification.",
+      "criteria": {
+        "identity": "Clear identity",
+        "transparency": "Transparency",
+        "seniority": "Seniority",
+        "corrections_history": "Debunk history",
+        "competence": "Competence",
+        "proximity": "Proximity to the facts",
+        "independence": "Independence",
+        "corroboration": "Corroboration"
+      },
+      "criteriaHelp": {
+        "identity": "Is the publisher, address or legal notice identifiable?",
+        "transparency": "Are sources, method and funding disclosed?",
+        "seniority": "How long has the source existed?",
+        "corrections_history": "Has it spread debunked content before? Does it correct its errors?",
+        "competence": "Recognised expertise on the topic?",
+        "proximity": "Does it have direct access to the facts?",
+        "independence": "Political, commercial or partisan ties?",
+        "corroboration": "Is its information confirmed by other sources?"
+      },
+      "scoreLabel": {
+        "none": "Not assessed",
+        "0": "Unfavourable",
+        "1": "Partial",
+        "2": "Favourable"
+      },
+      "justification": "Justification (required)",
+      "missingJustification": "Every assessed criterion must be justified.",
+      "save": "Save the profile",
+      "saved": "Profile saved.",
+      "score": "Reliability score",
+      "scoreHint": "Average of the assessed criteria. The score only assesses the source, never the truth of a claim.",
+      "verify": "Mark as verified",
+      "unverify": "Remove the “verified” mention",
+      "confidentialTitle": "Confidential details",
+      "confidentialHint": "Contact details or identity to protect. Every access is recorded in the audit log.",
+      "reveal": "Show (access is logged)",
+      "confidentialLogged": "Access recorded in the audit log.",
+      "saveConfidential": "Save confidential details",
+      "linkedCases": "Linked cases",
+      "noLinkedCase": "No linked case yet."
+    }
   },
   "verdict": {
     "confirmed": "Confirmed",
@@ -115,10 +394,171 @@
     "mediaDirectoryHint": "Profiles and reliability score",
     "reportLibrary": "Report library",
     "reportLibraryHint": "Already published fact-checks",
-    "categories": "Categories",
     "people": "Resource people",
     "peopleCount_one": "{{count}} contact",
-    "peopleCount_other": "{{count}} contacts"
+    "peopleCount_other": "{{count}} contacts",
+    "offlinePack": "Version saved on this device on {{date}} (offline).",
+    "manage": "Manage the directory",
+    "addPerson": "Add a person",
+    "proposePerson": "Propose a person",
+    "searchPeople": "Search a name, an organisation, a field…",
+    "filter": {
+      "domain": "Field",
+      "region": "Region",
+      "language": "Language",
+      "organization": "Organisation"
+    },
+    "favoritesOnly": "My favourites only",
+    "favorite": "Favourite",
+    "status": {
+      "pending": "To validate",
+      "revalidate": "To revalidate",
+      "withdrawn": "Withdrawn",
+      "valid": "Validated"
+    },
+    "guestHint": "Guest mode: only people who accepted public visibility are listed, without their contact details.",
+    "back": "Back to resources",
+    "person": {
+      "notFound": "This person is not (or no longer) in the directory.",
+      "languages": "Languages",
+      "visibility": "Visibility",
+      "lastValidated": "Last validation",
+      "neverValidated": "never validated",
+      "daysAgo_one": "{{count}} day ago",
+      "daysAgo_other": "{{count}} days ago",
+      "call": "Call",
+      "email": "Email",
+      "contactsHidden": "Contact details not shared: this person chose private visibility. Ask the editor-in-chief.",
+      "requests": "Confirmation requests",
+      "requestsHint": "Keep track of each request made to this person for a case, and of the answer.",
+      "requestSaved": "Confirmation request saved.",
+      "case": "Related case",
+      "channel": "Channel",
+      "newRequest": "New request",
+      "status": "Status",
+      "response": "Answer received",
+      "privateNote": "Private note",
+      "privateNoteHint": "Visible to you only.",
+      "saveNote": "Save",
+      "noteSaved": "Saved.",
+      "edit": "Edit the profile",
+      "validate": "Validate",
+      "revalidate": "Revalidate (details checked)",
+      "validated": "Profile validated.",
+      "withdraw": "Right to withdraw",
+      "withdrawConfirm": "Remove {{name}} from the directory and erase their contact details? This cannot be undone.",
+      "withdrawn": "Person removed from the directory, contact details erased.",
+      "updateRequest": "Update the request"
+    },
+    "visibility": {
+      "public": "Public",
+      "team": "Team",
+      "private": "Private"
+    },
+    "visibilityHint": {
+      "public": "Name, position and fields also visible to the public (never contact details).",
+      "team": "Contact details visible to the whole editorial team.",
+      "private": "Contact details visible only to the editor-in-chief and the administrator."
+    },
+    "channel": {
+      "phone": "Phone",
+      "whatsapp": "WhatsApp",
+      "email": "Email",
+      "in_person": "In person"
+    },
+    "confirmation": {
+      "to_contact": "To contact",
+      "sent": "Request sent",
+      "answered": "Answer received",
+      "reminder_needed": "Follow-up needed",
+      "no_answer": "No answer"
+    },
+    "form": {
+      "fullName": "Full name",
+      "position": "Position",
+      "organization": "Organisation",
+      "region": "Region",
+      "phone": "Phone",
+      "whatsapp": "WhatsApp",
+      "email": "Email",
+      "domains": "Fields of expertise (comma-separated)",
+      "domainsPlaceholder": "E.g. climate, floods",
+      "contacts": "Contact details and visibility",
+      "consent": "This person agreed to be listed in the MASO directory with the chosen visibility. They can withdraw at any time.",
+      "consentRequired": "The person's consent is required.",
+      "proposalHint": "Your proposal will be visible to the team once validated by the editor-in-chief.",
+      "sendProposal": "Send the proposal",
+      "proposalSent": "Proposal sent: it will appear in the directory once validated."
+    },
+    "admin": {
+      "title": "All profiles",
+      "hint": "Validate proposals and revalidate profiles older than {{days}} days: are the contact details still correct?",
+      "import": "Import people (CSV)"
+    },
+    "csv": {
+      "hint": "Expected columns (separator ; or ,): {{columns}}.",
+      "template": "Download the template",
+      "choose": "Choose a CSV file",
+      "preview": "{{valid}} valid line(s), {{rejected}} rejected.",
+      "confirm_one": "Import {{count}} line",
+      "confirm_other": "Import {{count}} lines",
+      "lineError": "Line {{line}}: {{reason}}",
+      "imported_one": "{{count}} item added.",
+      "imported_other": "{{count}} items added.",
+      "missing": "empty “{{column}}” column",
+      "invalidType": "invalid type (expected: {{types}})"
+    },
+    "sources": {
+      "noScore": "Not assessed",
+      "import": "Import sources (CSV)"
+    },
+    "theme": {
+      "demography": "Demography",
+      "health": "Health",
+      "education": "Education",
+      "economy": "Economy",
+      "climate": "Climate and disasters",
+      "elections": "Elections"
+    },
+    "stats": {
+      "stale": "Outdated data",
+      "staleHint": "Data older than {{years}} years: look for a more recent source before quoting it.",
+      "year": "Year {{year}}",
+      "chart": "Trend: {{name}}",
+      "source": "Source",
+      "updated": "Source updated on {{date}}",
+      "notValidated": "Not validated",
+      "compareTitle": "Compare with a claim",
+      "compareHint": "Enter the figure stated in the suspicious content: MASO computes the gap with the official data.",
+      "indicator": "Official indicator",
+      "claimedValue": "Stated figure (e.g. 40,000,000)",
+      "compare": {
+        "higher": "The stated figure ({{claimed}}) is {{percent}}% higher than the official data: {{official}} {{unit}} ({{source}}, {{year}}).",
+        "lower": "The stated figure ({{claimed}}) is {{percent}}% lower than the official data: {{official}} {{unit}} ({{source}}, {{year}}).",
+        "equal": "The stated figure ({{claimed}}) matches the official data: {{official}} {{unit}} ({{source}}, {{year}})."
+      },
+      "worldBankTitle": "Import from the World Bank",
+      "worldBankHint": "Official data on Madagascar, with their update date. Years already present are not duplicated.",
+      "allIndicators": "All indicators ({{count}})",
+      "import": "Import",
+      "manualTitle": "Manual entry",
+      "manualHint": "Source and date required: no figure without a source and a date.",
+      "theme": "Theme",
+      "field": {
+        "name": "Indicator name",
+        "value": "Value",
+        "unit": "Unit (optional)",
+        "year": "Year of the data",
+        "source": "Source (e.g. INSTAT, WHO, ministry)",
+        "sourceUrl": "Link to the source (optional)",
+        "sourceUpdatedAt": "Source update date"
+      },
+      "save": "Save the indicator",
+      "saved": "Saved.",
+      "invalidNumber": "Invalid value or year.",
+      "sourceRequired": "Source and update date (YYYY-MM-DD) required.",
+      "csvTitle": "Import statistics (CSV)"
+    }
   },
   "rediger": {
     "format": "Format",
@@ -163,12 +603,111 @@
     "installed": "The app is installed on this device.",
     "installUnavailable": "Use the browser menu: “Add to home screen”.",
     "account": "Account",
-    "accountHint": "Sign-in and roles arrive with module MOD-02.",
     "network": "Connection",
     "version": "Version {{version}}"
   },
   "notFound": {
     "title": "Page not found",
-    "back": "Back to monitoring"
+    "back": "Back to home"
+  },
+  "role": {
+    "public": "Guest",
+    "journalist": "Journalist",
+    "fact_checker": "Fact-checker",
+    "editor_in_chief": "Editor-in-chief",
+    "admin": "Administrator"
+  },
+  "language": {
+    "fr": "Français",
+    "mg": "Malagasy",
+    "en": "English"
+  },
+  "auth": {
+    "title": "Sign in",
+    "subtitle": "Access your verification workspace.",
+    "email": "Email address",
+    "password": "Password",
+    "methodPassword": "Password",
+    "methodMagicLink": "Magic link",
+    "submit": "Sign in",
+    "sendLink": "Send me the link",
+    "magicLinkSent": "A sign-in link was sent to {{email}}. Open it on this device.",
+    "forgot": "Forgot password?",
+    "or": "or",
+    "guest": "Continue without an account",
+    "guestHint": "Limited to the public directory and statistics.",
+    "demoTitle": "Demo mode",
+    "demoHint": "Supabase is not configured: fictional accounts, data kept on this device. Password: {{password}}",
+    "signIn": "Sign in",
+    "signOut": "Sign out",
+    "guestMode": "Guest mode",
+    "offlineSession": "Offline session: your actions will sync when the network is back.",
+    "loading": "Loading…",
+    "forgotTitle": "Forgot password",
+    "forgotHint": "Enter your address: you will receive a link to choose a new password.",
+    "sendReset": "Send the link",
+    "resetSent": "If an account exists for {{email}}, a link has just been sent.",
+    "backToLogin": "Back to sign in",
+    "resetTitle": "New password",
+    "newPassword": "New password",
+    "confirmPassword": "Confirm password",
+    "passwordRules": "At least 8 characters.",
+    "passwordTooShort": "The password must contain at least 8 characters.",
+    "passwordMismatch": "The two passwords do not match.",
+    "savePassword": "Save",
+    "resetExpired": "This link is no longer valid. Request a new one.",
+    "error": {
+      "invalid_credentials": "Incorrect email address or password.",
+      "account_suspended": "This account is suspended. Contact the administrator.",
+      "network": "Cannot reach the server. Check your network.",
+      "rate_limited": "Too many attempts. Try again in a few minutes.",
+      "role_not_allowed": "Action reserved for the administrator.",
+      "cannot_change_own_account": "You cannot modify your own account.",
+      "already_exists": "An account already exists with this address.",
+      "unknown": "Something went wrong. Please try again.",
+      "email_not_confirmed": "Email address not confirmed. In Supabase, confirm the account (Authentication → Users).",
+      "email_not_authorized": "Supabase's email service refuses this address: configure an SMTP server or create the account manually.",
+      "profile_missing": "This account has no MASO profile. Ask the administrator to create it (see the Supabase setup).",
+      "configuration": "Supabase is misconfigured (key, migrations or email provider). Check the .env file and the setup.",
+      "no_account": "No MASO account is linked to this address. Check the address or ask the administrator for an invitation."
+    }
+  },
+  "onboarding": {
+    "skip": "Skip",
+    "next": "Next",
+    "start": "Get started",
+    "step": "Step {{current}} of {{total}}",
+    "chooseLanguage": "Choose your language",
+    "s1Title": "Verify suspicious content",
+    "s1Text": "Image, video, link or text received on Facebook or WhatsApp: MASO analyses it and gives you clues, never an automatic verdict.",
+    "s2Title": "Document and get it approved",
+    "s2Text": "Evidence, sources, experts and official figures gathered in one case. The fact-checker proposes, the editor-in-chief validates and publishes.",
+    "s3Title": "In the field, even offline",
+    "s3Text": "Install the app: your cases, the directory and statistics stay available without network.",
+    "install": "Install the app"
+  },
+  "admin": {
+    "usage": "Usage",
+    "activeUsers": "Active accounts",
+    "suspendedUsers": "Suspended accounts",
+    "inviteTitle": "Invite a member",
+    "fullName": "Full name",
+    "role": "Role",
+    "language": "Language",
+    "invite": "Send invitation",
+    "invited": "Invitation sent to {{email}}.",
+    "invitedDemo": "Account created for {{email}} (demo). Password: {{password}}",
+    "usersTitle": "Members",
+    "you": "you",
+    "active": "Active",
+    "suspended": "Suspended",
+    "suspend": "Suspend",
+    "reactivate": "Reactivate",
+    "updated": "Account updated."
+  },
+  "clue": {
+    "none": "No clue",
+    "weak": "Weak clue",
+    "to_examine": "Clue to examine"
   }
 }

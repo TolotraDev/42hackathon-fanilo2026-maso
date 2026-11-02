@@ -1,8 +1,16 @@
 // Contrat partagé du domaine MASO (cahier des charges, sections 3, 6 et 11).
 // Les valeurs sont stables : elles seront aussi utilisées en base (MOD-02).
 
+/** Rôles de l'application ; « public » = visiteur sans compte (mode invité). */
 export const ROLES = ['public', 'journalist', 'fact_checker', 'editor_in_chief', 'admin'] as const
 export type Role = (typeof ROLES)[number]
+
+/** Rôles d'un compte (type public.user_role en base). */
+export const USER_ROLES = ['journalist', 'fact_checker', 'editor_in_chief', 'admin'] as const
+export type UserRole = (typeof USER_ROLES)[number]
+
+/** Équipe éditoriale : l'administrateur n'en fait pas partie (section 3). */
+export const STAFF_ROLES: readonly Role[] = ['journalist', 'fact_checker', 'editor_in_chief']
 
 export const CASE_STATUSES = [
   'new',
@@ -71,4 +79,15 @@ export const CASE_STATUS_TONES: Record<CaseStatus, Tone> = {
   validated: 'success',
   published: 'success',
   closed: 'neutral',
+}
+
+/** Profil d'un membre (table public.profiles). */
+export interface Profile {
+  id: string
+  email: string
+  fullName: string
+  role: UserRole
+  language: Language
+  newsroomId: string | null
+  active: boolean
 }
