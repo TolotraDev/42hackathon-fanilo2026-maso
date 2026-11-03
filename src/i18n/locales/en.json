@@ -54,7 +54,25 @@
     "urgent": "Urgent",
     "takeCharge": "Take charge",
     "reportRumor": "Report a rumour",
-    "breakdown": "Breakdown"
+    "breakdown": "Breakdown",
+    "refresh": "Refresh",
+    "map": "Alert map",
+    "mapTooltip_one": "{{region}}: {{count}} alert",
+    "mapTooltip_other": "{{region}}: {{count}} alerts",
+    "trends": "Trends",
+    "noTrend": "No recurring keyword yet.",
+    "allRegions": "All regions",
+    "empty": "No alert for these filters.",
+    "open": "Open",
+    "offlineCache": "Offline: here are the latest alerts saved on this device.",
+    "rssUnavailable": "RSS feeds unavailable (analysis service unreachable): only public reports are shown.",
+    "feedErrors_one": "{{count}} feed could not be read.",
+    "feedErrors_other": "{{count}} feeds could not be read.",
+    "origin": {
+      "all": "All",
+      "report": "Report",
+      "rss": "Media (RSS)"
+    }
   },
   "alertLevel": {
     "low": "Low",
@@ -592,7 +610,47 @@
     "words_one": "{{count}} word",
     "words_other": "{{count}} words",
     "radioDuration": "≈ {{seconds}} s on air",
-    "savedLocally": "Draft saved on this device"
+    "savedLocally": "Draft saved on this device",
+    "case": "Case",
+    "noCase": "No case (template only)",
+    "language": "Text language",
+    "useTemplate": "Insert the non-AI template",
+    "glossary": {
+      "title": "FR / MG glossary",
+      "search": "Search a term"
+    },
+    "assistant": {
+      "title": "Editorial assistant",
+      "hint": "It only uses the case content, cites every element and never gives a verdict.",
+      "excerpts_one": "{{count}} excerpt",
+      "excerpts_other": "{{count}} excerpts",
+      "noExcerpts": "This case has no evidence, source or completed checklist item yet: the assistant has nothing to rely on.",
+      "running": "Writing…",
+      "error": "The assistant could not answer. Try again later.",
+      "offline": "No connection: the assistant will be back with the network. Non-AI templates remain available.",
+      "mention": "AI-assisted draft — to be reviewed",
+      "missing": "What the case is missing:",
+      "removed_one": "{{count}} sentence removed by the check",
+      "removed_other": "{{count}} sentences removed by the check",
+      "model": "Model {{model}} · prompt {{version}}",
+      "insert": "Insert into draft",
+      "history_one": "{{count}} previous generation",
+      "history_other": "{{count}} previous generations",
+      "fn": {
+        "draft": "Write",
+        "angles": "Angles",
+        "headlines": "Headlines",
+        "questions": "Questions",
+        "context": "Context"
+      },
+      "reason": {
+        "no_citation": "no excerpt cited",
+        "unknown_excerpt": "unknown excerpt",
+        "number_not_in_excerpts": "number not in excerpts",
+        "name_not_in_excerpts": "name not in excerpts",
+        "verdict": "verdict not allowed"
+      }
+    }
   },
   "dossiers": {
     "tabActive": "Ongoing",
@@ -896,7 +954,27 @@
     "installUnavailable": "Use the browser menu: “Add to home screen”.",
     "account": "Account",
     "network": "Connection",
-    "version": "Version {{version}}"
+    "version": "Version {{version}}",
+    "badge": {
+      "title": "MASO press badge",
+      "hint": "Show this QR code: the public checks your identity on the portal.",
+      "qr": "QR code of badge {{code}}"
+    },
+    "dataSaver": "Data saver",
+    "dataSaverHint": "Monitoring is not loaded automatically; you refresh it yourself.",
+    "notifications": "Device notifications",
+    "notificationsHint": "Alert me when a notification arrives while MASO is in the background.",
+    "packs": {
+      "title": "Offline packs",
+      "hint": "Download the directory and statistics to browse them without network.",
+      "directory": "Directory",
+      "statistics": "Statistics",
+      "sources": "Media and sources",
+      "none": "not downloaded",
+      "savedAt": "updated {{date}}",
+      "download": "Download packs",
+      "error": "Download interrupted. Try again with network."
+    }
   },
   "notFound": {
     "title": "Page not found",
@@ -999,7 +1077,16 @@
     "suspended": "Suspended",
     "suspend": "Suspend",
     "reactivate": "Reactivate",
-    "updated": "Account updated."
+    "updated": "Account updated.",
+    "badge": {
+      "issue": "Issue badge",
+      "issued": "Badge issued for one year.",
+      "revoke": "Revoke badge",
+      "revoked": "Badge revoked",
+      "revokedDone": "Badge revoked.",
+      "expired": "Badge expired",
+      "until": "Badge valid until {{date}}"
+    }
   },
   "clue": {
     "none": "No clue",
@@ -1349,6 +1436,132 @@
       }
     },
     "quickVerdicts": "Quick access:",
-    "signIn": "Sign in"
+    "signIn": "Sign in",
+    "badge": {
+      "valid": "Valid badge",
+      "revoked": "Revoked badge",
+      "expired": "Expired badge",
+      "suspended": "Suspended account",
+      "unknown": "Unknown badge",
+      "unknownHint": "No MASO journalist holds this badge. Be wary of anyone claiming it.",
+      "validUntil": "valid until {{date}}"
+    }
+  },
+  "pin": {
+    "title": "MASO is locked",
+    "label": "PIN code",
+    "unlock": "Unlock",
+    "wrong_one": "Wrong code. {{count}} attempt left.",
+    "wrong_other": "Wrong code. {{count}} attempts left.",
+    "blocked": "Too many attempts. Sign out, then sign in again with your password.",
+    "signOut": "Sign out",
+    "setting": "PIN code",
+    "hint": "Asked when opening and after 5 minutes in the background.",
+    "new": "New code (4 to 6 digits)",
+    "confirm": "Confirm code",
+    "save": "Save",
+    "saved": "PIN code saved on this device.",
+    "invalid": "The code must have 4 to 6 digits.",
+    "mismatch": "The two codes do not match."
+  },
+  "settings": {
+    "title": "Settings and log",
+    "hint": "Monitoring, alert levels, templates, glossary, audit log, legal notice.",
+    "tab": {
+      "veille": "Monitoring",
+      "templates": "Templates",
+      "glossary": "Glossary",
+      "audit": "Log",
+      "legal": "Legal"
+    },
+    "save": "Save",
+    "saved": "Settings saved.",
+    "saveError": "Could not save. Check your connection and rights.",
+    "reset": "Restore original templates",
+    "cancel": "Cancel",
+    "veille": {
+      "sources": "RSS / Atom feeds",
+      "sourcesHint": "One address per line, 10 at most.",
+      "invalid": "Invalid address: {{url}}",
+      "high": "“High level” keywords",
+      "medium": "“Medium level” keywords",
+      "rulesHint": "One word per line, accents ignored. Content reported 3 times goes up one level."
+    },
+    "templates": {
+      "hint": "Used in Write, even without AI. {claim}, {title} and {verdict} are replaced by the case content."
+    },
+    "glossary": {
+      "add": "Add a term",
+      "edit": "Edit term",
+      "delete": "Delete term",
+      "fr": "French",
+      "mg": "Malagasy",
+      "en": "English (optional)",
+      "context": "Context (optional)"
+    },
+    "audit": {
+      "entity": "Item",
+      "action": "Action",
+      "from": "From",
+      "to": "To",
+      "export": "Export (CSV)",
+      "system": "System",
+      "noChange": "No field changed.",
+      "error": "Log unavailable: reserved for the editor-in-chief and administrators.",
+      "demo": "The audit log is kept by the server: it does not exist in demo mode.",
+      "actions": {
+        "insert": "creation",
+        "update": "update",
+        "delete": "deletion"
+      }
+    },
+    "legal": {
+      "label": "Legal notice and consent"
+    }
+  },
+  "textAnalysis": {
+    "title": "Text analysis",
+    "hint": "Paste the message you received (FR or MG): MASO spots verifiable claims and manipulation signals, on your phone.",
+    "input": "Text to analyse",
+    "placeholder": "Paste the circulating message here…",
+    "analyse": "Analyse",
+    "noVerdict": "These are leads for verification, not a verdict: only a journalist concludes.",
+    "signals": "Manipulation signals",
+    "noSignal": "No manipulation signal found.",
+    "claims_one": "{{count}} verifiable claim",
+    "claims_other": "{{count}} verifiable claims",
+    "noClaim": "No precise claim (figure, date, place, person) found.",
+    "entity": {
+      "number": "Figure",
+      "date": "Date",
+      "place": "Place",
+      "name": "Person"
+    },
+    "figures": "Figures compared with statistics",
+    "noFigure": "No figure in the text matches an official indicator of the directory.",
+    "figureLine": "Claimed: {{claimed}} · official: {{official}} {{unit}} ({{year}}) · gap {{percent}} %",
+    "existing": "Existing fact-checks",
+    "signal": {
+      "urgency": {
+        "title": "Urgency",
+        "text": "The text pushes you to react fast, without time to check."
+      },
+      "share_appeal": {
+        "title": "Call to share",
+        "text": "The text asks to be shared: a common rumour technique."
+      },
+      "no_source": {
+        "title": "No source",
+        "text": "The text cites no source, author or link."
+      },
+      "unsourced_figures": {
+        "title": "Unsourced figures",
+        "text": "Figures are given without saying where they come from."
+      },
+      "shouting": {
+        "title": "Alarmist tone",
+        "text": "Capital letters or repeated exclamation marks."
+      }
+    }
   }
 }

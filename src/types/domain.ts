@@ -90,4 +90,12 @@ export interface Profile {
   language: Language
   newsroomId: string | null
   active: boolean
+  /** Badge de presse avec QR (M14) ; émis et révoqué par l'administration (W12). */
+  badge?: PressBadge | null
+}
+
+export interface PressBadge {
+  code: string
+  validUntil: string
+  revoked: boolean
 }

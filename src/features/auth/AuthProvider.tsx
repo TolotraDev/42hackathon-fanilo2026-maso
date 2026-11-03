@@ -4,6 +4,7 @@ import { readStorage, writeStorage } from '@/lib/storage'
 import type { Profile, Role } from '@/types/domain'
 import type { AuthErrorCode, AuthService } from './authService'
 import { createDemoAuth } from './demoAuth'
+import { lock, removePin } from './pin'
 import { resolveSession, type ProfileResult } from './resolveSession'
 import { createSupabaseAuth } from './supabaseAuth'
 
@@ -85,6 +86,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signOut = useCallback(async () => {
     writeStorage(PROFILE_CACHE_KEY, '')
     writeStorage(GUEST_KEY, '')
+    // Le code PIN protège le compte de cet appareil : il disparaît avec la session.
+    removePin()
+    lock()
     await service.signOut()
     setState({ status: 'signed_out', voluntary: true })
   }, [service])

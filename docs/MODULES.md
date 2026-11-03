@@ -177,5 +177,5 @@ Critères d'acceptation : checklist finale du Standard de livraison 42 Antananar
 | MOD-04 | Joba | Terminé | Non | Non |
 | MOD-05 | Tolotra | Terminé | Non | Non |
 | MOD-06 | Lorraine | Terminé | Non | Non |
-| MOD-07 | Lucia | À faire | Non | Non |
-| MOD-08 | Joba | À faire | Non | Non |
+| MOD-07 | Lucia | Terminé (branche `lucia`) | Non | Non |
+| MOD-08 | Joba | Terminé (branche `lucia`) — déploiement à faire | Non | Non |

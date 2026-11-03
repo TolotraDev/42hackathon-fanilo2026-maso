@@ -2,19 +2,21 @@
 // Mode démonstration : rapports publiés et signalements conservés sur l'appareil, mêmes règles.
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { DEMO_USERS } from '@/data/demo/users'
+import { demoVerifyBadge } from '@/features/auth/demoAuth'
 import { DEMO_DB_NAME, LocalDb } from '@/features/dossiers/localDb'
 import { addLocalNotifications } from '@/features/notifications/notifications'
 import { demoSeal } from '@/features/revue/publication'
 import { hammingHex } from '@/lib/analysis/phash'
 import { supabase } from '@/lib/supabase'
 import { comparableUrl } from './comparableUrl'
-import type { AlertInput, AlertReceipt, MatchReason, PublicReport, ReportCard, ReportFilters, Tracking, TrackedStatus, Verification } from './types'
+import type { AlertInput, AlertReceipt, BadgeVerification, MatchReason, PublicReport, ReportCard, ReportFilters, Tracking, TrackedStatus, Verification } from './types'
 
 export interface PortalApi {
   readonly mode: 'remote' | 'local'
   reports(filters: ReportFilters): Promise<ReportCard[]>
   report(publicId: string): Promise<PublicReport | null>
   verify(publicId: string): Promise<Verification>
+  verifyBadge(code: string): Promise<BadgeVerification>
   lookup(input: { sha256?: string | null; phash?: string | null; url?: string | null }): Promise<ReportCard[]>
   submit(input: AlertInput): Promise<AlertReceipt>
   track(code: string): Promise<Tracking>
@@ -68,6 +70,7 @@ function remotePortal(db: SupabaseClient): PortalApi {
       }),
     report: async (publicId) => (await call<PublicReport | null>('portal_report', { p_public_id: publicId })) ?? null,
     verify: (publicId) => call<Verification>('portal_verify_report', { p_public_id: publicId }),
+    verifyBadge: (code) => call<BadgeVerification>('portal_verify_badge', { p_code: code }),
     lookup: (input) => call<ReportCard[]>('portal_lookup', { p_sha256: input.sha256 ?? null, p_phash: input.phash ?? null, p_url: input.url || null }),
     async submit(input) {
       validate(input)
@@ -196,6 +199,9 @@ export function localPortal(db: LocalDb = new LocalDb(DEMO_DB_NAME)): PortalApi 
     },
     async report(publicId) {
       return (await published()).find(({ report }) => report.public_id === publicId.trim().toUpperCase())?.report ?? null
+    },
+    async verifyBadge(code) {
+      return demoVerifyBadge(code)
     },
     async verify(publicId) {
       const found = (await published()).find(({ report }) => report.public_id === publicId.trim().toUpperCase())

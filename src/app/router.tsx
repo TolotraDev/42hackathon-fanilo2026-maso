@@ -3,12 +3,14 @@ import { createBrowserRouter } from 'react-router-dom'
 import { AppShell } from '@/components/layout/AppShell'
 import { PublicVisitor } from '@/features/auth/AuthProvider'
 import { LoginPage } from '@/features/auth/LoginPage'
+import { PinLock } from '@/features/auth/PinLock'
 import { HomeRedirect, Lazy, PublicOnly, RequireAuth, RequireSection } from '@/features/auth/RouteGuards'
 import { NotFoundPage } from '@/features/NotFoundPage'
 import { VeillePage } from '@/features/veille/VeillePage'
 import type { SectionId } from '@/lib/permissions'
 
 // Chaque page est chargée à la demande : premier chargement léger sur réseau lent (section 12).
+const SettingsPage = lazy(() => import('@/features/admin/SettingsPage').then((m) => ({ default: m.SettingsPage })))
 const AdminPage = lazy(() => import('@/features/admin/AdminPage').then((m) => ({ default: m.AdminPage })))
 const ForgotPasswordPage = lazy(() => import('@/features/auth/ForgotPasswordPage').then((m) => ({ default: m.ForgotPasswordPage })))
 const OnboardingPage = lazy(() => import('@/features/auth/OnboardingPage').then((m) => ({ default: m.OnboardingPage })))
@@ -39,6 +41,7 @@ const PublicReportPage = lazy(() => import('@/features/portail/PublicReportPage'
 const SubmitAlertPage = lazy(() => import('@/features/portail/SubmitAlertPage').then((m) => ({ default: m.SubmitAlertPage })))
 const TrackPage = lazy(() => import('@/features/portail/TrackPage').then((m) => ({ default: m.TrackPage })))
 const VerifyPage = lazy(() => import('@/features/portail/VerifyPage').then((m) => ({ default: m.VerifyPage })))
+const TextAnalysisPage = lazy(() => import('@/features/verifier/TextAnalysisPage').then((m) => ({ default: m.TextAnalysisPage })))
 const VideoAnalysisPage = lazy(() => import('@/features/verifier/VideoAnalysisPage').then((m) => ({ default: m.VideoAnalysisPage })))
 
 const section = (id: SectionId, page: React.ReactNode, path: string = id) => ({
@@ -76,7 +79,9 @@ export const router = createBrowserRouter([
   {
     element: (
       <RequireAuth>
-        <AppShell />
+        <PinLock>
+          <AppShell />
+        </PinLock>
       </RequireAuth>
     ),
     children: [
@@ -88,6 +93,7 @@ export const router = createBrowserRouter([
       section('verifier', <ImageAnalysisPage />, 'verifier/image'),
       section('verifier', <VideoAnalysisPage />, 'verifier/video'),
       section('verifier', <LinkAnalysisPage />, 'verifier/lien'),
+      section('verifier', <TextAnalysisPage />, 'verifier/texte'),
       section('verifier', <SharePage />, 'verifier/partage'),
       section('verifier', <SourcePage />, 'verifier/sources/:id'),
       section('ressources', <RessourcesPage />),
@@ -105,6 +111,7 @@ export const router = createBrowserRouter([
       section('dossiers', <CasePage />, 'dossiers/:id'),
       section('dossiers', <ReviewPage />, 'dossiers/:id/revue'),
       section('admin', <AdminPage />),
+      section('admin', <SettingsPage />, 'admin/parametres'),
       section('profil', <ProfilPage />),
       { path: '*', element: <NotFoundPage /> },
     ],

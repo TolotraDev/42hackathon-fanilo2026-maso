@@ -6,3 +6,4 @@ python-multipart>=0.0.9
 av>=12.0          # FFmpeg embarqué : informations vidéo et images clés
 Pillow>=10.0
 c2pa-python>=0.5  # Content Credentials (C2PA)
+defusedxml>=0.7  # lecture sûre des flux RSS / Atom (veille)

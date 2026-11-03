@@ -48,3 +48,9 @@ export function parseCsv(text: string): Array<Record<string, string>> {
 /** Liste dans une cellule : « climat|météo » ou « climat, météo ». */
 export const splitList = (value: string | undefined) =>
   (value ?? '').split(/[|,]/).map((item) => item.trim()).filter(Boolean)
+
+/** CSV (séparateur « ; », lisible par Excel en français) : chaque cellule est protégée par des guillemets. */
+export function toCsv(rows: Array<Array<string | number | null | undefined>>): string {
+  const cell = (value: string | number | null | undefined) => `"${String(value ?? '').replace(/"/g, '""')}"`
+  return rows.map((row) => row.map(cell).join(';')).join('\n') + '\n'
+}

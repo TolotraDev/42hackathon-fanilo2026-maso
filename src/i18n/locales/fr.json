@@ -54,7 +54,25 @@
     "urgent": "Urgent",
     "takeCharge": "Prendre en charge",
     "reportRumor": "Signaler une rumeur",
-    "breakdown": "Répartition"
+    "breakdown": "Répartition",
+    "refresh": "Actualiser",
+    "map": "Carte des alertes",
+    "mapTooltip_one": "{{region}} : {{count}} alerte",
+    "mapTooltip_other": "{{region}} : {{count}} alertes",
+    "trends": "Tendances",
+    "noTrend": "Pas encore de mot-clé récurrent.",
+    "allRegions": "Toutes les régions",
+    "empty": "Aucune alerte pour ces filtres.",
+    "open": "Ouvrir",
+    "offlineCache": "Hors ligne : voici les dernières alertes enregistrées sur l’appareil.",
+    "rssUnavailable": "Flux RSS indisponibles (service d’analyse injoignable) : seuls les signalements du public sont affichés.",
+    "feedErrors_one": "{{count}} flux n’a pas pu être lu.",
+    "feedErrors_other": "{{count}} flux n’ont pas pu être lus.",
+    "origin": {
+      "all": "Tout",
+      "report": "Signalement",
+      "rss": "Médias (RSS)"
+    }
   },
   "alertLevel": {
     "low": "Faible",
@@ -592,7 +610,47 @@
     "words_one": "{{count}} mot",
     "words_other": "{{count}} mots",
     "radioDuration": "≈ {{seconds}} s à l'antenne",
-    "savedLocally": "Brouillon enregistré sur cet appareil"
+    "savedLocally": "Brouillon enregistré sur cet appareil",
+    "case": "Dossier",
+    "noCase": "Aucun dossier (modèle seul)",
+    "language": "Langue du texte",
+    "useTemplate": "Insérer le modèle sans IA",
+    "glossary": {
+      "title": "Glossaire FR / MG",
+      "search": "Chercher un terme"
+    },
+    "assistant": {
+      "title": "Assistant éditorial",
+      "hint": "Il n’utilise que le contenu du dossier, cite chaque élément et ne donne jamais de verdict.",
+      "excerpts_one": "{{count}} extrait",
+      "excerpts_other": "{{count}} extraits",
+      "noExcerpts": "Ce dossier n’a encore ni preuve, ni source, ni point de checklist renseigné : l’assistant n’a rien sur quoi s’appuyer.",
+      "running": "Rédaction…",
+      "error": "L’assistant n’a pas pu répondre. Réessayez plus tard.",
+      "offline": "Pas de connexion : l’assistant reviendra avec le réseau. Les modèles sans IA restent disponibles.",
+      "mention": "Brouillon assisté par IA — à relire",
+      "missing": "Ce qui manque dans le dossier :",
+      "removed_one": "{{count}} phrase écartée par le contrôle",
+      "removed_other": "{{count}} phrases écartées par le contrôle",
+      "model": "Modèle {{model}} · consigne {{version}}",
+      "insert": "Insérer dans le brouillon",
+      "history_one": "{{count}} génération précédente",
+      "history_other": "{{count}} générations précédentes",
+      "fn": {
+        "draft": "Rédiger",
+        "angles": "Angles",
+        "headlines": "Titres",
+        "questions": "Questions",
+        "context": "Contexte"
+      },
+      "reason": {
+        "no_citation": "aucun extrait cité",
+        "unknown_excerpt": "extrait inexistant",
+        "number_not_in_excerpts": "chiffre absent des extraits",
+        "name_not_in_excerpts": "nom absent des extraits",
+        "verdict": "verdict interdit"
+      }
+    }
   },
   "dossiers": {
     "tabActive": "En cours",
@@ -896,7 +954,27 @@
     "installUnavailable": "Utilisez le menu du navigateur : « Ajouter à l'écran d'accueil ».",
     "account": "Compte",
     "network": "Connexion",
-    "version": "Version {{version}}"
+    "version": "Version {{version}}",
+    "badge": {
+      "title": "Badge de presse MASO",
+      "hint": "Montrez ce QR code : le public vérifie votre identité sur le portail.",
+      "qr": "QR code du badge {{code}}"
+    },
+    "dataSaver": "Économie de données",
+    "dataSaverHint": "Pas de chargement automatique de la veille ; vous actualisez vous-même.",
+    "notifications": "Notifications sur l’appareil",
+    "notificationsHint": "Prévenir quand une notification arrive et que MASO est en arrière-plan.",
+    "packs": {
+      "title": "Packs hors ligne",
+      "hint": "Téléchargez l’annuaire et les statistiques pour les consulter sans réseau.",
+      "directory": "Annuaire",
+      "statistics": "Statistiques",
+      "sources": "Médias et sources",
+      "none": "non téléchargé",
+      "savedAt": "à jour le {{date}}",
+      "download": "Télécharger les packs",
+      "error": "Téléchargement interrompu. Réessayez avec du réseau."
+    }
   },
   "notFound": {
     "title": "Page introuvable",
@@ -999,7 +1077,16 @@
     "suspended": "Suspendu",
     "suspend": "Suspendre",
     "reactivate": "Réactiver",
-    "updated": "Compte mis à jour."
+    "updated": "Compte mis à jour.",
+    "badge": {
+      "issue": "Émettre un badge",
+      "issued": "Badge émis pour un an.",
+      "revoke": "Révoquer le badge",
+      "revoked": "Badge révoqué",
+      "revokedDone": "Badge révoqué.",
+      "expired": "Badge expiré",
+      "until": "Badge valable jusqu’au {{date}}"
+    }
   },
   "clue": {
     "none": "Aucun indice",
@@ -1349,6 +1436,132 @@
       }
     },
     "quickVerdicts": "Accès rapide :",
-    "signIn": "Connexion"
+    "signIn": "Connexion",
+    "badge": {
+      "valid": "Badge valide",
+      "revoked": "Badge révoqué",
+      "expired": "Badge expiré",
+      "suspended": "Compte suspendu",
+      "unknown": "Badge inconnu",
+      "unknownHint": "Aucun journaliste MASO ne porte ce badge. Méfiez-vous d’une personne qui s’en réclame.",
+      "validUntil": "valable jusqu’au {{date}}"
+    }
+  },
+  "pin": {
+    "title": "MASO est verrouillé",
+    "label": "Code PIN",
+    "unlock": "Déverrouiller",
+    "wrong_one": "Code incorrect. Encore {{count}} essai.",
+    "wrong_other": "Code incorrect. Encore {{count}} essais.",
+    "blocked": "Trop d’essais. Déconnectez-vous puis reconnectez-vous avec votre mot de passe.",
+    "signOut": "Se déconnecter",
+    "setting": "Code PIN",
+    "hint": "Demandé à l’ouverture et après 5 minutes en arrière-plan.",
+    "new": "Nouveau code (4 à 6 chiffres)",
+    "confirm": "Confirmer le code",
+    "save": "Enregistrer",
+    "saved": "Code PIN enregistré sur cet appareil.",
+    "invalid": "Le code doit contenir 4 à 6 chiffres.",
+    "mismatch": "Les deux codes ne correspondent pas."
+  },
+  "settings": {
+    "title": "Paramètres et journal",
+    "hint": "Veille, niveaux d’alerte, modèles, glossaire, journal d’audit, mentions légales.",
+    "tab": {
+      "veille": "Veille",
+      "templates": "Modèles",
+      "glossary": "Glossaire",
+      "audit": "Journal",
+      "legal": "Mentions"
+    },
+    "save": "Enregistrer",
+    "saved": "Paramètres enregistrés.",
+    "saveError": "Enregistrement impossible. Vérifiez la connexion et vos droits.",
+    "reset": "Revenir aux modèles d’origine",
+    "cancel": "Annuler",
+    "veille": {
+      "sources": "Flux RSS / Atom",
+      "sourcesHint": "Une adresse par ligne, 10 au maximum.",
+      "invalid": "Adresse invalide : {{url}}",
+      "high": "Mots-clés « niveau élevé »",
+      "medium": "Mots-clés « niveau moyen »",
+      "rulesHint": "Un mot par ligne, sans tenir compte des accents. Un contenu signalé 3 fois monte d’un niveau."
+    },
+    "templates": {
+      "hint": "Utilisés dans Rédiger, même sans IA. {claim}, {title} et {verdict} sont remplacés par les éléments du dossier."
+    },
+    "glossary": {
+      "add": "Ajouter un terme",
+      "edit": "Modifier le terme",
+      "delete": "Supprimer le terme",
+      "fr": "Français",
+      "mg": "Malagasy",
+      "en": "Anglais (facultatif)",
+      "context": "Contexte (facultatif)"
+    },
+    "audit": {
+      "entity": "Élément",
+      "action": "Action",
+      "from": "Du",
+      "to": "Au",
+      "export": "Exporter (CSV)",
+      "system": "Système",
+      "noChange": "Aucun champ modifié.",
+      "error": "Journal illisible : réservé au rédacteur en chef et à l’administration.",
+      "demo": "Le journal d’audit est tenu par le serveur : il n’existe pas en mode démonstration.",
+      "actions": {
+        "insert": "création",
+        "update": "modification",
+        "delete": "suppression"
+      }
+    },
+    "legal": {
+      "label": "Mentions légales et consentements"
+    }
+  },
+  "textAnalysis": {
+    "title": "Analyse de texte",
+    "hint": "Collez le message reçu (FR ou MG) : MASO repère les affirmations vérifiables et les signaux de manipulation, sur votre téléphone.",
+    "input": "Texte à analyser",
+    "placeholder": "Collez ici le message qui circule…",
+    "analyse": "Analyser",
+    "noVerdict": "Ce sont des pistes de vérification, pas un verdict : seul un journaliste conclut.",
+    "signals": "Signaux de manipulation",
+    "noSignal": "Aucun signal de manipulation repéré.",
+    "claims_one": "{{count}} affirmation vérifiable",
+    "claims_other": "{{count}} affirmations vérifiables",
+    "noClaim": "Aucune affirmation précise (chiffre, date, lieu, personne) repérée.",
+    "entity": {
+      "number": "Chiffre",
+      "date": "Date",
+      "place": "Lieu",
+      "name": "Personne"
+    },
+    "figures": "Chiffres comparés aux statistiques",
+    "noFigure": "Aucun chiffre du texte ne correspond à un indicateur officiel de l’annuaire.",
+    "figureLine": "Annoncé : {{claimed}} · officiel : {{official}} {{unit}} ({{year}}) · écart {{percent}} %",
+    "existing": "Vérifications existantes",
+    "signal": {
+      "urgency": {
+        "title": "Urgence",
+        "text": "Le texte pousse à réagir vite, sans prendre le temps de vérifier."
+      },
+      "share_appeal": {
+        "title": "Appel au partage",
+        "text": "Le texte demande d’être partagé : technique fréquente des rumeurs."
+      },
+      "no_source": {
+        "title": "Aucune source",
+        "text": "Le texte ne cite ni source, ni auteur, ni lien."
+      },
+      "unsourced_figures": {
+        "title": "Chiffres non sourcés",
+        "text": "Des chiffres sont avancés sans dire d’où ils viennent."
+      },
+      "shouting": {
+        "title": "Ton alarmiste",
+        "text": "Majuscules ou points d’exclamation répétés."
+      }
+    }
   }
 }

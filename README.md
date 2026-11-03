@@ -27,7 +27,7 @@ Avancement par module : voir [docs/MODULES.md](docs/MODULES.md#avancement).
   - Base PostgreSQL complète (17 entités du cahier des charges), droits par rôle appliqués côté serveur (RLS)
   - Workflow des dossiers contrôlé par la base : changement de statut motivé et historisé, **personne ne valide son propre travail**, seul le rédacteur en chef publie
   - Journal d'audit en ajout seul, sources confidentielles accessibles uniquement par fonction journalisée, stockage privé des preuves
-  - Connexion par mot de passe ou lien magique, mot de passe oublié, présentation en 3 écrans, mode invité, session conservée hors ligne
+  - Connexion par mot de passe ou lien magique, mot de passe oublié, présentation en 3 écrans, session conservée hors ligne ; le public arrive directement sur l'espace public, sans compte
   - Navigation adaptée au rôle ; écran Administration : invitation, changement de rôle, suspension, statistiques d'usage
   - **Mode démonstration** sans backend : 4 comptes fictifs (un par rôle) quand Supabase n'est pas configuré
 - [x] MOD-03 — Vérifier : hub, analyse image et analyse de lien
@@ -58,8 +58,18 @@ Avancement par module : voir [docs/MODULES.md](docs/MODULES.md#avancement).
   - **Portail public sans compte** : derniers rapports, recherche (mot-clé, verdict, thème, région), page rapport (affirmation, verdict, explication, preuves, méthode, corrections), partage WhatsApp / Facebook avec aperçu, PDF, **QR de vérification** (contenu modifié détecté)
   - **Signaler sans compte** : image, lien ou texte ; « **Déjà vérifié** » si le fichier, une image très proche ou le lien est connu, sinon indices simples et « Non vérifié à ce stade » (jamais de verdict automatique) ; **code de suivi** ; anti-abus (10 envois par heure et par adresse, 5 Mo, formats image, doublons regroupés, champ piège)
   - **Tableau de bord par rôle**, **bibliothèque des rapports** (filtres, PDF, lien), **notifications** (attribution, relecture, correction, publication, mention @, signalement du public), prise en charge d'un signalement en un clic
-- [ ] MOD-07 — IA « zéro invention » : texte, assistant éditorial, veille
-- [ ] MOD-08 — Profil, badge QR, paramètres, audit, tests et livraison
+  - **Espace public en page d'accueil** de MASO : rapports, signalement, suivi, vérification, et **Ressources publiques** (annuaire à visibilité publique sans coordonnées, statistiques sourcées)
+- [x] MOD-07 — IA « zéro invention » : texte, assistant éditorial, veille
+  - Interface **`LLMProvider`** côté serveur avec trois implémentations interchangeables : **Groq**, **Gemini** (API gratuites) et **Ollama** (modèle local)
+  - **Contrôle « zéro invention »** côté serveur, phrase par phrase : extraits numérotés du dossier `[P1] [S2] [C3] [R4] [K5]`, citation obligatoire, identifiants vérifiés, **nombres, dates et noms propres recherchés dans les extraits cités**, verdicts refusés ; une phrase non conforme est écartée avec sa raison ; **abstention** (« Information insuffisante dans le dossier ») et liste de ce qui manque ; température 0,1, consigne versionnée, journal de chaque génération (`ai_suggestions`) ; **tests automatisés**
+  - **Assistant éditorial** dans Rédiger : brève radio ~45 s, post, article, démenti ; angles, titres, questions d'interview, contexte ; en français, malgache ou anglais ; mention « Brouillon assisté par IA — à relire » ; historique des générations ; **masqué proprement** quand aucun modèle ne répond
+  - **Modèles sans IA** par format et par langue (remplis avec l'affirmation, le titre et le verdict du dossier) et **glossaire FR / MG / EN**
+  - **Analyse de texte** (M6), sur l'appareil et hors ligne : affirmations vérifiables (chiffres, dates, lieux, personnes, citations), signaux de manipulation (urgence, appel au partage, absence de source, chiffres non sourcés, ton alarmiste), **rapprochement des chiffres avec les statistiques officielles**, vérifications existantes, ajout au dossier
+  - **Veille** (M2 / W3) : signalements du public et **flux RSS** réels (lus par le serveur, protégé contre les adresses internes et le XML malveillant), **niveaux par règles de mots-clés**, regroupement des rumeurs en tendances, **carte des régions** (Leaflet), filtres, *Prendre en charge* qui crée le dossier pré-rempli, 50 dernières alertes consultables hors ligne
+- [x] MOD-08 — Profil, badge QR, paramètres, audit, tests et livraison
+  - **Profil** (M14) : langue, thème, **mode économie de données**, **packs hors ligne** (annuaire, statistiques, sources), **notifications sur l'appareil**, **code PIN** (empreinte PBKDF2 sur l'appareil, verrouillage au lancement et après 5 min en arrière-plan), déconnexion
+  - **Badge de presse avec QR** : émis et révoqué par l'administration (W12), affiché dans le profil, **vérifiable par le public** sur le portail (valide, révoqué, expiré, compte suspendu)
+  - **Paramètres et journal** (W13) : sources de veille, règles des niveaux d'alerte, modèles de rédaction, glossaire, mentions légales ; **journal d'audit** (qui, quoi, quand, avant → après) avec filtres et **export CSV**
 
 ## Stack technique
 
@@ -130,18 +140,20 @@ Liens, captures (`screenshots/`) et vidéo : à compléter en MOD-08.
 
 ## Limites connues & pistes
 
-- L'écran **Veille** affiche encore des **données de démonstration fictives** (`src/data/demo/alerts.ts`) : il sera branché sur les signalements et les flux avec MOD-07.
 - Les détails des sources confidentielles sont isolés et accessibles uniquement par fonction journalisée, mais **pas encore chiffrés** en base (prévu avec Supabase Vault).
 - Le lien magique et l'invitation par e-mail dépendent d'un serveur d'envoi d'e-mails (SMTP) configuré dans Supabase.
 - **Indice IA** et **Google Fact Check** nécessitent des clés (`HF_TOKEN`, `GOOGLE_FACTCHECK_API_KEY`) : sans elles, ces étapes sont signalées « non configurées ».
 - L'archivage Wayback Machine est soumis aux limites d'archive.org (refus temporaires signalés comme tels).
 - L'empreinte perceptuelle est calculée dans le navigateur (et non avec `imagehash` côté serveur comme prévu au cahier des charges) pour fonctionner hors ligne.
 - Synchronisation : en cas de modifications concurrentes, la dernière enregistrée l'emporte ; un refus du serveur est signalé et conservé.
-- L'entrée « Texte » du hub arrive avec MOD-07.
 - Signature des rapports : HMAC calculé par la base (clé secrète en base). Elle prouve que le contenu n'a pas été modifié depuis la publication, mais se vérifie en ligne via le portail (pas de clé publique hors ligne).
 - Aperçu de partage : la page affiche l'aperçu et les boutons, mais Facebook et WhatsApp lisent les balises d'une page générée côté serveur ; sans rendu serveur, leur vignette reste générique.
 - Anti-abus du signalement public : limite par adresse IP, taille, formats, doublons et champ piège ; pas de CAPTCHA externe (aucun service tiers ajouté).
-- Notifications : actualisées toutes les minutes et à chaque modification (pas de notification push quand l'application est fermée).
+- Notifications : actualisées toutes les minutes et à chaque modification ; la notification sur l'appareil s'affiche quand MASO est ouvert en arrière-plan (pas de push quand l'application est fermée).
+- **Assistant éditorial** : il faut un modèle joignable (`LLM_PROVIDER` + clé Groq ou Gemini, ou Ollama lancé avec le modèle installé). Le contrôle « zéro invention » compare les textes ; une reformulation trop libre d'un nom ou d'un chiffre est écartée plutôt qu'acceptée.
+- **Flux RSS** : certains sites limitent les lectures répétées (erreur affichée, les autres flux restent lus).
+- Le **code PIN** protège l'accès sur l'appareil ; il ne chiffre pas les données locales.
+- Les paramètres (W13) et les badges demandent la migration `202611031000_parametres_badges.sql` sur le serveur ; sans elle, les valeurs par défaut s'appliquent.
 - Les traductions malgaches doivent être relues par un locuteur natif.
 - Données de démonstration : personnes et sources fictives (numéros `+261 00…` inexistants, e-mails `@example.org`) ; statistiques réelles de la Banque mondiale (WDI).
 - Feuille de route après le hackathon : voir [docs/CAHIER_DES_CHARGES.md](docs/CAHIER_DES_CHARGES.md#19-feuille-de-route).
@@ -156,6 +168,8 @@ Liens, captures (`screenshots/`) et vidéo : à compléter en MOD-08.
 | Joba | Produit et contenu | MOD-04, MOD-08 |
 
 Outils d'IA utilisés pour le développement : Claude Code (Anthropic) — génération et relecture de code, documentation.
+
+IA dans l'application : assistant éditorial via Groq, Gemini ou Ollama (au choix, contrôle « zéro invention » côté serveur) ; indice de génération d'image via Hugging Face (facultatif). Aucune IA ne propose de verdict.
 
 ## Documentation
 

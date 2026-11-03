@@ -22,6 +22,15 @@ function readUsers(): DemoAccount[] {
   return DEMO_USERS.map((user) => ({ ...user, password: DEMO_PASSWORD }))
 }
 
+/** Vérification publique d'un badge (W0), en mode démonstration. */
+export function demoVerifyBadge(code: string) {
+  const user = readUsers().find((item) => item.badge?.code === code.trim().toUpperCase())
+  if (!user?.badge) return { found: false as const }
+  const today = new Date().toISOString().slice(0, 10)
+  const status = user.badge.revoked ? 'revoked' : !user.active ? 'suspended' : user.badge.validUntil < today ? 'expired' : 'valid'
+  return { found: true as const, status, full_name: user.fullName, role: user.role, newsroom: null, valid_until: user.badge.validUntil, code: user.badge.code } as const
+}
+
 const saveUsers = (users: DemoAccount[]) => writeStorage(USERS_KEY, JSON.stringify(users))
 const withoutPassword = ({ password: _password, ...profile }: DemoAccount): Profile => profile
 
@@ -118,6 +127,19 @@ export function createDemoAuth(): AuthService {
 
       async setActive(userId, active) {
         updateUser(userId, { active })
+      },
+
+      async issueBadge(userId, validUntil) {
+        requireAdmin()
+        const user = readUsers().find((item) => item.id === userId)
+        if (!user || user.role === 'admin') throw new AuthFailure('role_not_allowed')
+        const code = `MB-${crypto.randomUUID().replace(/-/g, '').slice(0, 10).toUpperCase()}`
+        saveUsers(readUsers().map((item) => (item.id === userId ? { ...item, badge: { code, validUntil, revoked: false } } : item)))
+      },
+
+      async revokeBadge(userId) {
+        requireAdmin()
+        saveUsers(readUsers().map((item) => (item.id === userId && item.badge ? { ...item, badge: { ...item.badge, revoked: true } } : item)))
       },
     },
   }

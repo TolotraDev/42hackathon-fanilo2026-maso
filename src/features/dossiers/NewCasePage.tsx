@@ -28,6 +28,13 @@ export function NewCasePage() {
   const alertId = params.get('alerte')
   const [alert, setAlert] = useState<PublicAlert | null>(null)
 
+  // Prise en charge depuis la veille (flux RSS) : le titre et l'affirmation sont pré-remplis.
+  useEffect(() => {
+    const title = params.get('titre')
+    if (!title || alertId) return
+    setForm((current) => ({ ...current, title: title.slice(0, 120), claim: params.get('affirmation') ?? '', region: params.get('region') ?? '' }))
+  }, [params, alertId])
+
   useEffect(() => {
     if (!alertId) return
     void alertsApi()

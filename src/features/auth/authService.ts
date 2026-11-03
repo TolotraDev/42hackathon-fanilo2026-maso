@@ -51,4 +51,6 @@ export interface AdminService {
   inviteUser(input: InviteInput): Promise<void>
   setRole(userId: string, role: UserRole): Promise<void>
   setActive(userId: string, active: boolean): Promise<void>
+  issueBadge(userId: string, validUntil: string): Promise<void>
+  revokeBadge(userId: string): Promise<void>
 }

@@ -77,6 +77,17 @@ export interface Verification {
   content_hash?: string
 }
 
+/** Vérification publique d'un badge de journaliste (W0) : le minimum pour l'identifier. */
+export interface BadgeVerification {
+  found: boolean
+  status?: 'valid' | 'revoked' | 'expired' | 'suspended'
+  full_name?: string
+  role?: string
+  newsroom?: string | null
+  valid_until?: string
+  code?: string
+}
+
 export interface AlertInput {
   text: string
   url: string

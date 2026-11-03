@@ -1,6 +1,7 @@
-import { UserPlus } from 'lucide-react'
+import { BadgeCheck, Settings2, UserPlus } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router-dom'
 import { useShellSearch } from '@/components/layout/AppShell'
 import { Avatar, Badge, Button, Card, Input, SectionTitle } from '@/components/ui'
 import { DEMO_PASSWORD } from '@/data/demo/users'
@@ -8,13 +9,13 @@ import { useAuth } from '@/features/auth/AuthProvider'
 import { FormMessage } from '@/features/auth/FormMessage'
 import { useAuthErrorMessage } from '@/features/auth/useAuthError'
 import { matchesQuery } from '@/lib/text'
-import { LANGUAGES, USER_ROLES, type Language, type Profile, type UserRole } from '@/types/domain'
+import { LANGUAGES, STAFF_ROLES, USER_ROLES, type Language, type Profile, type UserRole } from '@/types/domain'
 
 const SELECT = 'min-h-11 w-full rounded-xl border border-line bg-canvas px-3 text-sm text-ink focus:border-cobalt focus:outline-none'
 
 type Feedback = { tone: 'error' | 'success'; text: string } | null
 
-/** W12 — Administration des comptes : invitation, rôle, suspension, statistiques d'usage. */
+/** W12 — Administration des comptes : invitation, rôle, suspension, badges QR, statistiques d'usage. */
 export function AdminPage() {
   const { t } = useTranslation()
   const { service, profile: me } = useAuth()
@@ -68,11 +69,32 @@ export function AdminPage() {
     }, success)
   }
 
+  // Badge valable un an à partir d'aujourd'hui.
+  const badgeEnd = () => {
+    const date = new Date()
+    date.setFullYear(date.getFullYear() + 1)
+    return date.toISOString().slice(0, 10)
+  }
+  const today = new Date().toISOString().slice(0, 10)
+
   const activeCount = users.filter((user) => user.active).length
   const visibleUsers = users.filter((user) => matchesQuery(query, user.fullName, user.email, t(`role.${user.role}`)))
 
   return (
     <div className="space-y-4">
+      <Link
+        to="/admin/parametres"
+        className="flex items-center gap-3 rounded-2xl border border-line bg-surface p-4 transition hover:border-cobalt"
+      >
+        <span className="flex size-10 items-center justify-center rounded-xl bg-cobalt/10 text-cobalt">
+          <Settings2 className="size-5" aria-hidden />
+        </span>
+        <span>
+          <span className="block text-sm font-bold text-ink">{t('settings.title')}</span>
+          <span className="block text-xs text-ink-muted">{t('settings.hint')}</span>
+        </span>
+      </Link>
+
       <section>
         <SectionTitle>{t('admin.usage')}</SectionTitle>
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6">
@@ -182,9 +204,21 @@ export function AdminPage() {
                         {isMe && <span className="font-normal text-ink-muted"> ({t('admin.you')})</span>}
                       </p>
                       <p className="truncate text-xs text-ink-muted">{user.email}</p>
+                      {user.badge && (
+                        <p className="flex items-center gap-1 text-xs text-ink-muted">
+                          <BadgeCheck className="size-3.5" aria-hidden />
+                          <span className="font-mono">{user.badge.code}</span>
+                          {' · '}
+                          {user.badge.revoked
+                            ? t('admin.badge.revoked')
+                            : user.badge.validUntil < today
+                              ? t('admin.badge.expired')
+                              : t('admin.badge.until', { date: user.badge.validUntil })}
+                        </p>
+                      )}
                     </div>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-2">
                     <Badge tone={user.active ? 'success' : 'danger'}>{user.active ? t('admin.active') : t('admin.suspended')}</Badge>
                     <select
                       aria-label={`${t('admin.role')} — ${user.fullName || user.email}`}
@@ -209,6 +243,26 @@ export function AdminPage() {
                     >
                       {user.active ? t('admin.suspend') : t('admin.reactivate')}
                     </Button>
+                    {STAFF_ROLES.includes(user.role) &&
+                      (user.badge && !user.badge.revoked && user.badge.validUntil >= today ? (
+                        <Button
+                          variant="ghost"
+                          className="min-h-11 shrink-0 text-danger"
+                          disabled={busy}
+                          onClick={() => void act(() => service.admin.revokeBadge(user.id), t('admin.badge.revokedDone'))}
+                        >
+                          {t('admin.badge.revoke')}
+                        </Button>
+                      ) : (
+                        <Button
+                          variant="ghost"
+                          className="min-h-11 shrink-0"
+                          disabled={busy || !user.active}
+                          onClick={() => void act(() => service.admin.issueBadge(user.id, badgeEnd()), t('admin.badge.issued'))}
+                        >
+                          {t('admin.badge.issue')}
+                        </Button>
+                      ))}
                   </div>
                 </div>
               )

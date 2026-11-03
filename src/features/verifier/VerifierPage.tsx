@@ -62,7 +62,7 @@ export function VerifierPage() {
     { id: 'image', icon: Image, action: () => imageInput.current?.click() },
     { id: 'video', icon: Video, action: () => videoInput.current?.click() },
     { id: 'link', icon: Link2, action: () => navigate('/verifier/lien') },
-    { id: 'text', icon: FileText },
+    { id: 'text', icon: FileText, action: () => navigate('/verifier/texte') },
   ]
 
   const resultCount = results ? results.library.length + results.claims.length : 0

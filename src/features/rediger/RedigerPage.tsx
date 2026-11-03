@@ -1,23 +1,33 @@
-import { Bold, Check, Italic, List, Quote, type LucideIcon } from 'lucide-react'
-import { useEffect, useRef, useState, type CSSProperties } from 'react'
+import { Bold, Check, FileText, Italic, List, Quote, type LucideIcon } from 'lucide-react'
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Card, Textarea } from '@/components/ui'
+import { Button, Card, Textarea } from '@/components/ui'
+import { useCase, useCases } from '@/features/dossiers/CaseStoreProvider'
+import { useServiceCapabilities } from '@/hooks/useServiceCapabilities'
 import { cn } from '@/lib/cn'
+import { DEFAULT_SETTINGS, fillTemplate, getSetting, type AppSettings } from '@/lib/settings'
 import { readStorage, writeStorage } from '@/lib/storage'
 import { countWords, estimateRadioSeconds } from '@/lib/text'
+import { LANGUAGES, type Language } from '@/types/domain'
+import { AssistantPanel } from './AssistantPanel'
+import { buildExcerpts } from './excerpts'
+import { GlossaryCard } from './GlossaryCard'
 
 const FORMATS = ['radio', 'post', 'article', 'debunk'] as const
 type Format = (typeof FORMATS)[number]
 
 interface Draft {
   format: Format
+  language: Language
+  /** Dossier dont l'assistant et les modèles tirent leur contenu. */
+  caseId: string
   note: string
   title: string
   body: string
 }
 
 const DRAFT_STORAGE_KEY = 'maso.draft'
-const EMPTY_DRAFT: Draft = { format: 'radio', note: '', title: '', body: '' }
+const EMPTY_DRAFT: Draft = { format: 'radio', language: 'fr', caseId: '', note: '', title: '', body: '' }
 
 function readDraft(): Draft {
   try {
@@ -55,7 +65,10 @@ const FORMAT_HOVER: Record<Format, string> = {
   debunk: 'hover:border-red-500/50 hover:text-red-600',
 }
 
-/** M11 — Éditeur d'article, sans IA (l'assistant borné arrive en MOD-07). Brouillon gardé hors ligne. */
+/**
+ * M11 / W11 — Rédiger : éditeur, modèles sans IA par format et langue, assistant borné au dossier
+ * (masqué sans modèle), glossaire FR / MG. Brouillon gardé hors ligne.
+ */
 export function RedigerPage() {
   const { t } = useTranslation()
   const [draft, setDraft] = useState<Draft>(readDraft)
@@ -66,6 +79,29 @@ export function RedigerPage() {
   }, [draft])
 
   const update = (patch: Partial<Draft>) => setDraft((current) => ({ ...current, ...patch }))
+
+  const { cases } = useCases()
+  const { detail } = useCase(draft.caseId || undefined)
+  const { capabilities } = useServiceCapabilities()
+  const [templates, setTemplates] = useState<AppSettings['templates']>(DEFAULT_SETTINGS.templates)
+  useEffect(() => {
+    getSetting('templates').then(setTemplates, () => undefined)
+  }, [])
+  const excerpts = useMemo(() => (detail ? buildExcerpts(detail) : []), [detail])
+  const record = detail?.case
+
+  const appendToBody = (text: string) => update({ body: draft.body.trim() ? `${draft.body.trimEnd()}
+
+${text}` : text })
+
+  const insertTemplate = () =>
+    appendToBody(
+      fillTemplate(templates[draft.format][draft.language], {
+        claim: record?.claim,
+        title: draft.title || record?.title,
+        verdict: record?.verdict ? t(`verdict.${record.verdict}`, { lng: draft.language }) : undefined,
+      }),
+    )
 
   const applyTool = (before: string, after: string) => {
     const area = bodyRef.current
@@ -169,10 +205,65 @@ export function RedigerPage() {
           </div>
         </Card>
 
+        {/* Dossier source, langue et modèle sans IA */}
+        <Card className="dashboard-rise space-y-3 p-4 shadow-sm" style={{ '--i': 2 } as CSSProperties}>
+          <div className="space-y-1.5">
+            <label htmlFor="draft-case" className="block font-display text-sm font-bold text-navy dark:text-ink">
+              {t('rediger.case')}
+            </label>
+            <select
+              id="draft-case"
+              value={draft.caseId}
+              onChange={(event) => update({ caseId: event.target.value })}
+              className="min-h-10 w-full rounded-xl border border-line bg-surface px-3 text-sm text-ink focus:border-cobalt focus:outline-none"
+            >
+              <option value="">{t('rediger.noCase')}</option>
+              {(cases ?? []).map((item) => (
+                <option key={item.id} value={item.id}>{item.title}</option>
+              ))}
+            </select>
+          </div>
+          <div role="group" aria-label={t('rediger.language')} className="grid grid-cols-3 gap-1.5">
+            {LANGUAGES.map((lng) => (
+              <button
+                key={lng}
+                type="button"
+                lang={lng}
+                aria-pressed={draft.language === lng}
+                onClick={() => update({ language: lng })}
+                className={cn(
+                  'min-h-9 rounded-lg border text-xs font-bold uppercase transition',
+                  draft.language === lng ? 'border-cobalt bg-cobalt text-white' : 'border-line text-ink-muted hover:border-cobalt/50',
+                )}
+              >
+                {lng}
+              </button>
+            ))}
+          </div>
+          <Button variant="secondary" block className="min-h-10" onClick={insertTemplate}>
+            <FileText className="size-4" aria-hidden />
+            {t('rediger.useTemplate')}
+          </Button>
+        </Card>
+
+        {/* Assistant : seulement avec un dossier choisi et un modèle disponible (sinon masqué). */}
+        {capabilities?.assistant && record && (
+          <AssistantPanel
+            caseId={record.id}
+            claim={record.claim}
+            excerpts={excerpts}
+            format={draft.format}
+            language={draft.language}
+            onInsert={appendToBody}
+          />
+        )}
+
+        <GlossaryCard />
+
         {/* Note rapide */}
         <Card
           className="dashboard-rise space-y-2 border-t-4 border-t-white/20 p-4 shadow-sm"
-          style={{ '--i': 2 } as CSSProperties}
+          style={{ '--i': 3 } as CSSProperties}
         >
           <label
             htmlFor="note"

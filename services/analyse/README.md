@@ -11,6 +11,8 @@ Analyses qui demandent un serveur. Les analyses locales (empreintes, métadonné
 | `POST /link/analyse` | HTTPS, âge du domaine, hébergeur, dernière archive | RDAP, Wayback Machine |
 | `POST /link/archive` | Archiver la page maintenant | Wayback Machine |
 | `GET /factcheck?query=` | Vérifications déjà publiées | Google Fact Check Tools (si clé) |
+| `POST /ai/assist` | Assistant éditorial borné aux extraits du dossier, sortie contrôlée « zéro invention » (section 10) | Groq, Gemini ou Ollama (`LLM_PROVIDER`) |
+| `POST /veille/rss` | Lecture des flux RSS / Atom de la veille (10 au maximum) | httpx + defusedxml |
 
 **Sécurité** : les adresses internes, privées ou sur un port non standard sont refusées, y compris après redirection (protection SSRF). Le type réel des fichiers est contrôlé (pas l'extension). Les tailles sont limitées (20 Mo image, 100 Mo vidéo). Le débit est limité par adresse IP.
 
@@ -40,6 +42,10 @@ Puis dans le `.env` du front : `VITE_ANALYSE_API_URL=http://localhost:8000`.
 | `AI_IMAGE_MODEL` | `umm-maybe/AI-image-detector` | Modèle d'indice IA |
 | `MAX_IMAGE_MB` / `MAX_VIDEO_MB` | `20` / `100` | Tailles maximales |
 | `REQUESTS_PER_MINUTE` | `60` | Limite par adresse IP |
+| `LLM_PROVIDER` | vide (premier configuré) | `groq`, `gemini` ou `ollama` |
+| `LLM_API_KEY` | vide | Clé du fournisseur choisi (ou `GROQ_API_KEY` / `GEMINI_API_KEY`) |
+| `GROQ_MODEL` / `GEMINI_MODEL` | `llama-3.3-70b-versatile` / `gemini-2.0-flash` | Modèle utilisé |
+| `OLLAMA_URL` / `OLLAMA_MODEL` | vide / `llama3.1` | Modèle local ; l'assistant n'est annoncé que si Ollama répond et que le modèle est installé |
 
 Sans clé, chaque analyse concernée est simplement signalée « non configurée » dans l'application ; le reste fonctionne.
 

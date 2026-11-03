@@ -1,15 +1,27 @@
 import { Bell } from 'lucide-react'
+import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import { useCaseStore } from '@/features/dossiers/CaseStoreProvider'
 import { cn } from '@/lib/cn'
+import { deviceNotificationsOn } from './deviceNotifications'
 
 /** Cloche de l'en-tête : nombre de notifications non lues (équipe éditoriale uniquement). */
 export function NotificationBell({ tone = 'light' }: { tone?: 'light' | 'dark' }) {
   const { t } = useTranslation()
   const { store, notifications } = useCaseStore()
-  if (!store) return null
   const unread = notifications.filter((item) => !item.readAt).length
+  const previous = useRef(unread)
+
+  // Notification sur l'appareil (M14) quand une nouvelle notification arrive pendant que MASO est en arrière-plan.
+  useEffect(() => {
+    if (unread > previous.current && document.hidden && deviceNotificationsOn()) {
+      new Notification('MASO', { body: t('notifications.unread', { count: unread }), icon: '/pwa-192x192.png', tag: 'maso-notifications' })
+    }
+    previous.current = unread
+  }, [unread, t])
+
+  if (!store) return null
   return (
     <Link
       to="/notifications"

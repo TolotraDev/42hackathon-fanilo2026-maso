@@ -11,6 +11,9 @@ interface ProfileRow {
   language: Profile['language']
   newsroom_id: string | null
   active: boolean
+  badge_code: string | null
+  badge_valid_until: string | null
+  badge_revoked: boolean
 }
 
 const toProfile = (row: ProfileRow): Profile => ({
@@ -21,6 +24,7 @@ const toProfile = (row: ProfileRow): Profile => ({
   language: row.language,
   newsroomId: row.newsroom_id,
   active: row.active,
+  badge: row.badge_code && row.badge_valid_until ? { code: row.badge_code, validUntil: row.badge_valid_until, revoked: row.badge_revoked } : null,
 })
 
 export function createSupabaseAuth(client: SupabaseClient): AuthService {
@@ -116,6 +120,16 @@ export function createSupabaseAuth(client: SupabaseClient): AuthService {
 
       async setActive(userId, active) {
         const { error } = await client.rpc('admin_set_active', { p_user_id: userId, p_active: active })
+        if (error) throw toFailure(error)
+      },
+
+      async issueBadge(userId, validUntil) {
+        const { error } = await client.rpc('admin_issue_badge', { p_user_id: userId, p_valid_until: validUntil })
+        if (error) throw toFailure(error)
+      },
+
+      async revokeBadge(userId) {
+        const { error } = await client.rpc('admin_revoke_badge', { p_user_id: userId })
         if (error) throw toFailure(error)
       },
     },

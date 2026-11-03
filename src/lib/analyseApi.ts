@@ -108,6 +108,42 @@ export interface FactCheckClaim {
   date: string | null
 }
 
+export type AssistFunction = 'draft' | 'angles' | 'headlines' | 'questions' | 'context'
+export type AssistFormat = 'radio' | 'post' | 'article' | 'debunk'
+
+export interface AssistRequest {
+  function: AssistFunction
+  format: AssistFormat
+  language: 'fr' | 'mg' | 'en'
+  claim: string
+  excerpts: Array<{ id: string; text: string }>
+}
+
+/** Réponse de l'assistant, déjà passée au contrôle « zéro invention » du serveur. */
+export interface AssistResult {
+  model: string
+  prompt_version: string
+  prompt: string
+  generated_at: string
+  sentences: Array<{ text: string; citations: string[] }>
+  removed: Array<{ text: string; reason: 'no_citation' | 'unknown_excerpt' | 'number_not_in_excerpts' | 'name_not_in_excerpts' | 'verdict'; detail: string }>
+  missing: string[]
+  compliant: boolean
+  abstained: boolean
+  abstention: string | null
+  cited_excerpts: string[]
+}
+
+export interface FeedItem {
+  title: string
+  link: string
+  summary: string
+  published_at: string | null
+  source: string
+}
+
+const postJson = (body: unknown) => ({ method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
+
 export const analyseApi = {
   configured: BASE !== null,
   /** Un seul contrôle à la fois, partagé entre les écrans (et le double montage du mode strict de React). */
@@ -126,6 +162,8 @@ export const analyseApi = {
       { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ url }) },
       95000,
     ),
+  assist: (request: AssistRequest) => call<AssistResult>('/ai/assist', postJson(request), 70000),
+  feeds: (urls: string[]) => call<{ items: FeedItem[]; errors: Array<{ url: string; error: string }> }>('/veille/rss', postJson({ urls }), 60000),
   factcheck: (query: string, language?: string) =>
     call<{ available: boolean; claims: FactCheckClaim[] }>(
       `/factcheck?${new URLSearchParams({ query, ...(language ? { language } : {}) })}`,
