@@ -7,7 +7,7 @@ import { useAuth } from '@/features/auth/AuthProvider'
 import { FormMessage } from '@/features/auth/FormMessage'
 import { useAuthErrorMessage } from '@/features/auth/useAuthError'
 import { AttachToCase } from '@/features/verifier/AttachToCase'
-import { addEvidence, isPersistenceAvailable } from '@/features/verifier/verificationApi'
+import { isPersistenceAvailable } from '@/features/verifier/verificationApi'
 import { cn } from '@/lib/cn'
 import { loadWithPack } from '@/lib/offlineCache'
 import { CsvImport } from './CsvImport'
@@ -229,10 +229,8 @@ export function StatisticsPage() {
 
           {result && selected && canEdit && role !== 'admin' && (
             <AttachToCase
-              onAttach={async (caseId, origin) => {
-                await addEvidence({
-                  caseId,
-                  type: 'analysis',
+              evidence={(origin) => ({
+type: 'analysis',
                   url: selected.sourceUrl ?? undefined,
                   origin: origin || null,
                   analysis: {
@@ -244,8 +242,7 @@ export function StatisticsPage() {
                     difference: result.difference,
                     percent: result.percent,
                   },
-                })
-              }}
+                })}
             />
           )}
         </div>

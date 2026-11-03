@@ -16,7 +16,9 @@
     "search": "Rechercher",
     "closeSearch": "Fermer la recherche",
     "settings": "Paramètres",
-    "admin": "Administration"
+    "admin": "Administration",
+    "accueil": "Accueil",
+    "portail": "Portail public"
   },
   "page": {
     "veille": "Flux d'actualités",
@@ -25,12 +27,16 @@
     "rediger": "Éditeur d'article",
     "dossiers": "Tableau de bord",
     "profil": "Profil et paramètres",
-    "admin": "Administration"
+    "admin": "Administration",
+    "accueil": "Accueil",
+    "portail": "Portail public"
   },
   "network": {
     "online": "En ligne",
     "offline": "Hors ligne",
-    "offlineBanner": "Vous êtes hors ligne : l'application continue de fonctionner avec les données de cet appareil."
+    "offlineBanner": "Vous êtes hors ligne : l'application continue de fonctionner avec les données de cet appareil.",
+    "pending_one": "{{count}} en attente",
+    "pending_other": "{{count}} en attente"
   },
   "common": {
     "searchPlaceholder": "Rechercher…",
@@ -271,8 +277,9 @@
       "originPlaceholder": "Ex. : page Facebook « … », groupe WhatsApp",
       "submit": "Ajouter au dossier",
       "done": "Preuve ajoutée au dossier « {{title}} ».",
-      "needsDatabase": "L'ajout au dossier nécessite la base de données MASO (Supabase). Les analyses restent utilisables.",
-      "offline": "Connexion nécessaire pour ajouter au dossier."
+      "staffOnly": "Réservé à l'équipe éditoriale.",
+      "queued": "Hors ligne : elle sera envoyée au retour du réseau.",
+      "offlineHint": "Hors ligne : la preuve sera enregistrée sur l'appareil puis envoyée automatiquement."
     },
     "visual": {
       "title": "Checklist visuelle",
@@ -590,7 +597,288 @@
     "due": "Échéance : {{date}}",
     "countInProgress": "En cours",
     "countToReview": "À relire",
-    "countPublished": "Publiés"
+    "countPublished": "Publiés",
+    "sync": {
+      "synced": "À jour",
+      "pending": "En attente d'envoi",
+      "error": "Erreur de synchronisation",
+      "errorHint": "Le serveur a refusé une modification de ce dossier. Elle est conservée sur l'appareil :",
+      "retry": "Réessayer",
+      "discard": "Abandonner les modifications en attente",
+      "discardConfirm": "Abandonner les modifications non envoyées de ce dossier ? Elles seront perdues."
+    },
+    "error": {
+      "reason_required": "Le motif est obligatoire.",
+      "transition_not_allowed": "Ce changement de statut n'est pas permis pour votre rôle.",
+      "verdict_required": "Un verdict doit d'abord être proposé.",
+      "self_validation_forbidden": "Vous ne pouvez pas valider votre propre verdict.",
+      "title_required": "Le titre est obligatoire.",
+      "case_not_found": "Dossier introuvable.",
+      "case_locked": "Ce dossier est validé ou classé : il n'est plus modifiable.",
+      "checklist_evidence_required": "Un point « fait » doit être lié à au moins une preuve.",
+      "role_not_allowed": "Action non permise pour votre rôle.",
+      "justification_required": "La justification est obligatoire.",
+      "submission_blocked": "Soumission impossible :",
+      "report_locked": "Le rapport n'est plus modifiable.",
+      "comment_empty": "Le commentaire est vide.",
+      "missing_file": "Le fichier de la preuve n'est plus sur l'appareil.",
+      "unknown": "Erreur inconnue.",
+      "publication_blocked": "Publication impossible :",
+      "comment_required": "Le commentaire est obligatoire.",
+      "not_in_review": "Ce dossier n'est pas en relecture.",
+      "online_required": "Cette décision exige une connexion : le rapport est signé par le serveur.",
+      "sync_first": "Des modifications de ce dossier sont encore en attente d'envoi. Attendez la synchronisation.",
+      "publish_via_review": "La publication passe par la revue éditoriale (signature).",
+      "not_published": "Ce rapport n'est pas publié."
+    },
+    "blocker": {
+      "claim_missing": "affirmation manquante",
+      "source_missing": "aucune source liée",
+      "evidence_missing": "aucune preuve citée",
+      "checklist_unjustified": "checklist incomplète non justifiée",
+      "verdict_missing": "aucun verdict proposé ;",
+      "report_missing": "le rapport n'est pas rédigé ;",
+      "summary_missing": "le résumé est vide ;",
+      "explanation_missing": "l'explication est vide ;",
+      "claims_missing": "aucune affirmation n'est listée ;",
+      "unsupported_claim": "une affirmation n'est liée à aucune preuve ;",
+      "self_validation": "vous avez proposé ce verdict : un autre rédacteur en chef doit le valider."
+    },
+    "condition": {
+      "claim_missing": "L'affirmation à vérifier est renseignée",
+      "source_missing": "Au moins une source est liée au dossier",
+      "evidence_missing": "Au moins une preuve est citée dans la justification",
+      "checklist_unjustified": "Chaque point de checklist non traité est justifié"
+    },
+    "mutation": {
+      "create_case": "Création du dossier",
+      "update_case": "Modification",
+      "set_checklist": "Checklist",
+      "change_status": "Changement de statut",
+      "propose_verdict": "Verdict proposé",
+      "add_evidence": "Ajout d'une preuve",
+      "link_source": "Lien vers une source",
+      "unlink_source": "Retrait d'une source",
+      "save_report": "Rapport",
+      "add_comment": "Commentaire"
+    },
+    "priority": {
+      "1": "Priorité haute",
+      "2": "Priorité normale",
+      "3": "Priorité basse"
+    },
+    "offlineList": "Liste enregistrée sur l'appareil (hors ligne).",
+    "pendingChanges_one": "{{count}} modification en attente d'envoi.",
+    "pendingChanges_other": "{{count}} modifications en attente d'envoi.",
+    "new": "Nouveau dossier",
+    "create": "Créer le dossier",
+    "view": "Affichage",
+    "views": {
+      "list": "Liste",
+      "board": "Colonnes"
+    },
+    "mine": "Mes dossiers",
+    "offlineCreate": "Hors ligne : le dossier sera créé sur l'appareil et envoyé au retour du réseau.",
+    "field": {
+      "claim": "Affirmation à vérifier",
+      "claimPlaceholder": "Ce que dit le contenu suspect, mot pour mot si possible.",
+      "category": "Catégorie",
+      "categoryPlaceholder": "Ex. : climat, santé, élections",
+      "region": "Région",
+      "priority": "Priorité",
+      "dueDate": "Échéance",
+      "status": "Statut",
+      "assignee": "Attribué à"
+    },
+    "back": "Retour aux dossiers",
+    "notFound": "Ce dossier n'existe pas ou vous n'y avez pas accès.",
+    "member": "Membre de l'équipe",
+    "tabs": "Onglets du dossier",
+    "tab": {
+      "summary": "Résumé",
+      "evidences": "Preuves",
+      "sources": "Sources",
+      "contacts": "Contacts",
+      "figures": "Chiffres cités",
+      "checklist": "Checklist",
+      "report": "Rapport",
+      "history": "Historique"
+    },
+    "export": {
+      "pdf": "Exporter en PDF",
+      "pdfDone": "PDF téléchargé.",
+      "copy": "Copier en texte",
+      "copied": "Dossier copié : vous pouvez le coller dans un message.",
+      "footer": "Exporté de MASO le {{date}} — statut : {{status}}. Document de travail : seul un rapport validé et publié engage la rédaction.",
+      "comments": "Commentaires de l'équipe"
+    },
+    "offlineCase": "Hors ligne : version enregistrée sur l'appareil. Vos modifications seront envoyées au retour du réseau.",
+    "offlineIncomplete": "Ce dossier n'a pas encore été téléchargé sur l'appareil : ouvrez-le une fois avec du réseau pour le consulter hors ligne.",
+    "verdict": {
+      "title": "Verdict",
+      "confidence": "Niveau de confiance",
+      "cites": "Preuves citées",
+      "proposedBy": "proposé par {{name}}",
+      "none": "Aucun verdict proposé pour l'instant.",
+      "selfValidation": "Vous avez proposé ce verdict : un autre rédacteur en chef doit le valider.",
+      "propose": "Proposer un verdict",
+      "label": "Verdict",
+      "justification": "Justification",
+      "justificationHint": "De 3 à 5 phrases, chacune renvoyant à une preuve (ex. « La même photo a été publiée en 2024 [P1]. »).",
+      "conditions": "Conditions de soumission",
+      "submit": "Soumettre au rédacteur en chef",
+      "proposed": "Verdict proposé : le dossier est soumis au rédacteur en chef."
+    },
+    "status": {
+      "title": "Faire avancer le dossier",
+      "to": {
+        "in_analysis": "Mettre en analyse",
+        "awaiting_response": "En attente d'une réponse",
+        "correction_requested": "Demander une correction",
+        "validated": "Valider",
+        "closed": "Classer sans suite",
+        "to_review": "Soumettre",
+        "new": "Nouveau",
+        "published": "Publier"
+      },
+      "reason": "Motif (obligatoire)",
+      "confirm": "Confirmer : {{status}}",
+      "changed": "Statut mis à jour."
+    },
+    "lockedHint": "Dossier validé ou classé : il n'est plus modifiable.",
+    "saved": "Enregistré.",
+    "save": "Enregistrer",
+    "unassigned": "Non attribué",
+    "submitToFactChecker": "Pour soumettre le dossier au fact-checker, attribuez-le-lui.",
+    "evidences": {
+      "add": "Ajouter une preuve",
+      "addHint": "Analysez un contenu dans Vérifier puis « Ajouter au dossier », ou ajoutez directement un lien.",
+      "analyse": {
+        "image": "Analyser une image",
+        "video": "Analyser une vidéo",
+        "lien": "Analyser un lien"
+      },
+      "linkUrl": "Adresse du lien",
+      "addLink": "Ajouter le lien",
+      "added": "Preuve ajoutée.",
+      "none": "Aucune preuve pour l'instant.",
+      "comparison": "Comparaison côte à côte",
+      "compare": "Comparer"
+    },
+    "evidenceType": {
+      "image": "Image",
+      "video": "Vidéo",
+      "link": "Lien",
+      "screenshot": "Capture",
+      "document": "Document",
+      "text": "Texte",
+      "analysis": "Analyse"
+    },
+    "analysisKind": {
+      "image": "Analyse d'image",
+      "video": "Analyse vidéo",
+      "link": "Analyse de lien",
+      "statistic_comparison": "Comparaison avec une statistique officielle"
+    },
+    "sources": {
+      "required": "Au moins une source doit être liée avant de soumettre un verdict.",
+      "unlink": "Retirer la source",
+      "link": "Lier une source",
+      "search": "Rechercher une source de l'annuaire",
+      "add": "Lier",
+      "createHint": "Source absente de l'annuaire ?"
+    },
+    "contacts": {
+      "none": "Aucune demande de confirmation pour ce dossier.",
+      "suggested": "Experts suggérés",
+      "suggestedHint": "Selon la catégorie et la région du dossier. Ouvrez une fiche pour lancer une demande de confirmation."
+    },
+    "figures": {
+      "compare": "Comparer un chiffre",
+      "none": "Aucun chiffre comparé pour ce dossier.",
+      "line": "Chiffre annoncé : {{claimed}} — donnée officielle : {{official}} {{unit}} ({{year}}) — écart : {{percent}} %."
+    },
+    "checklist": {
+      "explanation": "Explication (obligatoire si le point n'est pas traité)",
+      "hint": "Chaque point « fait » doit être lié à une preuve ; chaque point non traité doit être justifié avant de soumettre un verdict."
+    },
+    "checklistState": {
+      "todo": "À faire",
+      "in_progress": "En cours",
+      "done": "Fait",
+      "not_applicable": "Non applicable"
+    },
+    "block": {
+      "origin": "Origine",
+      "context": "Contexte",
+      "content": "Contenu",
+      "sources": "Sources",
+      "adversarial": "Contradictoire",
+      "conclusion": "Conclusion"
+    },
+    "question": {
+      "origin": {
+        "first_publisher": "Qui a publié en premier ?",
+        "first_date": "Quelle est la première date retrouvée ?",
+        "account_credible": "Le compte d'origine est-il identifiable et crédible ?",
+        "reposted": "Le contenu a-t-il été repris ailleurs ?"
+      },
+      "context": {
+        "place_date_confirmed": "Le lieu et la date annoncés sont-ils confirmés (géolocalisation, météo, éléments visibles) ?",
+        "older_version": "Existe-t-il une version plus ancienne ?",
+        "matches_event": "Le contenu correspond-il à l'événement ?"
+      },
+      "content": {
+        "technical_analysis": "L'analyse technique a-t-elle été faite ?",
+        "reverse_search": "La recherche inversée a-t-elle été faite ?",
+        "figures_compared": "Les chiffres ont-ils été comparés à une source officielle ?"
+      },
+      "sources": {
+        "two_independent": "Au moins deux sources indépendantes ?",
+        "direct_knowledge": "Les sources ont-elles une connaissance directe des faits ?",
+        "conflicts_examined": "Les conflits d'intérêts ont-ils été examinés ?",
+        "statements_crosschecked": "Les déclarations ont-elles été recoupées ?"
+      },
+      "adversarial": {
+        "party_contacted": "La personne ou l'institution concernée a-t-elle été contactée ?",
+        "response_kept": "Sa réponse est-elle conservée ?",
+        "counter_evidence": "Les éléments contraires ont-ils été examinés ?"
+      }
+    },
+    "report": {
+      "hint": "Brouillon du rapport : la revue, la signature et la publication arrivent avec MOD-06. L'export PDF (en haut) fonctionne hors ligne.",
+      "summary": "Résumé",
+      "summaryHint": "En 2 phrases : l'affirmation et la conclusion.",
+      "explanation": "Explication",
+      "explanationHint": "Ce que montrent les preuves, avec leurs références [P1], [P2]…",
+      "method": "Méthode",
+      "methodHint": "Outils et démarches utilisés.",
+      "save": "Enregistrer le brouillon",
+      "saved": "Brouillon enregistré.",
+      "claims": "Affirmations du rapport",
+      "claimsHint": "Une phrase par affirmation vérifiée, liée à au moins une preuve. Une affirmation sans preuve bloque la publication.",
+      "claimN": "Affirmation {{n}}",
+      "claimPlaceholder": "Ex. : la photo a été publiée pour la première fois en mars 2024.",
+      "claimEvidence": "Preuves de l'affirmation {{n}}",
+      "removeClaim": "Retirer l'affirmation {{n}}",
+      "addClaim": "Ajouter une affirmation",
+      "unsupported": "Affirmation non étayée : cochez au moins une preuve.",
+      "publicEvidences": "Preuves montrées au public",
+      "publicEvidencesHint": "Ne cochez que ce qui peut être publié (pas de source confidentielle ni de donnée personnelle).",
+      "publishedAs": "Rapport publié : {{id}}.",
+      "openPublic": "Voir la page publique"
+    },
+    "history": {
+      "none": "Aucun changement pour l'instant.",
+      "comment": "Ajouter un commentaire pour l'équipe…",
+      "addComment": "Commenter",
+      "commented": "Commentaire ajouté.",
+      "commentBy": "Commentaire de {{name}}",
+      "mention": "Mentionner :"
+    },
+    "fromAlert": "Signalement public {{code}}",
+    "fromAlertHint_one": "Depuis le signalement {{code}} ({{count}} signalement). Le fichier et le lien reçus seront ajoutés comme preuves.",
+    "fromAlertHint_other": "Depuis le signalement {{code}} ({{count}} signalements). Le fichier et le lien reçus seront ajoutés comme preuves."
   },
   "profil": {
     "language": "Langue",
@@ -670,7 +958,8 @@
       "profile_missing": "Ce compte n'a pas de profil MASO. Demandez à l'administrateur de le créer (voir la configuration Supabase).",
       "configuration": "Supabase est mal configuré (clé, migrations ou fournisseur e-mail). Vérifiez le fichier .env et la configuration.",
       "no_account": "Aucun compte MASO n'est associé à cette adresse. Vérifiez l'adresse ou demandez une invitation à l'administrateur."
-    }
+    },
+    "portal": "Consulter le portail public (sans compte)"
   },
   "onboarding": {
     "skip": "Passer",
@@ -709,5 +998,316 @@
     "none": "Aucun indice",
     "weak": "Indice faible",
     "to_examine": "Indice à examiner"
+  },
+  "confidence": {
+    "high": "Élevé",
+    "medium": "Moyen",
+    "low": "Faible"
+  },
+  "accueil": {
+    "hello": "Bonjour {{name}}",
+    "intro": {
+      "journalist": "Vos dossiers, les corrections demandées et les signalements du public à prendre en charge.",
+      "fact_checker": "Les dossiers qui vous sont attribués et ceux qui attendent un verdict.",
+      "editor_in_chief": "Les rapports à relire, à valider et à publier."
+    },
+    "indicators": "Indicateurs",
+    "indicator": {
+      "myOpen": "Mes dossiers en cours",
+      "corrections": "Corrections demandées",
+      "late": "En retard",
+      "published": "Rapports publiés",
+      "assigned": "Attribués à moi",
+      "inAnalysis": "En analyse",
+      "toReview": "À relire",
+      "toPublish": "Validés, à publier",
+      "open": "Dossiers ouverts"
+    },
+    "queue": "File de travail",
+    "queueEmpty": "Rien à traiter pour le moment.",
+    "late": "En retard",
+    "publicAlerts": "Signalements du public",
+    "alertsUnavailable": "Signalements indisponibles hors ligne.",
+    "noAlerts": "Aucun signalement reçu.",
+    "occurrences_one": "{{count}} signalement",
+    "occurrences_other": "{{count}} signalements",
+    "withFile": "Fichier joint",
+    "fileOnly": "Fichier sans texte",
+    "takeAlert": "Prendre en charge : créer le dossier",
+    "recent": "Activité récente",
+    "seeAll": "Tout voir",
+    "shortcuts": "Raccourcis",
+    "shortcut": {
+      "newCase": "Nouveau dossier",
+      "checkImage": "Vérifier une image",
+      "library": "Bibliothèque",
+      "portal": "Portail public"
+    }
+  },
+  "notifications": {
+    "title": "Notifications",
+    "unread_one": "{{count}} notification non lue",
+    "unread_other": "{{count}} notifications non lues",
+    "allRead": "Tout est lu.",
+    "markAll": "Tout marquer comme lu",
+    "none": "Aucune notification.",
+    "new": "nouvelle",
+    "someone": "Quelqu'un",
+    "kind": {
+      "assigned": "{{name}} vous a attribué un dossier",
+      "review_requested": "Rapport à relire (soumis par {{name}})",
+      "correction_requested": "Correction demandée par {{name}}",
+      "verification_requested": "Vérification complémentaire demandée par {{name}}",
+      "rejected": "Dossier rejeté par {{name}}",
+      "validated": "Dossier validé par {{name}}",
+      "published": "Rapport publié par {{name}}",
+      "mentioned": "{{name}} vous a mentionné",
+      "public_report": "Nouveau signalement du public"
+    }
+  },
+  "bibliotheque": {
+    "title": "Bibliothèque des rapports",
+    "from": "Publié depuis le",
+    "to": "Publié jusqu'au",
+    "reset": "Effacer les filtres",
+    "count_one": "{{count}} rapport publié",
+    "count_other": "{{count}} rapports publiés",
+    "open": "Page publique"
+  },
+  "revue": {
+    "title": "Revue éditoriale",
+    "backToCase": "Retour au dossier",
+    "open": "Ouvrir la revue éditoriale",
+    "openPublic": "Voir la page publique",
+    "panel": {
+      "editor": "Relisez le rapport, comparez les versions, puis décidez : valider et publier, demander une correction ou une vérification, ou rejeter.",
+      "team": "Le dossier est en relecture par le rédacteur en chef.",
+      "published": "Le rapport est publié et signé."
+    },
+    "noReport": "Le rapport n'est pas encore rédigé (onglet Rapport du dossier).",
+    "unsupported": "Affirmation non étayée",
+    "public": "Publique",
+    "noExplanation": "sans explication",
+    "checklistComplete": "Tous les points de la checklist sont traités.",
+    "versions": {
+      "title": "Comparaison de versions",
+      "none": "Une seule version du rapport pour l'instant.",
+      "compare": "Version précédente à comparer",
+      "option": "Version {{version}} → version actuelle ({{current}})",
+      "added": "ajouté",
+      "removed": "retiré",
+      "unchanged": "inchangé"
+    },
+    "decisions": "Décisions éditoriales",
+    "noDecision": "Aucune décision pour l'instant.",
+    "decide": "Décision du rédacteur en chef",
+    "decision": {
+      "validate_publish": "Valider et publier",
+      "request_correction": "Demander une correction",
+      "request_verification": "Demander une vérification complémentaire",
+      "reject": "Rejeter"
+    },
+    "decisionHint": {
+      "validate_publish": "Le rapport est signé et publié sur le portail public en un clic.",
+      "request_correction": "Le dossier retourne au fact-checker, qui corrige le rapport.",
+      "request_verification": "Le dossier repart en analyse : il manque des éléments.",
+      "reject": "Le dossier est classé, sans publication."
+    },
+    "conditions": "Conditions de publication",
+    "condition": {
+      "verdict_missing": "Un verdict est proposé",
+      "report_missing": "Le rapport est rédigé",
+      "summary_missing": "Le résumé est rempli",
+      "explanation_missing": "L'explication est remplie",
+      "claims_missing": "Au moins une affirmation est listée",
+      "unsupported_claim": "Chaque affirmation renvoie à une preuve",
+      "self_validation": "Le verdict a été proposé par quelqu'un d'autre"
+    },
+    "blocker": {
+      "claims_missing": "Aucune affirmation n'est listée : la publication est bloquée."
+    },
+    "comment": "Commentaire (obligatoire)",
+    "commentHint": "Ce commentaire est enregistré avec la décision et envoyé à l'équipe.",
+    "onlineRequired": "Hors ligne : la décision sera possible au retour du réseau (signature serveur).",
+    "sending": "Envoi…",
+    "submit": {
+      "validate_publish": "Valider, signer et publier",
+      "request_correction": "Demander la correction",
+      "request_verification": "Demander la vérification",
+      "reject": "Rejeter le dossier"
+    },
+    "done": {
+      "validate_publish": "Rapport signé et publié.",
+      "request_correction": "Correction demandée : le fact-checker est notifié.",
+      "request_verification": "Vérification complémentaire demandée.",
+      "reject": "Dossier rejeté et classé."
+    },
+    "published": "Publié : {{id}}",
+    "signature": "Signature",
+    "correction": "Ajouter une correction publique",
+    "correctionHint": "Elle apparaît datée sur la page publique ; le rapport est signé à nouveau.",
+    "addCorrection": "Publier la correction",
+    "correctionAdded": "Correction publiée.",
+    "editorOnly": "Seul le rédacteur en chef décide de la publication.",
+    "notInReview": "Ce dossier n'est pas en relecture. Il y passera quand le fact-checker proposera un verdict.",
+    "openEvidence": "Ouvrir"
+  },
+  "portail": {
+    "home": "Accueil du portail public",
+    "nav": "Portail public",
+    "link": {
+      "reports": "Rapports",
+      "submit": "Signaler",
+      "track": "Suivre",
+      "verify": "Vérifier un rapport"
+    },
+    "staffLogin": "Espace rédaction",
+    "backToApp": "Retour à l'application",
+    "footer": "MASO — vérifications réalisées et validées par des journalistes. Aucun verdict n'est produit automatiquement.",
+    "title": "Vérifications publiées",
+    "subtitle": "Rumeurs, images et chiffres vérifiés par les rédactions malgaches. Vous avez vu passer un contenu douteux ? Signalez-le, sans compte.",
+    "cta": {
+      "submit": "Signaler un contenu",
+      "alreadyChecked": "Déjà vérifié ? Tester une image ou un lien"
+    },
+    "filter": {
+      "query": "Mot-clé",
+      "queryPlaceholder": "Ex. : inondation, riz, MASO-2026-0001",
+      "verdict": "Verdict",
+      "theme": "Thème",
+      "themePlaceholder": "Ex. : Climat",
+      "region": "Région",
+      "all": "Tous",
+      "search": "Rechercher"
+    },
+    "latest": "Derniers rapports",
+    "results": "Résultats",
+    "noReports": "Aucun rapport publié ne correspond.",
+    "more": "Afficher plus",
+    "corrected": "Corrigé",
+    "reason": {
+      "same_file": "Même fichier",
+      "similar_image": "Image très proche",
+      "same_link": "Même lien"
+    },
+    "humanNotice": "Chaque verdict est établi par des journalistes, puis validé par un rédacteur en chef. Aucune machine ne décide.",
+    "backToReports": "Tous les rapports",
+    "notFound": "Ce rapport n'existe pas ou n'est pas publié.",
+    "report": {
+      "verdict": "Verdict",
+      "claim": "Affirmation vérifiée",
+      "summary": "En bref",
+      "explanation": "Notre explication",
+      "claims": "Ce que nous avons vérifié",
+      "evidences": "Preuves",
+      "noEvidence": "Les preuves de ce rapport ne sont pas publiables (sources protégées).",
+      "notPublished": "non publiée",
+      "privateEvidence": "Preuve conservée par la rédaction (source protégée)",
+      "method": "Méthode",
+      "corrections": "Corrections",
+      "publishedBy": "Publié le {{date}} par {{newsroom}}",
+      "validatedBy": "validé par {{name}}",
+      "share": "Partager",
+      "pdf": "Télécharger en PDF",
+      "authenticity": "Authenticité",
+      "qrLabel": "QR code de vérification du rapport {{id}}",
+      "qrHint": "Scannez ce QR code pour vérifier que ce rapport est authentique et n'a pas été modifié.",
+      "verifyNow": "Vérifier maintenant"
+    },
+    "share": {
+      "title": "Vérifié : {{verdict}} — {{title}}",
+      "preview": "Aperçu du partage",
+      "copy": "Copier le lien",
+      "copied": "Copié"
+    },
+    "platform": {
+      "facebook": "Facebook",
+      "whatsapp": "WhatsApp",
+      "tiktok": "TikTok",
+      "youtube": "YouTube",
+      "x": "X (Twitter)",
+      "radio": "Radio",
+      "other": "Autre"
+    },
+    "submit": {
+      "title": "Signaler un contenu suspect",
+      "subtitle": "Une image, un lien ou un message qui circule ? Envoyez-le : nous vérifions d'abord s'il a déjà été vérifié.",
+      "file": "Image (facultatif)",
+      "fileHint": "JPEG, PNG ou WebP, 5 Mo au maximum. Son empreinte est calculée sur votre téléphone avant l'envoi.",
+      "fileType": "Format non accepté : JPEG, PNG ou WebP uniquement.",
+      "fileSize": "Fichier trop lourd : 5 Mo au maximum.",
+      "removeFile": "Retirer",
+      "url": "Lien (facultatif)",
+      "text": "Texte ou description (facultatif)",
+      "textPlaceholder": "Copiez le message reçu, ou décrivez ce que vous avez vu.",
+      "platform": "Où l'avez-vous vu ?",
+      "contact": "Contact (facultatif)",
+      "contactHint": "Téléphone ou e-mail, seulement si vous acceptez d'être recontacté. Jamais publié.",
+      "send": "Envoyer le signalement",
+      "sending": "Envoi…",
+      "privacy": "Aucun compte n'est nécessaire. Nous ne gardons que ce que vous envoyez.",
+      "alreadyChecked": "Déjà vérifié",
+      "alreadyCheckedHint": "Ce contenu correspond à un rapport déjà publié :",
+      "notVerified": "Non vérifié à ce stade",
+      "forwarded": "Votre signalement est transmis aux journalistes. Ce n'est pas un verdict : seuls les journalistes concluent, après vérification.",
+      "clues": "Premiers indices (pas un verdict)",
+      "cluesHint": "Ces indices ne disent pas si le contenu est vrai ou faux.",
+      "link": {
+        "domain": "Site : {{domain}}.",
+        "not_https": "Le lien n'est pas sécurisé (pas de HTTPS).",
+        "shortener": "Lien raccourci : la vraie destination est masquée.",
+        "social": "Publication sur un réseau social : l'auteur reste à identifier."
+      },
+      "trackingCode": "Code de suivi",
+      "copyCode": "Copier le code",
+      "trackingHint": "Gardez ce code : il permet de suivre votre signalement, sans compte.",
+      "trackNow": "Suivre mon signalement",
+      "duplicate": "Ce contenu nous a déjà été signalé : votre signalement y a été ajouté (même code de suivi).",
+      "another": "Faire un autre signalement"
+    },
+    "track": {
+      "title": "Suivre un signalement",
+      "check": "Voir l'état",
+      "notFound": "Aucun signalement ne correspond à ce code.",
+      "received": "Reçu le {{date}}",
+      "status": {
+        "new": "Reçu",
+        "in_progress": "Pris en charge",
+        "verified": "Vérifié",
+        "debunked": "Vérifié : faux ou trompeur"
+      },
+      "explain": {
+        "new": "Votre signalement est arrivé. Un journaliste va l'examiner.",
+        "in_progress": "Une rédaction vérifie ce contenu.",
+        "verified": "La vérification est terminée : voir le rapport.",
+        "debunked": "La vérification est terminée : voir le rapport."
+      }
+    },
+    "verify": {
+      "title": "Vérifier un rapport",
+      "subtitle": "Scannez le QR code d'un rapport MASO, ou saisissez son numéro, pour vérifier qu'il est authentique et n'a pas été modifié.",
+      "number": "Numéro du rapport",
+      "check": "Vérifier",
+      "authentic": "Rapport authentique",
+      "authenticHint": "La signature correspond au contenu publié : il n'a pas été modifié depuis sa signature.",
+      "altered": "Signature invalide",
+      "alteredHint": "Le contenu ne correspond plus à la signature : ne faites pas confiance à ce rapport.",
+      "unknown": "Rapport inconnu",
+      "unknownHint": "Aucun rapport MASO publié ne porte ce numéro. Méfiez-vous d'un document qui s'en réclame.",
+      "published": "publié le {{date}}",
+      "signed": "signé le {{date}}",
+      "hash": "Empreinte du contenu",
+      "open": "Lire le rapport"
+    },
+    "error": {
+      "unknown": "Une erreur est survenue. Réessayez.",
+      "network": "Pas de connexion. Réessayez quand le réseau revient.",
+      "content_required": "Ajoutez une image, un lien ou un texte.",
+      "too_long": "Un des champs est trop long.",
+      "invalid_url": "Le lien doit commencer par http:// ou https://.",
+      "invalid_file": "Fichier non accepté (JPEG, PNG ou WebP, 5 Mo au maximum).",
+      "rate_limited": "Trop de signalements envoyés depuis cette connexion. Réessayez dans une heure.",
+      "upload_failed": "Le signalement est enregistré, mais l'image n'a pas pu être envoyée."
+    }
   }
 }

@@ -16,7 +16,9 @@
     "search": "Search",
     "closeSearch": "Close search",
     "settings": "Settings",
-    "admin": "Administration"
+    "admin": "Administration",
+    "accueil": "Home",
+    "portail": "Public portal"
   },
   "page": {
     "veille": "News feed",
@@ -25,12 +27,16 @@
     "rediger": "Article editor",
     "dossiers": "Dashboard",
     "profil": "Profile and settings",
-    "admin": "Administration"
+    "admin": "Administration",
+    "accueil": "Home",
+    "portail": "Public portal"
   },
   "network": {
     "online": "Online",
     "offline": "Offline",
-    "offlineBanner": "You are offline: the app keeps working with the data stored on this device."
+    "offlineBanner": "You are offline: the app keeps working with the data stored on this device.",
+    "pending_one": "{{count}} pending",
+    "pending_other": "{{count}} pending"
   },
   "common": {
     "searchPlaceholder": "Search…",
@@ -271,8 +277,9 @@
       "originPlaceholder": "E.g. Facebook page “…”, WhatsApp group",
       "submit": "Add to case",
       "done": "Evidence added to case “{{title}}”.",
-      "needsDatabase": "Adding to a case requires the MASO database (Supabase). Analyses remain usable.",
-      "offline": "A connection is needed to add to a case."
+      "staffOnly": "Reserved for the editorial team.",
+      "queued": "Offline: it will be sent when the network is back.",
+      "offlineHint": "Offline: the evidence will be saved on this device, then sent automatically."
     },
     "visual": {
       "title": "Visual checklist",
@@ -590,7 +597,288 @@
     "due": "Due: {{date}}",
     "countInProgress": "Ongoing",
     "countToReview": "To review",
-    "countPublished": "Published"
+    "countPublished": "Published",
+    "sync": {
+      "synced": "Up to date",
+      "pending": "Waiting to send",
+      "error": "Sync error",
+      "errorHint": "The server refused a change to this case. It is kept on this device:",
+      "retry": "Retry",
+      "discard": "Discard pending changes",
+      "discardConfirm": "Discard the unsent changes to this case? They will be lost."
+    },
+    "error": {
+      "reason_required": "A reason is required.",
+      "transition_not_allowed": "This status change is not allowed for your role.",
+      "verdict_required": "A verdict must be proposed first.",
+      "self_validation_forbidden": "You cannot validate your own verdict.",
+      "title_required": "A title is required.",
+      "case_not_found": "Case not found.",
+      "case_locked": "This case is validated or closed: it can no longer be edited.",
+      "checklist_evidence_required": "A “done” item must be linked to at least one piece of evidence.",
+      "role_not_allowed": "Action not allowed for your role.",
+      "justification_required": "A justification is required.",
+      "submission_blocked": "Cannot submit:",
+      "report_locked": "The report can no longer be edited.",
+      "comment_empty": "The comment is empty.",
+      "missing_file": "The evidence file is no longer on this device.",
+      "unknown": "Unknown error.",
+      "publication_blocked": "Cannot publish:",
+      "comment_required": "A comment is required.",
+      "not_in_review": "This case is not under review.",
+      "online_required": "This decision needs a connection: the report is signed by the server.",
+      "sync_first": "Changes to this case are still waiting to be sent. Wait for the sync.",
+      "publish_via_review": "Publication goes through the editorial review (signature).",
+      "not_published": "This report is not published."
+    },
+    "blocker": {
+      "claim_missing": "claim missing",
+      "source_missing": "no linked source",
+      "evidence_missing": "no evidence cited",
+      "checklist_unjustified": "incomplete checklist not justified",
+      "verdict_missing": "no verdict proposed;",
+      "report_missing": "the report is not written;",
+      "summary_missing": "the summary is empty;",
+      "explanation_missing": "the explanation is empty;",
+      "claims_missing": "no claim is listed;",
+      "unsupported_claim": "a claim is not linked to any evidence;",
+      "self_validation": "you proposed this verdict: another editor-in-chief must validate it."
+    },
+    "condition": {
+      "claim_missing": "The claim to verify is filled in",
+      "source_missing": "At least one source is linked to the case",
+      "evidence_missing": "At least one piece of evidence is cited in the justification",
+      "checklist_unjustified": "Every unchecked checklist item is justified"
+    },
+    "mutation": {
+      "create_case": "Case creation",
+      "update_case": "Edit",
+      "set_checklist": "Checklist",
+      "change_status": "Status change",
+      "propose_verdict": "Proposed verdict",
+      "add_evidence": "Evidence added",
+      "link_source": "Source linked",
+      "unlink_source": "Source removed",
+      "save_report": "Report",
+      "add_comment": "Comment"
+    },
+    "priority": {
+      "1": "High priority",
+      "2": "Normal priority",
+      "3": "Low priority"
+    },
+    "offlineList": "List saved on this device (offline).",
+    "pendingChanges_one": "{{count}} change waiting to be sent.",
+    "pendingChanges_other": "{{count}} changes waiting to be sent.",
+    "new": "New case",
+    "create": "Create the case",
+    "view": "View",
+    "views": {
+      "list": "List",
+      "board": "Columns"
+    },
+    "mine": "My cases",
+    "offlineCreate": "Offline: the case will be created on this device and sent when the network is back.",
+    "field": {
+      "claim": "Claim to verify",
+      "claimPlaceholder": "What the suspicious content says, word for word if possible.",
+      "category": "Category",
+      "categoryPlaceholder": "E.g. climate, health, elections",
+      "region": "Region",
+      "priority": "Priority",
+      "dueDate": "Deadline",
+      "status": "Status",
+      "assignee": "Assigned to"
+    },
+    "back": "Back to cases",
+    "notFound": "This case does not exist or you do not have access to it.",
+    "member": "Team member",
+    "tabs": "Case tabs",
+    "tab": {
+      "summary": "Summary",
+      "evidences": "Evidence",
+      "sources": "Sources",
+      "contacts": "Contacts",
+      "figures": "Quoted figures",
+      "checklist": "Checklist",
+      "report": "Report",
+      "history": "History"
+    },
+    "export": {
+      "pdf": "Export as PDF",
+      "pdfDone": "PDF downloaded.",
+      "copy": "Copy as text",
+      "copied": "Case copied: you can paste it in a message.",
+      "footer": "Exported from MASO on {{date}} — status: {{status}}. Working document: only a validated and published report commits the newsroom.",
+      "comments": "Team comments"
+    },
+    "offlineCase": "Offline: version saved on this device. Your changes will be sent when the network is back.",
+    "offlineIncomplete": "This case has not been downloaded to this device yet: open it once with network to read it offline.",
+    "verdict": {
+      "title": "Verdict",
+      "confidence": "Confidence level",
+      "cites": "Cited evidence",
+      "proposedBy": "proposed by {{name}}",
+      "none": "No verdict proposed yet.",
+      "selfValidation": "You proposed this verdict: another editor-in-chief must validate it.",
+      "propose": "Propose a verdict",
+      "label": "Verdict",
+      "justification": "Justification",
+      "justificationHint": "3 to 5 sentences, each referring to a piece of evidence (e.g. “The same photo was published in 2024 [P1].”).",
+      "conditions": "Submission conditions",
+      "submit": "Submit to the editor-in-chief",
+      "proposed": "Verdict proposed: the case is submitted to the editor-in-chief."
+    },
+    "status": {
+      "title": "Move the case forward",
+      "to": {
+        "in_analysis": "Start analysis",
+        "awaiting_response": "Waiting for an answer",
+        "correction_requested": "Request a correction",
+        "validated": "Validate",
+        "closed": "Close without follow-up",
+        "to_review": "Submit",
+        "new": "New",
+        "published": "Publish"
+      },
+      "reason": "Reason (required)",
+      "confirm": "Confirm: {{status}}",
+      "changed": "Status updated."
+    },
+    "lockedHint": "Case validated or closed: it can no longer be edited.",
+    "saved": "Saved.",
+    "save": "Save",
+    "unassigned": "Unassigned",
+    "submitToFactChecker": "To submit the case to the fact-checker, assign it to them.",
+    "evidences": {
+      "add": "Add evidence",
+      "addHint": "Analyse a content in Verify then “Add to case”, or add a link directly.",
+      "analyse": {
+        "image": "Analyse an image",
+        "video": "Analyse a video",
+        "lien": "Analyse a link"
+      },
+      "linkUrl": "Link address",
+      "addLink": "Add the link",
+      "added": "Evidence added.",
+      "none": "No evidence yet.",
+      "comparison": "Side-by-side comparison",
+      "compare": "Compare"
+    },
+    "evidenceType": {
+      "image": "Image",
+      "video": "Video",
+      "link": "Link",
+      "screenshot": "Screenshot",
+      "document": "Document",
+      "text": "Text",
+      "analysis": "Analysis"
+    },
+    "analysisKind": {
+      "image": "Image analysis",
+      "video": "Video analysis",
+      "link": "Link analysis",
+      "statistic_comparison": "Comparison with an official statistic"
+    },
+    "sources": {
+      "required": "At least one source must be linked before submitting a verdict.",
+      "unlink": "Remove the source",
+      "link": "Link a source",
+      "search": "Search a source in the directory",
+      "add": "Link",
+      "createHint": "Source missing from the directory?"
+    },
+    "contacts": {
+      "none": "No confirmation request for this case.",
+      "suggested": "Suggested experts",
+      "suggestedHint": "Based on the case's category and region. Open a profile to start a confirmation request."
+    },
+    "figures": {
+      "compare": "Compare a figure",
+      "none": "No figure compared for this case.",
+      "line": "Stated figure: {{claimed}} — official data: {{official}} {{unit}} ({{year}}) — gap: {{percent}}%."
+    },
+    "checklist": {
+      "explanation": "Explanation (required if the item is not handled)",
+      "hint": "Every “done” item must be linked to evidence; every unhandled item must be justified before submitting a verdict."
+    },
+    "checklistState": {
+      "todo": "To do",
+      "in_progress": "In progress",
+      "done": "Done",
+      "not_applicable": "Not applicable"
+    },
+    "block": {
+      "origin": "Origin",
+      "context": "Context",
+      "content": "Content",
+      "sources": "Sources",
+      "adversarial": "Right of reply",
+      "conclusion": "Conclusion"
+    },
+    "question": {
+      "origin": {
+        "first_publisher": "Who published it first?",
+        "first_date": "What is the earliest date found?",
+        "account_credible": "Is the original account identifiable and credible?",
+        "reposted": "Has the content been reposted elsewhere?"
+      },
+      "context": {
+        "place_date_confirmed": "Are the stated place and date confirmed (geolocation, weather, visible elements)?",
+        "older_version": "Is there an older version?",
+        "matches_event": "Does the content match the event?"
+      },
+      "content": {
+        "technical_analysis": "Has the technical analysis been done?",
+        "reverse_search": "Has the reverse search been done?",
+        "figures_compared": "Have the figures been compared with an official source?"
+      },
+      "sources": {
+        "two_independent": "At least two independent sources?",
+        "direct_knowledge": "Do the sources have direct knowledge of the facts?",
+        "conflicts_examined": "Have conflicts of interest been examined?",
+        "statements_crosschecked": "Have the statements been cross-checked?"
+      },
+      "adversarial": {
+        "party_contacted": "Has the person or institution concerned been contacted?",
+        "response_kept": "Is their answer kept?",
+        "counter_evidence": "Has contrary evidence been examined?"
+      }
+    },
+    "report": {
+      "hint": "Report draft: review, signature and publication come with MOD-06. The PDF export (above) works offline.",
+      "summary": "Summary",
+      "summaryHint": "In 2 sentences: the claim and the conclusion.",
+      "explanation": "Explanation",
+      "explanationHint": "What the evidence shows, with its references [P1], [P2]…",
+      "method": "Method",
+      "methodHint": "Tools and steps used.",
+      "save": "Save the draft",
+      "saved": "Draft saved.",
+      "claims": "Report claims",
+      "claimsHint": "One sentence per verified claim, linked to at least one piece of evidence. A claim without evidence blocks publication.",
+      "claimN": "Claim {{n}}",
+      "claimPlaceholder": "E.g. the photo was first published in March 2024.",
+      "claimEvidence": "Evidence for claim {{n}}",
+      "removeClaim": "Remove claim {{n}}",
+      "addClaim": "Add a claim",
+      "unsupported": "Unsupported claim: tick at least one piece of evidence.",
+      "publicEvidences": "Evidence shown to the public",
+      "publicEvidencesHint": "Only tick what can be published (no confidential source or personal data).",
+      "publishedAs": "Report published: {{id}}.",
+      "openPublic": "See the public page"
+    },
+    "history": {
+      "none": "No change yet.",
+      "comment": "Add a comment for the team…",
+      "addComment": "Comment",
+      "commented": "Comment added.",
+      "commentBy": "Comment by {{name}}",
+      "mention": "Mention:"
+    },
+    "fromAlert": "Public report {{code}}",
+    "fromAlertHint_one": "From public report {{code}} ({{count}} report). The file and link received will be added as evidence.",
+    "fromAlertHint_other": "From public report {{code}} ({{count}} reports). The file and link received will be added as evidence."
   },
   "profil": {
     "language": "Language",
@@ -670,7 +958,8 @@
       "profile_missing": "This account has no MASO profile. Ask the administrator to create it (see the Supabase setup).",
       "configuration": "Supabase is misconfigured (key, migrations or email provider). Check the .env file and the setup.",
       "no_account": "No MASO account is linked to this address. Check the address or ask the administrator for an invitation."
-    }
+    },
+    "portal": "Browse the public portal (no account)"
   },
   "onboarding": {
     "skip": "Skip",
@@ -709,5 +998,316 @@
     "none": "No clue",
     "weak": "Weak clue",
     "to_examine": "Clue to examine"
+  },
+  "confidence": {
+    "high": "High",
+    "medium": "Medium",
+    "low": "Low"
+  },
+  "accueil": {
+    "hello": "Hello {{name}}",
+    "intro": {
+      "journalist": "Your cases, requested corrections and public reports waiting to be taken on.",
+      "fact_checker": "Cases assigned to you and those waiting for a verdict.",
+      "editor_in_chief": "Reports to review, validate and publish."
+    },
+    "indicators": "Indicators",
+    "indicator": {
+      "myOpen": "My open cases",
+      "corrections": "Corrections requested",
+      "late": "Overdue",
+      "published": "Published reports",
+      "assigned": "Assigned to me",
+      "inAnalysis": "In analysis",
+      "toReview": "To review",
+      "toPublish": "Validated, to publish",
+      "open": "Open cases"
+    },
+    "queue": "Work queue",
+    "queueEmpty": "Nothing to handle right now.",
+    "late": "Overdue",
+    "publicAlerts": "Public reports",
+    "alertsUnavailable": "Public reports are unavailable offline.",
+    "noAlerts": "No report received.",
+    "occurrences_one": "{{count}} report",
+    "occurrences_other": "{{count}} reports",
+    "withFile": "File attached",
+    "fileOnly": "File without text",
+    "takeAlert": "Take it on: create the case",
+    "recent": "Recent activity",
+    "seeAll": "See all",
+    "shortcuts": "Shortcuts",
+    "shortcut": {
+      "newCase": "New case",
+      "checkImage": "Check an image",
+      "library": "Library",
+      "portal": "Public portal"
+    }
+  },
+  "notifications": {
+    "title": "Notifications",
+    "unread_one": "{{count}} unread notification",
+    "unread_other": "{{count}} unread notifications",
+    "allRead": "All caught up.",
+    "markAll": "Mark all as read",
+    "none": "No notifications.",
+    "new": "new",
+    "someone": "Someone",
+    "kind": {
+      "assigned": "{{name}} assigned you a case",
+      "review_requested": "Report to review (submitted by {{name}})",
+      "correction_requested": "Correction requested by {{name}}",
+      "verification_requested": "Further verification requested by {{name}}",
+      "rejected": "Case rejected by {{name}}",
+      "validated": "Case validated by {{name}}",
+      "published": "Report published by {{name}}",
+      "mentioned": "{{name}} mentioned you",
+      "public_report": "New report from the public"
+    }
+  },
+  "bibliotheque": {
+    "title": "Report library",
+    "from": "Published from",
+    "to": "Published until",
+    "reset": "Clear filters",
+    "count_one": "{{count}} published report",
+    "count_other": "{{count}} published reports",
+    "open": "Public page"
+  },
+  "revue": {
+    "title": "Editorial review",
+    "backToCase": "Back to the case",
+    "open": "Open the editorial review",
+    "openPublic": "See the public page",
+    "panel": {
+      "editor": "Read the report, compare versions, then decide: validate and publish, request a correction or verification, or reject.",
+      "team": "The case is being reviewed by the editor-in-chief.",
+      "published": "The report is published and signed."
+    },
+    "noReport": "The report is not written yet (Report tab of the case).",
+    "unsupported": "Unsupported claim",
+    "public": "Public",
+    "noExplanation": "no explanation",
+    "checklistComplete": "Every checklist item has been handled.",
+    "versions": {
+      "title": "Version comparison",
+      "none": "Only one version of the report so far.",
+      "compare": "Previous version to compare",
+      "option": "Version {{version}} → current version ({{current}})",
+      "added": "added",
+      "removed": "removed",
+      "unchanged": "unchanged"
+    },
+    "decisions": "Editorial decisions",
+    "noDecision": "No decision yet.",
+    "decide": "Editor-in-chief decision",
+    "decision": {
+      "validate_publish": "Validate and publish",
+      "request_correction": "Request a correction",
+      "request_verification": "Request further verification",
+      "reject": "Reject"
+    },
+    "decisionHint": {
+      "validate_publish": "The report is signed and published on the public portal in one click.",
+      "request_correction": "The case goes back to the fact-checker, who corrects the report.",
+      "request_verification": "The case goes back to analysis: elements are missing.",
+      "reject": "The case is closed, without publication."
+    },
+    "conditions": "Publication conditions",
+    "condition": {
+      "verdict_missing": "A verdict is proposed",
+      "report_missing": "The report is written",
+      "summary_missing": "The summary is filled in",
+      "explanation_missing": "The explanation is filled in",
+      "claims_missing": "At least one claim is listed",
+      "unsupported_claim": "Each claim refers to evidence",
+      "self_validation": "The verdict was proposed by someone else"
+    },
+    "blocker": {
+      "claims_missing": "No claim is listed: publication is blocked."
+    },
+    "comment": "Comment (required)",
+    "commentHint": "This comment is saved with the decision and sent to the team.",
+    "onlineRequired": "Offline: the decision will be possible when the network is back (server signature).",
+    "sending": "Sending…",
+    "submit": {
+      "validate_publish": "Validate, sign and publish",
+      "request_correction": "Request the correction",
+      "request_verification": "Request the verification",
+      "reject": "Reject the case"
+    },
+    "done": {
+      "validate_publish": "Report signed and published.",
+      "request_correction": "Correction requested: the fact-checker has been notified.",
+      "request_verification": "Further verification requested.",
+      "reject": "Case rejected and closed."
+    },
+    "published": "Published: {{id}}",
+    "signature": "Signature",
+    "correction": "Add a public correction",
+    "correctionHint": "It appears, dated, on the public page; the report is signed again.",
+    "addCorrection": "Publish the correction",
+    "correctionAdded": "Correction published.",
+    "editorOnly": "Only the editor-in-chief decides on publication.",
+    "notInReview": "This case is not under review. It will be once the fact-checker proposes a verdict.",
+    "openEvidence": "Open"
+  },
+  "portail": {
+    "home": "Public portal home",
+    "nav": "Public portal",
+    "link": {
+      "reports": "Reports",
+      "submit": "Report",
+      "track": "Track",
+      "verify": "Verify a report"
+    },
+    "staffLogin": "Newsroom area",
+    "backToApp": "Back to the app",
+    "footer": "MASO — checks carried out and validated by journalists. No verdict is produced automatically.",
+    "title": "Published fact-checks",
+    "subtitle": "Rumours, images and figures checked by Malagasy newsrooms. Seen something dubious? Report it, no account needed.",
+    "cta": {
+      "submit": "Report content",
+      "alreadyChecked": "Already checked? Test an image or a link"
+    },
+    "filter": {
+      "query": "Keyword",
+      "queryPlaceholder": "E.g. flood, rice, MASO-2026-0001",
+      "verdict": "Verdict",
+      "theme": "Topic",
+      "themePlaceholder": "E.g. Climate",
+      "region": "Region",
+      "all": "All",
+      "search": "Search"
+    },
+    "latest": "Latest reports",
+    "results": "Results",
+    "noReports": "No published report matches.",
+    "more": "Show more",
+    "corrected": "Corrected",
+    "reason": {
+      "same_file": "Same file",
+      "similar_image": "Very similar image",
+      "same_link": "Same link"
+    },
+    "humanNotice": "Every verdict is established by journalists, then validated by an editor-in-chief. No machine decides.",
+    "backToReports": "All reports",
+    "notFound": "This report does not exist or is not published.",
+    "report": {
+      "verdict": "Verdict",
+      "claim": "Claim checked",
+      "summary": "In short",
+      "explanation": "Our explanation",
+      "claims": "What we checked",
+      "evidences": "Evidence",
+      "noEvidence": "The evidence for this report cannot be published (protected sources).",
+      "notPublished": "not published",
+      "privateEvidence": "Evidence kept by the newsroom (protected source)",
+      "method": "Method",
+      "corrections": "Corrections",
+      "publishedBy": "Published on {{date}} by {{newsroom}}",
+      "validatedBy": "validated by {{name}}",
+      "share": "Share",
+      "pdf": "Download as PDF",
+      "authenticity": "Authenticity",
+      "qrLabel": "Verification QR code for report {{id}}",
+      "qrHint": "Scan this QR code to check that this report is authentic and has not been altered.",
+      "verifyNow": "Verify now"
+    },
+    "share": {
+      "title": "Checked: {{verdict}} — {{title}}",
+      "preview": "Share preview",
+      "copy": "Copy link",
+      "copied": "Copied"
+    },
+    "platform": {
+      "facebook": "Facebook",
+      "whatsapp": "WhatsApp",
+      "tiktok": "TikTok",
+      "youtube": "YouTube",
+      "x": "X (Twitter)",
+      "radio": "Radio",
+      "other": "Other"
+    },
+    "submit": {
+      "title": "Report suspicious content",
+      "subtitle": "An image, a link or a message going around? Send it: we first check whether it has already been verified.",
+      "file": "Image (optional)",
+      "fileHint": "JPEG, PNG or WebP, 5 MB maximum. Its fingerprint is computed on your phone before sending.",
+      "fileType": "Format not accepted: JPEG, PNG or WebP only.",
+      "fileSize": "File too large: 5 MB maximum.",
+      "removeFile": "Remove",
+      "url": "Link (optional)",
+      "text": "Text or description (optional)",
+      "textPlaceholder": "Paste the message you received, or describe what you saw.",
+      "platform": "Where did you see it?",
+      "contact": "Contact (optional)",
+      "contactHint": "Phone or e-mail, only if you agree to be contacted. Never published.",
+      "send": "Send the report",
+      "sending": "Sending…",
+      "privacy": "No account needed. We only keep what you send.",
+      "alreadyChecked": "Already checked",
+      "alreadyCheckedHint": "This content matches a report that is already published:",
+      "notVerified": "Not verified at this stage",
+      "forwarded": "Your report has been passed on to journalists. This is not a verdict: only journalists conclude, after checking.",
+      "clues": "First clues (not a verdict)",
+      "cluesHint": "These clues do not say whether the content is true or false.",
+      "link": {
+        "domain": "Website: {{domain}}.",
+        "not_https": "The link is not secure (no HTTPS).",
+        "shortener": "Shortened link: the real destination is hidden.",
+        "social": "Social media post: the author still needs to be identified."
+      },
+      "trackingCode": "Tracking code",
+      "copyCode": "Copy the code",
+      "trackingHint": "Keep this code: it lets you track your report, without an account.",
+      "trackNow": "Track my report",
+      "duplicate": "This content had already been reported to us: your report has been added to it (same tracking code).",
+      "another": "Send another report"
+    },
+    "track": {
+      "title": "Track a report",
+      "check": "See the status",
+      "notFound": "No report matches this code.",
+      "received": "Received on {{date}}",
+      "status": {
+        "new": "Received",
+        "in_progress": "Being handled",
+        "verified": "Checked",
+        "debunked": "Checked: false or misleading"
+      },
+      "explain": {
+        "new": "Your report has arrived. A journalist will look at it.",
+        "in_progress": "A newsroom is checking this content.",
+        "verified": "The check is complete: see the report.",
+        "debunked": "The check is complete: see the report."
+      }
+    },
+    "verify": {
+      "title": "Verify a report",
+      "subtitle": "Scan the QR code of a MASO report, or enter its number, to check that it is authentic and has not been altered.",
+      "number": "Report number",
+      "check": "Verify",
+      "authentic": "Authentic report",
+      "authenticHint": "The signature matches the published content: it has not been altered since it was signed.",
+      "altered": "Invalid signature",
+      "alteredHint": "The content no longer matches the signature: do not trust this report.",
+      "unknown": "Unknown report",
+      "unknownHint": "No published MASO report has this number. Be wary of any document claiming otherwise.",
+      "published": "published on {{date}}",
+      "signed": "signed on {{date}}",
+      "hash": "Content fingerprint",
+      "open": "Read the report"
+    },
+    "error": {
+      "unknown": "Something went wrong. Try again.",
+      "network": "No connection. Try again when the network is back.",
+      "content_required": "Add an image, a link or a text.",
+      "too_long": "One of the fields is too long.",
+      "invalid_url": "The link must start with http:// or https://.",
+      "invalid_file": "File not accepted (JPEG, PNG or WebP, 5 MB maximum).",
+      "rate_limited": "Too many reports sent from this connection. Try again in an hour.",
+      "upload_failed": "The report is saved, but the image could not be sent."
+    }
   }
 }

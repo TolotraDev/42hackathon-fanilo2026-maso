@@ -11,7 +11,7 @@ import type { ClueLevel } from '@/types/domain'
 import { AttachToCase } from './AttachToCase'
 import { BackToHub } from './ImageAnalysisPage'
 import { FactList, StepCard } from './StepCard'
-import { addEvidence, findCasesWithUrl, findSourceByDomain, isPersistenceAvailable, type CaseSummary, type SourceRecord } from './verificationApi'
+import { findCasesWithUrl, findSourceByDomain, isPersistenceAvailable, type CaseSummary, type SourceRecord } from './verificationApi'
 
 /** Un domaine très récent est un signal classique de site opportuniste (section 7, M5). */
 export function qualifyDomainAge(ageDays: number | null | undefined): ClueLevel | undefined {
@@ -328,10 +328,8 @@ export function LinkAnalysisPage() {
               </Card>
             )}
             <AttachToCase
-              onAttach={async (caseId, origin) => {
-                await addEvidence({
-                  caseId,
-                  type: 'link',
+              evidence={(origin) => ({
+type: 'link',
                   url,
                   archiveUrl: archiveUrl ?? null,
                   origin: origin || null,
@@ -343,8 +341,7 @@ export function LinkAnalysisPage() {
                     directory: knownSource ? { id: knownSource.id, name: knownSource.name, score: knownSource.score } : null,
                     existing: existing.data ?? null,
                   },
-                })
-              }}
+                })}
             />
           </div>
         </div>

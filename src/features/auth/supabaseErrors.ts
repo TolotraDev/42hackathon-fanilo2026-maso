@@ -35,7 +35,8 @@ export function toAuthFailure(error: SupabaseLikeError): AuthFailure {
   // Lien magique demandé pour une adresse sans compte (la création de compte par e-mail est désactivée).
   if (/signups not allowed/i.test(message)) return new AuthFailure('no_account')
   if (error.code && CODES[error.code]) return new AuthFailure(CODES[error.code])
-  if (error.name === 'AuthRetryableFetchError' || /failed to fetch|network/i.test(message)) return new AuthFailure('network')
+  // Requête qui n'a pas abouti (coupure, page quittée pendant l'envoi) : à réessayer, ce n'est pas un refus.
+  if (error.name === 'AuthRetryableFetchError' || error.name === 'AbortError' || /failed to fetch|network|abort|load failed/i.test(message)) return new AuthFailure('network')
   if (error.status === 429) return new AuthFailure('rate_limited')
   if (/invalid api key|no api key|invalid path specified/i.test(message)) return new AuthFailure('configuration')
   if (/invalid login credentials/i.test(message)) return new AuthFailure('invalid_credentials')

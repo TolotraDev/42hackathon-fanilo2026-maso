@@ -12,7 +12,6 @@ import { FileDrop } from './FileDrop'
 import { BackToHub } from './ImageAnalysisPage'
 import { setPendingMedia, takePendingMedia } from './pendingMedia'
 import { FactList, StepCard } from './StepCard'
-import { addEvidence } from './verificationApi'
 
 interface VideoReception {
   mime: string | null
@@ -182,12 +181,9 @@ export function VideoAnalysisPage() {
         <div className="space-y-4 lg:col-start-1 lg:row-start-2">
           {reception.state === 'done' && !rejected && (
             <AttachToCase
-              onAttach={async (caseId, origin) => {
-                await addEvidence({
-                  caseId,
-                  type: 'video',
+              evidence={(origin) => ({
+type: 'video',
                   file,
-                  fileExtension: reception.data?.mime === 'video/webm' ? 'webm' : reception.data?.mime === 'video/quicktime' ? 'mov' : 'mp4',
                   sha256: reception.data?.sha256,
                   origin: origin || media?.origin || null,
                   analysis: {
@@ -198,8 +194,7 @@ export function VideoAnalysisPage() {
                     keyframes: server.data?.keyframes.map(({ time_s, reason }) => ({ time_s, reason })) ?? [],
                     tool: server.data?.tool,
                   },
-                })
-              }}
+                })}
             />
           )}
         

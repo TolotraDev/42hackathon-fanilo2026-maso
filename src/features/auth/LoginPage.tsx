@@ -1,4 +1,4 @@
-import { FlaskConical, LogIn, Mail, UserRound } from 'lucide-react'
+import { FlaskConical, Globe, LogIn, Mail, UserRound } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router-dom'
@@ -135,6 +135,10 @@ export function LoginPage() {
             {t('auth.guest')}
           </Button>
           <p className="text-center text-xs text-ink-muted">{t('auth.guestHint')}</p>
+          <Link to="/portail" className="flex min-h-11 items-center justify-center gap-2 text-sm font-semibold text-cobalt hover:underline">
+            <Globe className="size-4" aria-hidden />
+            {t('auth.portal')}
+          </Link>
         </div>
       </Card>
 

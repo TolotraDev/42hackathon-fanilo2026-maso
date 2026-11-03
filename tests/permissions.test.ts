@@ -12,8 +12,10 @@ describe('accès aux espaces selon le rôle', () => {
     }
   })
 
-  it('ouvre l’annuaire public et les statistiques aux invités', () => {
+  it('ouvre l’annuaire public, les statistiques et le portail aux invités', () => {
     expect(canAccessSection('public', 'ressources')).toBe(true)
+    expect(canAccessSection('public', 'portail')).toBe(true)
+    expect(canAccessSection('public', 'accueil')).toBe(false)
     expect(canAccessSection('public', 'admin')).toBe(false)
   })
 
@@ -27,7 +29,7 @@ describe('accès aux espaces selon le rôle', () => {
   })
 
   it('envoie chaque rôle vers son accueil', () => {
-    expect(homePathFor('fact_checker')).toBe('/veille')
+    expect(homePathFor('fact_checker')).toBe('/accueil')
     expect(homePathFor('admin')).toBe('/admin')
     expect(homePathFor('public')).toBe('/ressources')
   })

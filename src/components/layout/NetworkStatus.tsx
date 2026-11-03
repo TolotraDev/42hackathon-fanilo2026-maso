@@ -1,5 +1,6 @@
 import { CloudOff, Wifi } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { useCaseStore } from '@/features/dossiers/CaseStoreProvider'
 import { useOnlineStatus } from '@/hooks/useOnlineStatus'
 import { cn } from '@/lib/cn'
 
@@ -7,11 +8,13 @@ import { cn } from '@/lib/cn'
 export function NetworkStatus({ className }: { className?: string }) {
   const { t } = useTranslation()
   const online = useOnlineStatus()
+  const { pending } = useCaseStore()
   const Icon = online ? Wifi : CloudOff
   return (
     <span className={cn('inline-flex items-center gap-1.5 text-xs font-medium', className)} role="status">
       <Icon className="size-4" aria-hidden />
       {online ? t('network.online') : t('network.offline')}
+      {pending > 0 && <span>· {t('network.pending', { count: pending })}</span>}
     </span>
   )
 }
