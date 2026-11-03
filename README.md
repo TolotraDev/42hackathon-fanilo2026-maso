@@ -180,6 +180,7 @@ IA dans l'application : assistant éditorial via Groq, Gemini ou Ollama (au choi
 - [Modules et répartition](docs/MODULES.md)
 - [Guide Git](docs/GUIDE_GIT.md)
 - [Configurer Supabase](docs/CONFIGURATION_SUPABASE.md)
+- **[Guide complet de MASO, pas à pas (pour découvrir toute la plateforme)](docs/GUIDE_COMPLET.md)**
 - [Tester le MOD-03 pas à pas](docs/GUIDE_TEST_MOD03.md) (fichiers d'exemple dans `docs/exemples/`)
 - [Tester le MOD-04 pas à pas](docs/GUIDE_TEST_MOD04.md)
 - [Tester le MOD-05 pas à pas](docs/GUIDE_TEST_MOD05.md)
