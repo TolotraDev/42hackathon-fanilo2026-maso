@@ -30,21 +30,21 @@ export function useNavSections(): NavSection[] {
 }
 
 /**
- * Barre du bas sur mobile. Pour l'équipe éditoriale : Vérifier, l'action principale, est le bouton central rond.
- * Pour les autres rôles (admin, invité) : les espaces accessibles, sans bouton central.
+ * Barre du bas sur mobile : chaque rôle a son action principale au centre, en bouton rond bleu.
+ * Équipe éditoriale : Vérifier · administration : Administration · public : Ressources.
  */
 export function useBottomNav(): { left: NavSection[]; center: NavSection | null; right: NavSection[] } {
   const sections = useNavSections()
   const allowed = (id: SectionId) => sections.some((section) => section.id === id)
+  const pick = (ids: SectionId[]) => ids.filter(allowed).map(byId)
   if (allowed('verifier')) {
-    return {
-      left: (['veille', 'ressources'] as const).filter(allowed).map(byId),
-      center: byId('verifier'),
-      right: (['rediger', 'dossiers'] as const).filter(allowed).map(byId),
-    }
+    return { left: pick(['veille', 'ressources']), center: byId('verifier'), right: pick(['rediger', 'dossiers']) }
   }
-  // Le portail public a sa propre page (hors de la coque) : il reste accessible depuis le menu.
-  return { left: sections.filter((section) => section.id !== 'portail'), center: null, right: [] }
+  if (allowed('admin')) {
+    return { left: pick(['portail', 'ressources']), center: byId('admin'), right: pick(['profil']) }
+  }
+  const center = allowed('ressources') ? byId('ressources') : null
+  return { left: pick(['portail']), center, right: pick(['profil']) }
 }
 
 export function sectionFromPath(pathname: string): NavSection | undefined {

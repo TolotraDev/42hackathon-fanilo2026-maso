@@ -1,6 +1,7 @@
 import { Moon, Search, Sun } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useTheme } from '@/hooks/useTheme'
+import { SignOutButton } from '@/features/auth/SignOutButton'
 import { NotificationBell } from '@/features/notifications/NotificationBell'
 import { LanguageSwitcher } from './LanguageSwitcher'
 
@@ -16,7 +17,7 @@ export function Topbar({ title, query, onQueryChange }: TopbarProps) {
   const { isDark, setPreference } = useTheme()
 
   return (
-    <header className="sticky top-0 z-20 hidden h-16 items-center gap-4 border-b border-line bg-surface/90 px-8 backdrop-blur lg:flex">
+    <header className="sticky top-0 z-20 hidden h-[4.5rem] items-center gap-3 border-b border-line bg-surface/90 px-10 backdrop-blur lg:flex">
       <h1 className="font-display text-lg font-extrabold uppercase tracking-wide text-navy dark:text-ink">{title}</h1>
       <label className="relative ml-auto w-72">
         <span className="sr-only">{t('nav.search')}</span>
@@ -39,6 +40,7 @@ export function Topbar({ title, query, onQueryChange }: TopbarProps) {
       >
         {isDark ? <Sun className="size-5" aria-hidden /> : <Moon className="size-5" aria-hidden />}
       </button>
+      <SignOutButton />
     </header>
   )
 }

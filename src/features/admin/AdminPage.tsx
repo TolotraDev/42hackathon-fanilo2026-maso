@@ -1,9 +1,9 @@
-import { BadgeCheck, Settings2, UserPlus } from 'lucide-react'
+import { BadgeCheck, KeyRound, Mail, Settings2 } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import { useShellSearch } from '@/components/layout/AppShell'
-import { Avatar, Badge, Button, Card, Input, SectionTitle } from '@/components/ui'
+import { Avatar, Badge, Button, Card, Input, SectionTitle, SegmentedControl } from '@/components/ui'
 import { DEMO_PASSWORD } from '@/data/demo/users'
 import { useAuth } from '@/features/auth/AuthProvider'
 import { FormMessage } from '@/features/auth/FormMessage'
@@ -25,11 +25,15 @@ export function AdminPage() {
   const [users, setUsers] = useState<Profile[]>([])
   const [feedback, setFeedback] = useState<Feedback>(null)
   const [busy, setBusy] = useState(false)
-  const [invite, setInvite] = useState<{ email: string; fullName: string; role: UserRole; language: Language }>({
+  const [mode, setMode] = useState<'email' | 'password'>('email')
+  const [roleFilter, setRoleFilter] = useState<UserRole | ''>('')
+  const [statusFilter, setStatusFilter] = useState<'' | 'active' | 'suspended'>('')
+  const [invite, setInvite] = useState<{ email: string; fullName: string; role: UserRole; language: Language; password: string }>({
     email: '',
     fullName: '',
     role: 'journalist',
     language: 'fr',
+    password: '',
   })
 
   const load = useCallback(async () => {
@@ -61,11 +65,15 @@ export function AdminPage() {
   const onInvite = (event: React.FormEvent) => {
     event.preventDefault()
     const email = invite.email.trim()
-    const success =
-      service.mode === 'demo' ? t('admin.invitedDemo', { email, password: DEMO_PASSWORD }) : t('admin.invited', { email })
+    const password = mode === 'password' ? invite.password : undefined
+    const success = password
+      ? t('admin.created', { email })
+      : service.mode === 'demo'
+        ? t('admin.invitedDemo', { email, password: DEMO_PASSWORD })
+        : t('admin.invited', { email })
     void act(async () => {
-      await service.admin.inviteUser({ ...invite, email })
-      setInvite((current) => ({ ...current, email: '', fullName: '' }))
+      await service.admin.inviteUser({ ...invite, email, password })
+      setInvite((current) => ({ ...current, email: '', fullName: '', password: '' }))
     }, success)
   }
 
@@ -78,7 +86,12 @@ export function AdminPage() {
   const today = new Date().toISOString().slice(0, 10)
 
   const activeCount = users.filter((user) => user.active).length
-  const visibleUsers = users.filter((user) => matchesQuery(query, user.fullName, user.email, t(`role.${user.role}`)))
+  const visibleUsers = users.filter(
+    (user) =>
+      (!roleFilter || user.role === roleFilter) &&
+      (!statusFilter || (statusFilter === 'active') === user.active) &&
+      matchesQuery(query, user.fullName, user.email, t(`role.${user.role}`)),
+  )
 
   return (
     <div className="space-y-4">
@@ -123,6 +136,16 @@ export function AdminPage() {
         <Card className="p-4">
           <SectionTitle>{t('admin.inviteTitle')}</SectionTitle>
           <form onSubmit={onInvite} className="space-y-3">
+            <SegmentedControl<'email' | 'password'>
+              label={t('admin.addMode')}
+              value={mode}
+              onChange={setMode}
+              options={[
+                { value: 'email', label: t('admin.modeEmail') },
+                { value: 'password', label: t('admin.modePassword') },
+              ]}
+            />
+            <p className="text-xs text-ink-muted">{mode === 'email' ? t('admin.modeEmailHint') : t('admin.modePasswordHint')}</p>
             <div className="space-y-1.5">
               <label htmlFor="invite-name" className="text-sm font-semibold text-ink">
                 {t('admin.fullName')}
@@ -182,15 +205,48 @@ export function AdminPage() {
                 </select>
               </div>
             </div>
+            {mode === 'password' && (
+              <div className="space-y-1.5">
+                <label htmlFor="invite-password" className="text-sm font-semibold text-ink">
+                  {t('admin.tempPassword')}
+                </label>
+                <Input
+                  id="invite-password"
+                  type="text"
+                  required
+                  minLength={8}
+                  autoComplete="new-password"
+                  value={invite.password}
+                  onChange={(event) => setInvite({ ...invite, password: event.target.value })}
+                />
+                <p className="text-xs text-ink-muted">{t('admin.tempPasswordHint')}</p>
+              </div>
+            )}
             <Button type="submit" block disabled={busy}>
-              <UserPlus className="size-4" aria-hidden />
-              {t('admin.invite')}
+              {mode === 'email' ? <Mail className="size-4" aria-hidden /> : <KeyRound className="size-4" aria-hidden />}
+              {mode === 'email' ? t('admin.invite') : t('admin.create')}
             </Button>
           </form>
         </Card>
 
         <section>
           <SectionTitle>{t('admin.usersTitle')}</SectionTitle>
+          <div className="mb-3 flex flex-wrap gap-2">
+            <select aria-label={t('admin.role')} className={`${SELECT} w-auto`} value={roleFilter} onChange={(event) => setRoleFilter(event.target.value as UserRole | '')}>
+              <option value="">{t('admin.allRoles')}</option>
+              {USER_ROLES.map((role) => (
+                <option key={role} value={role}>
+                  {t(`role.${role}`)}
+                </option>
+              ))}
+            </select>
+            <select aria-label={t('admin.status')} className={`${SELECT} w-auto`} value={statusFilter} onChange={(event) => setStatusFilter(event.target.value as '' | 'active' | 'suspended')}>
+              <option value="">{t('admin.allStatuses')}</option>
+              <option value="active">{t('admin.active')}</option>
+              <option value="suspended">{t('admin.suspended')}</option>
+            </select>
+            <span className="self-center text-xs text-ink-muted">{t('common.resultsCount', { count: visibleUsers.length })}</span>
+          </div>
           <Card className="divide-y divide-line">
             {visibleUsers.map((user) => {
               const isMe = user.id === me?.id

@@ -228,3 +228,25 @@ body {
   scrollbar-width: thin;
   scrollbar-color: rgb(var(--line)) transparent;
 }
+
+/* Mise en page aérée : plus d'espace entre les blocs de premier niveau de chaque page
+   (les espacements internes des cartes ne changent pas). */
+.app-content > [class*='space-y-3'] > :not(:last-child),
+.app-content > [class*='space-y-4'] > :not(:last-child) {
+  margin-block-start: 0;
+  margin-block-end: 1.25rem;
+}
+.app-content > .grid.gap-4,
+.app-content > div > .grid.gap-4 {
+  gap: 1.25rem;
+}
+@media (min-width: 1024px) {
+  .app-content > [class*='space-y-3'] > :not(:last-child),
+  .app-content > [class*='space-y-4'] > :not(:last-child) {
+    margin-block-end: 1.75rem;
+  }
+  .app-content > .grid.gap-4,
+  .app-content > div > .grid.gap-4 {
+    gap: 1.75rem;
+  }
+}

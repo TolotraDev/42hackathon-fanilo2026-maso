@@ -1,4 +1,5 @@
-// MASO — Invitation d'un membre par l'administrateur (W12).
+// MASO — Invitation d'un membre par l'administrateur (W12) : par e-mail, ou création directe avec un mot de passe provisoire
+// (quand aucun serveur d'envoi d'e-mails n'est configuré).
 // S'exécute sur Supabase (Edge Function, Deno) : la clé service_role ne quitte jamais le serveur.
 import { createClient } from 'npm:@supabase/supabase-js@2'
 
@@ -41,16 +42,17 @@ Deno.serve(async (request) => {
   const role = body?.role
   const language = LANGUAGES.includes(body?.language) ? body.language : 'fr'
   const redirectTo = typeof body?.redirect_to === 'string' ? body.redirect_to : undefined
+  const password = typeof body?.password === 'string' ? body.password : ''
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) || !fullName || !ROLES.includes(role)) {
     return reply(400, { error: 'invalid_request' })
   }
+  if (password && password.length < 8) return reply(400, { error: 'weak_password' })
 
   // 3. Envoyer l'invitation, puis fixer le rôle (le rôle n'est jamais pris des métadonnées utilisateur).
   const admin = createClient(url, serviceKey, { auth: { persistSession: false } })
-  const { data: invited, error } = await admin.auth.admin.inviteUserByEmail(email, {
-    data: { full_name: fullName, language },
-    redirectTo,
-  })
+  const { data: invited, error } = password
+    ? await admin.auth.admin.createUser({ email, password, email_confirm: true, user_metadata: { full_name: fullName, language } })
+    : await admin.auth.admin.inviteUserByEmail(email, { data: { full_name: fullName, language }, redirectTo })
   if (error || !invited.user) return reply(400, { error: error?.message ?? 'invite_failed' })
 
   const { error: roleError } = await admin
@@ -61,7 +63,7 @@ Deno.serve(async (request) => {
 
   await admin.from('audit_logs').insert({
     user_id: userData.user.id,
-    action: 'invite_user',
+    action: password ? 'create_user' : 'invite_user',
     entity: 'profiles',
     entity_id: invited.user.id,
     after: { email, role },

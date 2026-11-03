@@ -1039,12 +1039,19 @@
       "configuration": "Diso ny fandrindrana ny Supabase (lakile, migrations na mailaka). Jereo ny rakitra .env sy ny fandrindrana.",
       "no_account": "Tsy misy kaonty MASO mifandray amin'io adiresy io. Jereo ny adiresy na mangataha fanasana amin'ny mpitantana.",
       "shortCredentials": "Tsy maintsy misy litera 8 farafahakeliny ny mailaka sy ny tenimiafina.",
-      "shortEmail": "Tsy maintsy misy litera 8 farafahakeliny ny mailaka."
+      "shortEmail": "Tsy maintsy misy litera 8 farafahakeliny ny mailaka.",
+      "function_missing": "Tsy mbola napetraka ao amin’ny Supabase ny asa ilaina. Angataho amin’ny mpitantana teknika ny hametraka azy (supabase functions deploy).",
+      "weak_password": "Fohy loatra ny tenimiafina : litera 8 farafahakeliny."
     },
     "portal": "Hijery ny vavahady ho an’ny besinimaro",
     "emailPlaceholder": "Adiresy mailaka",
     "showPassword": "Asehoy ny tenimiafina",
-    "hidePassword": "Afeno ny tenimiafina"
+    "hidePassword": "Afeno ny tenimiafina",
+    "signOutConfirm": {
+      "title": "Hivoaka ve ?",
+      "text": "Hiala amin’ny toeranao amin’ity fitaovana ity ianao. Ho voafafa ny kaody PIN sy ny fidirana voatahiry eto ; mijanona ao amin’ny mpizara ny antontan-taratasinao.",
+      "cancel": "Hanafoana"
+    }
   },
   "onboarding": {
     "skip": "Dingana",
@@ -1086,7 +1093,19 @@
       "revokedDone": "Nofoanana ny badge.",
       "expired": "Lany daty ny badge",
       "until": "Manan-kery hatramin’ny {{date}}"
-    }
+    },
+    "addMode": "Fomba fanampiana",
+    "modeEmail": "Fanasana amin’ny mailaka",
+    "modePassword": "Tenimiafina vonjimaika",
+    "modeEmailHint": "Mahazo mailaka hisafidianana tenimiafina ilay olona (mila mpizara mailaka).",
+    "modePasswordHint": "Noforonina avy hatrany ny kaonty ; omeo mivantana azy ny tenimiafina vonjimaika.",
+    "tempPassword": "Tenimiafina vonjimaika",
+    "tempPasswordHint": "Litera 8 farafahakeliny. Ovaina amin’ny fidirana voalohany.",
+    "create": "Hamorona ny kaonty",
+    "created": "Noforonina ny kaonty ho an’i {{email}}.",
+    "allRoles": "Andraikitra rehetra",
+    "allStatuses": "Toetra rehetra",
+    "status": "Toetra"
   },
   "clue": {
     "none": "Tsy misy famantarana",

@@ -20,7 +20,8 @@ export function RequireAuth({ children }: { children: React.ReactNode }) {
   if (state.status === 'loading') return <SplashScreen />
   if (state.status === 'signed_out') {
     // MASO est d'abord une plateforme publique : la racine ouvre l'espace public, pas la connexion.
-    if (location.pathname === '/') return <Navigate to="/portail" replace />
+    // Déconnexion volontaire : retour à l'espace public, comme à l'arrivée sur la racine.
+    if (location.pathname === '/' || state.voluntary) return <Navigate to="/portail" replace />
     const target = isOnboarded() ? '/connexion' : '/bienvenue'
     return <Navigate to={target} replace state={state.voluntary ? undefined : { from: location.pathname }} />
   }

@@ -1,7 +1,6 @@
 import { LockKeyhole, LogOut } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
 import { Logo } from '@/components/layout/Logo'
 import { Button, Input } from '@/components/ui'
 import { useAuth } from './AuthProvider'
@@ -13,7 +12,6 @@ const MAX_ATTEMPTS = 5
 export function PinLock({ children }: { children: React.ReactNode }) {
   const { t } = useTranslation()
   const { signOut } = useAuth()
-  const navigate = useNavigate()
   const [locked, setLocked] = useState(() => hasPin() && !isUnlocked())
   const [pin, setPin] = useState('')
   const [attempts, setAttempts] = useState(0)
@@ -78,7 +76,7 @@ export function PinLock({ children }: { children: React.ReactNode }) {
       </form>
       <button
         type="button"
-        onClick={() => void signOut().then(() => navigate('/connexion'))}
+        onClick={() => void signOut()}
         className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-white/80 hover:text-white"
       >
         <LogOut className="size-4" aria-hidden />

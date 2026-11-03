@@ -13,6 +13,8 @@ export type AuthErrorCode =
   | 'profile_missing'
   | 'no_account'
   | 'configuration'
+  | 'function_missing'
+  | 'weak_password'
   | 'unknown'
 
 /** Erreur d'authentification avec un code traduisible (clé i18n auth.error.<code>). */
@@ -29,6 +31,8 @@ export interface InviteInput {
   fullName: string
   role: UserRole
   language: Language
+  /** Mot de passe provisoire : le compte est créé tout de suite, sans e-mail d'invitation. */
+  password?: string
 }
 
 export interface AuthService {

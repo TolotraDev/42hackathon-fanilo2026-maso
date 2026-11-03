@@ -103,7 +103,7 @@ export function createDemoAuth(): AuthService {
           .sort((a, b) => a.fullName.localeCompare(b.fullName))
       },
 
-      async inviteUser({ email, fullName, role, language }) {
+      async inviteUser({ email, fullName, role, language, password }) {
         requireAdmin()
         const users = readUsers()
         const normalized = email.trim().toLowerCase()
@@ -116,7 +116,7 @@ export function createDemoAuth(): AuthService {
           language,
           newsroomId: null,
           active: true,
-          password: DEMO_PASSWORD,
+          password: password || DEMO_PASSWORD,
         })
         saveUsers(users)
       },

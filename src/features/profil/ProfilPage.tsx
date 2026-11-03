@@ -1,4 +1,4 @@
-import { BadgeCheck, CloudOff, Download, LockKeyhole, LogIn, LogOut, PackageCheck, Smartphone } from 'lucide-react'
+import { BadgeCheck, CloudOff, Download, LockKeyhole, LogIn, PackageCheck, Smartphone } from 'lucide-react'
 import { useState, type CSSProperties } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -6,6 +6,7 @@ import { LanguageSwitcher } from '@/components/layout/LanguageSwitcher'
 import { NetworkStatus } from '@/components/layout/NetworkStatus'
 import { Avatar, Badge, Button, Card, Input, SegmentedControl } from '@/components/ui'
 import { useAuth } from '@/features/auth/AuthProvider'
+import { SignOutButton } from '@/features/auth/SignOutButton'
 import { FormMessage } from '@/features/auth/FormMessage'
 import { hasPin, isValidPin, removePin, setPin } from '@/features/auth/pin'
 import { deviceNotificationsOn, notificationsSupported, setDeviceNotifications } from '@/features/notifications/deviceNotifications'
@@ -171,7 +172,7 @@ export function ProfilPage() {
   const { t } = useTranslation()
   const { preference, setPreference } = useTheme()
   const { canInstall, installed, install } = useInstallPrompt()
-  const { state, profile, role, signOut, leaveGuestMode } = useAuth()
+  const { state, profile, role, leaveGuestMode } = useAuth()
   const navigate = useNavigate()
   const name = profile ? profile.fullName || profile.email : t('auth.guestMode')
   const [dataSaver, setDataSaver] = useDataSaver()
@@ -208,15 +209,7 @@ export function ProfilPage() {
         )}
 
         {profile ? (
-          <Button
-            variant="secondary"
-            block
-            onClick={() => void signOut().then(() => navigate('/connexion'))}
-            className="bg-danger/10 text-danger hover:bg-danger/20 border-none focus-visible:ring-danger"
-          >
-            <LogOut className="size-4" aria-hidden />
-            {t('auth.signOut')}
-          </Button>
+          <SignOutButton variant="block" />
         ) : (
           <Button
             block

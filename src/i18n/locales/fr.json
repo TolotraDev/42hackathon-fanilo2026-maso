@@ -1039,12 +1039,19 @@
       "configuration": "Supabase est mal configuré (clé, migrations ou fournisseur e-mail). Vérifiez le fichier .env et la configuration.",
       "no_account": "Aucun compte MASO n'est associé à cette adresse. Vérifiez l'adresse ou demandez une invitation à l'administrateur.",
       "shortCredentials": "L’e-mail et le mot de passe doivent contenir au moins 8 caractères.",
-      "shortEmail": "L’e-mail doit contenir au moins 8 caractères."
+      "shortEmail": "L’e-mail doit contenir au moins 8 caractères.",
+      "function_missing": "La fonction serveur nécessaire n’est pas déployée sur Supabase. Demandez à l’administrateur technique de la déployer (supabase functions deploy).",
+      "weak_password": "Mot de passe trop court : 8 caractères au minimum."
     },
     "portal": "Consulter le portail public",
     "emailPlaceholder": "Adresse e-mail",
     "showPassword": "Afficher le mot de passe",
-    "hidePassword": "Masquer le mot de passe"
+    "hidePassword": "Masquer le mot de passe",
+    "signOutConfirm": {
+      "title": "Se déconnecter ?",
+      "text": "Vous quitterez votre espace sur cet appareil. Le code PIN et la session enregistrés ici seront effacés ; vos dossiers restent sur le serveur.",
+      "cancel": "Annuler"
+    }
   },
   "onboarding": {
     "skip": "Passer",
@@ -1086,7 +1093,19 @@
       "revokedDone": "Badge révoqué.",
       "expired": "Badge expiré",
       "until": "Badge valable jusqu’au {{date}}"
-    }
+    },
+    "addMode": "Mode d’ajout",
+    "modeEmail": "Invitation e-mail",
+    "modePassword": "Mot de passe provisoire",
+    "modeEmailHint": "La personne reçoit un e-mail pour choisir son mot de passe (serveur d’e-mails requis).",
+    "modePasswordHint": "Le compte est créé tout de suite ; communiquez le mot de passe provisoire en main propre.",
+    "tempPassword": "Mot de passe provisoire",
+    "tempPasswordHint": "8 caractères au minimum. À changer à la première connexion (Mot de passe oublié).",
+    "create": "Créer le compte",
+    "created": "Compte créé pour {{email}}.",
+    "allRoles": "Tous les rôles",
+    "allStatuses": "Tous les statuts",
+    "status": "Statut"
   },
   "clue": {
     "none": "Aucun indice",
