@@ -12,7 +12,20 @@ import { router } from './router'
 
 initTheme()
 logStartupDiagnostics()
-registerSW({ immediate: true })
+// Nouvelle version déployée : le service worker la récupère et la page se recharge seule (autoUpdate).
+// Le navigateur ne cherche une mise à jour qu'au chargement : on vérifie aussi chaque minute et au retour
+// sur l'onglet, pour qu'un onglet resté ouvert (ou l'application installée) ne garde pas l'ancienne version.
+registerSW({
+  immediate: true,
+  onRegisteredSW(_url, registration) {
+    if (!registration) return
+    const check = () => {
+      if (navigator.onLine) void registration.update().catch(() => undefined)
+    }
+    setInterval(check, 60_000)
+    document.addEventListener('visibilitychange', () => document.visibilityState === 'visible' && check())
+  },
+})
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
