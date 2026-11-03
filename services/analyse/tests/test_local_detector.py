@@ -77,11 +77,43 @@ def test_le_service_utilise_le_modele_local_sans_cle(monkeypatch, jpeg_bytes):
     assert response.json() == {"available": True, "model": "local", "score": 0.42}
 
 
-def test_manque_de_memoire_sans_faire_tomber_le_service(model_dir, monkeypatch):
-    import subprocess
-
+def test_delai_depasse_sans_bloquer_le_service(model_dir, monkeypatch):
     tiny_model(model_dir / "model.fp32.onnx")
     local_detector.prepare()
-    killed = subprocess.CompletedProcess(args=[], returncode=-9, stdout=b"", stderr=b"Killed")
-    monkeypatch.setattr(local_detector.subprocess, "run", lambda *args, **kwargs: killed)
-    assert local_detector.ai_clue_local(jpeg((230, 20, 20)))["error"] == "model_out_of_memory"
+
+    class Killed:
+        """Processus qui ne répond plus."""
+        stdin = __import__("io").BytesIO()
+        stdout = None
+
+        def poll(self):
+            return None
+
+        def wait(self):
+            return -9
+
+    monkeypatch.setattr(local_detector, "_start_worker", lambda: Killed())
+    monkeypatch.setattr(local_detector.select, "select", lambda *args: ([], [], []))
+    monkeypatch.setattr(local_detector, "_worker", None)
+    monkeypatch.setattr(local_detector, "_stop_worker", lambda: None)
+    assert local_detector.ai_clue_local(jpeg((230, 20, 20)))["error"] == "model_timeout"
+
+
+def test_le_processus_garde_le_modele_entre_deux_images(model_dir):
+    tiny_model(model_dir / "model.fp32.onnx")
+    local_detector.prepare()
+    try:
+        first = local_detector.ai_clue_local(jpeg((230, 20, 20)))
+        worker = local_detector._worker
+        second = local_detector.ai_clue_local(jpeg((20, 20, 230)))
+        assert local_detector._worker is worker and worker.poll() is None
+        assert first["score"] > 0.9 and second["score"] < 0.1
+        # Image illisible : réponse d'erreur, le processus reste en vie.
+        assert local_detector.ai_clue_local(b"pas une image")["error"] == "unreadable_image"
+        assert worker.poll() is None
+        # Processus tué (manque de mémoire) : signalé, puis relancé à l'image suivante.
+        worker.kill()
+        worker.wait()
+        assert local_detector.ai_clue_local(jpeg((230, 20, 20)))["available"] is True
+    finally:
+        local_detector._stop_worker()

@@ -5,6 +5,7 @@ Chaque réponse est un ensemble de faits et d'indices ; aucun verdict n'est jama
 """
 
 import shutil
+import threading
 
 import httpx
 from fastapi import Depends, FastAPI, File, HTTPException, Query, Request, Response, UploadFile
@@ -29,6 +30,13 @@ from .video import analyse_video
 from .zero_invention import Excerpt
 
 app = FastAPI(title="MASO — service d'analyse", version=__version__)
+
+
+@app.on_event("startup")
+def warm_up_local_detector() -> None:
+    # Charge le détecteur IA local en arrière-plan : la première image n'attend pas le chargement du modèle.
+    if settings.ai_local_enabled and not (settings.sightengine_user and settings.sightengine_secret):
+        threading.Thread(target=local_detector.warm_up, daemon=True).start()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.allowed_origins,
