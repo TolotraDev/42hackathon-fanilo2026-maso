@@ -22,7 +22,7 @@ Durée : environ 20 minutes. Il faut seulement un navigateur ; le terminal n'est
 
 Dans le menu de gauche : **SQL Editor** → **New query**.
 
-Pour **chacun des 5 fichiers ci-dessous, dans cet ordre** : ouvrir le fichier dans VS Code, tout copier (`Ctrl+A`, `Ctrl+C`), coller dans l'éditeur SQL, cliquer **Run**. Le message attendu est `Success. No rows returned`.
+Pour **chacun des fichiers ci-dessous, dans cet ordre** : ouvrir le fichier dans VS Code, tout copier (`Ctrl+A`, `Ctrl+C`), coller dans l'éditeur SQL, cliquer **Run**. Le message attendu est `Success. No rows returned`.
 
 | Ordre | Fichier | Contenu |
 |---|---|---|
@@ -31,7 +31,11 @@ Pour **chacun des 5 fichiers ci-dessous, dans cet ordre** : ouvrir le fichier da
 | 3 | `supabase/migrations/202611021402_rls.sql` | Droits par rôle |
 | 4 | `supabase/migrations/202611021403_workflow.sql` | Workflow des dossiers, administration |
 | 5 | `supabase/migrations/202611021404_storage.sql` | Stockage privé des preuves |
+| 6 | `supabase/migrations/202611021500_verification.sql` | Images déjà vues, fiches sources (MOD-03) |
+| 7 | `supabase/migrations/202611021600_ressources.sql` | Annuaire, favoris et notes, statistiques (MOD-04) |
+| 8 | `supabase/demo/donnees_demo.sql` | **Données de démonstration** (facultatif, relançable sans doublons) |
 
+> Projet déjà configuré lors d'un module précédent : n'exécuter **que les nouveaux fichiers** (ex. le n° 6 pour MOD-03).
 > Ne **pas** exécuter `supabase/seed.sql` sur le projet en ligne : il sert uniquement à la base locale.
 > En cas d'erreur, ne pas relancer le même fichier : noter le message d'erreur et le transmettre à Lorraine.
 

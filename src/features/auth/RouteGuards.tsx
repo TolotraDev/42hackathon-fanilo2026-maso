@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import { Navigate, useLocation } from 'react-router-dom'
 import { Logo } from '@/components/layout/Logo'
 import { canAccessSection, homePathFor, type SectionId } from '@/lib/permissions'
@@ -46,4 +47,13 @@ export function PublicOnly({ children }: { children: React.ReactNode }) {
     return <Navigate to={from && from !== '/' ? from : homePathFor(role)} replace />
   }
   return children
+}
+
+/** Page chargée à la demande, avec un indicateur discret pendant le téléchargement. */
+export function Lazy({ children }: { children: React.ReactNode }) {
+  return (
+    <Suspense fallback={<div className="flex min-h-40 items-center justify-center" role="status" aria-label="…"><span className="size-6 animate-spin rounded-full border-2 border-cobalt border-t-transparent" /></div>}>
+      {children}
+    </Suspense>
+  )
 }

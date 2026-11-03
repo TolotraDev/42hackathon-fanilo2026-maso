@@ -153,8 +153,9 @@ select is(pg_temp.count_as('a0000000-0000-4000-8000-000000000005', 'select * fro
   'l''administrateur ne voit pas les dossiers');
 select is(pg_temp.count_as('a0000000-0000-4000-8000-000000000006', 'select * from public.cases'), 0::bigint,
   'un compte suspendu ne voit plus rien');
-select is(pg_temp.count_as(null, 'select * from public.statistic_indicators'), 0::bigint,
-  'le public peut lire les statistiques');
+select is(pg_temp.count_as(null, 'select * from public.statistic_indicators'),
+  (select count(*) from public.statistic_indicators),
+  'le public peut lire toutes les statistiques');
 select is(pg_temp.run_as(null,
   $$insert into public.alerts (text, platform) values ('Rumeur vue sur Facebook', 'facebook')$$),
   null, 'le public peut signaler une rumeur sans compte');
