@@ -1,4 +1,4 @@
-import { CloudRain, Megaphone, Radio, Plus, ArrowUpRight } from 'lucide-react'
+import { CloudRain, Radio, Plus, ArrowUpRight } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useShellSearch } from '@/components/layout/AppShell'
