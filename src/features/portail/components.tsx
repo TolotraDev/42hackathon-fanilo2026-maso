@@ -62,7 +62,7 @@ export function SharePanel({ title, description, url }: { title: string; descrip
     <div className="space-y-3">
       <div className="overflow-hidden rounded-xl border border-line bg-canvas" aria-label={t('portail.share.preview')}>
         <div className="flex items-center gap-2 bg-navy px-3 py-2 text-xs font-bold uppercase tracking-wide text-white">
-          <img src="/favicon.svg" alt="" className="size-5 rounded" />
+          <img src="/logo-mark.png" alt="" className="size-5 rounded-full" />
           MASO
         </div>
         <div className="space-y-1 p-3">

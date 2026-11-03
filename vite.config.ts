@@ -17,7 +17,7 @@ export default defineConfig({
       strategies: 'injectManifest',
       srcDir: 'src/sw',
       filename: 'sw.ts',
-      includeAssets: ['favicon.svg', 'apple-touch-icon.png'],
+      includeAssets: ['favicon.png', 'logo-mark.png', 'apple-touch-icon.png'],
       manifest: {
         name: "MASO — Module d'Authentification et de Source Originale",
         short_name: 'MASO',
