@@ -141,9 +141,9 @@ Menu **Edge Functions** → **Deploy a new function** → **Via Editor** → nom
 **B. Depuis le terminal**
 
 ```bash
-npx supabase login                                   # ouvre le navigateur
-npx supabase link --project-ref abcdefgh             # « abcdefgh » = début de votre Project URL
-npx supabase functions deploy invite-user
+npx supabase@2.121.0 login                                   # ouvre le navigateur
+npx supabase@2.121.0 link --project-ref abcdefgh             # « abcdefgh » = début de votre Project URL
+npx supabase@2.121.0 functions deploy invite-user
 ```
 
 Les clés nécessaires (`SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`…) sont fournies automatiquement par Supabase à la fonction : il n'y a rien à copier.
@@ -164,4 +164,4 @@ Copier *API URL* et *anon key* affichés dans `.env`, puis relancer `npm run dev
 - E-mails (lien magique, invitation) : http://localhost:54324
 - Interface d'administration de la base : http://localhost:54323
 - Tests des droits : `npm run test:db`
-- Arrêter : `npx supabase stop`
+- Arrêter : `npx supabase@2.121.0 stop`

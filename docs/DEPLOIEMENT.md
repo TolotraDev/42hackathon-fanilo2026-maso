@@ -232,13 +232,13 @@ Sans ce réglage, le lien magique, l'invitation et « mot de passe oublié » re
 Elle sert à l'écran **Administration → Inviter un membre**. À faire une seule fois, dans un terminal à la racine du projet :
 
 ```bash
-npx supabase login
-npx supabase link --project-ref <identifiant>
-npx supabase functions deploy invite-user
+npx supabase@2.121.0 login
+npx supabase@2.121.0 link --project-ref <identifiant>
+npx supabase@2.121.0 functions deploy invite-user
 ```
 
-- `npx supabase login` ouvre le navigateur : cliquer **Authorize**.
-- `<identifiant>` est le mot entre `https://` et `.supabase.co` dans votre `VITE_SUPABASE_URL`, par exemple `kdrgduispofdcvzmbksf`. Si la commande demande le mot de passe de la base de données, appuyez simplement sur **Entrée** pour passer : il n'est pas nécessaire ici.
+- `npx supabase@2.121.0 login` ouvre le navigateur : cliquer **Authorize**.
+- `<identifiant>` est le mot entre `https://` et `.supabase.co` dans votre `VITE_SUPABASE_URL`, par exemple `abcdefghijklmnop`. Si la commande demande le mot de passe de la base de données, appuyez simplement sur **Entrée** pour passer : il n'est pas nécessaire ici.
 - Succès : `Deployed Functions on project … : invite-user`.
 
 ---

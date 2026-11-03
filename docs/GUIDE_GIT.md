@@ -40,7 +40,7 @@ joba     ─┘  (chaque module)   (version fonctionnelle)
 ### 1.2 Sur le PC, dans le dossier du projet
 
 ```bash
-cd /media/tolotra/Projet/MASO
+cd chemin/vers/42hackathon-fanilo2026-maso
 
 git init -b dev
 git config user.name  "TANJONIAINA Tolotra"

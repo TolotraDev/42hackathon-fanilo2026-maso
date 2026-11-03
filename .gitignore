@@ -27,4 +27,8 @@ supabase/.branches/
 .DS_Store
 *.log
 .vercel/
+.andromity/
 services/analyse/models/
+
+# Document de l'organisation (non livré)
+docs/references/42_Antananarivo_Standard_Livraison_Hackathons.pdf

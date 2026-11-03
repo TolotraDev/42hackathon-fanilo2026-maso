@@ -131,7 +131,7 @@ npm run db:start          # démarre Supabase en local, applique supabase/migrat
                           # → copier « API URL » et « anon key » affichés dans .env (VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY)
 npm run test:db           # tests des règles de droits (pgTAP)
 npm run db:reset          # réinitialise la base (migrations + comptes de démonstration)
-npx supabase functions serve invite-user   # invitation des membres (écran Administration)
+npx supabase@2.121.0 functions serve invite-user   # invitation des membres (écran Administration)
 ```
 
 Les e-mails (lien magique, mot de passe oublié, invitation) arrivent dans la boîte de test Supabase : http://localhost:54324.
@@ -139,13 +139,25 @@ Les mêmes comptes de démonstration existent en base (mot de passe `Maso2026!de
 
 ## Démo
 
-Liens, captures (`screenshots/`) et vidéo : à compléter en MOD-08.
+- **Application en ligne** : https://42hackathon-fanilo2026-maso.vercel.app — portail public (rapports, signalement, vérification d'un rapport ou d'un badge) accessible sans compte ; espace journaliste sur connexion (comptes fournis au jury via le canal de soumission).
+- **Service d'analyse** (API) : https://maso-analyse-ixf4.onrender.com/health — offre gratuite de Render : après 15 min sans visite, le premier appel attend environ une minute le réveil du service.
+- **Sans rien installer d'autre que Node.js** : le mode démonstration (voir ci-dessus) fonctionne entièrement sur l'appareil.
+- **Parcours complet pas à pas**, du signalement à la publication : [docs/GUIDE_COMPLET.md](docs/GUIDE_COMPLET.md), avec les fichiers d'exemple de `docs/exemples/`.
+
+Captures (`screenshots/`) :
+
+| Rapport d'analyse automatique (journaliste) | Vérification (fact-checker) |
+|---|---|
+| ![Rapport d'analyse](screenshots/circuit-1-analyse-journaliste.png) | ![Fact-checker](screenshots/circuit-2-fact-checker.png) |
+| **Rapport proposé (rédacteur en chef)** | **Rapport publié (public, mobile)** |
+| ![Rédacteur en chef](screenshots/circuit-3-redacteur-en-chef.png) | ![Rapport public](screenshots/circuit-4-rapport-public.png) |
 
 ## Limites connues & pistes
 
 - Les détails des sources confidentielles sont isolés et accessibles uniquement par fonction journalisée, mais **pas encore chiffrés** en base (prévu avec Supabase Vault).
 - Le lien magique et l'invitation par e-mail dépendent d'un serveur d'envoi d'e-mails (SMTP) configuré dans Supabase.
-- **Indice IA** et **Google Fact Check** nécessitent des clés (`HF_TOKEN`, `GOOGLE_FACTCHECK_API_KEY`) : sans elles, ces étapes sont signalées « non configurées ».
+- **Google Fact Check** nécessite une clé (`GOOGLE_FACTCHECK_API_KEY`) : sans elle, cette étape est signalée « non configurée ». L'**indice IA** utilise un modèle exécuté dans le service (sans clé) ; c'est un indice faillible (images très compressées, générateurs récents), jamais une conclusion.
+- **Publications Facebook, Instagram, TikTok réservées aux connectés** : illisibles par le service ; le journaliste colle le texte ou dépose la capture, et l'analyse continue sur ce contenu.
 - L'archivage Wayback Machine est soumis aux limites d'archive.org (refus temporaires signalés comme tels).
 - L'empreinte perceptuelle est calculée dans le navigateur (et non avec `imagehash` côté serveur comme prévu au cahier des charges) pour fonctionner hors ligne.
 - Synchronisation : en cas de modifications concurrentes, la dernière enregistrée l'emporte ; un refus du serveur est signalé et conservé.
@@ -172,7 +184,7 @@ Liens, captures (`screenshots/`) et vidéo : à compléter en MOD-08.
 | Lucia | Vérification et veille | MOD-03, MOD-07 |
 | Joba | Produit et contenu | MOD-04, MOD-08 |
 
-Outils d'IA utilisés pour le développement : Claude Code (Anthropic) — génération et relecture de code, documentation.
+Outils d'IA utilisés pour le développement : Claude Code (Anthropic) — génération et relecture de code, tests, documentation ; GitHub Copilot — aide aux fusions de branches. Le code a été relu, testé et assumé par l'équipe.
 
 IA dans l'application : assistant éditorial via Groq, Gemini ou Ollama (au choix, contrôle « zéro invention » côté serveur) ; indice de génération d'image par le modèle [Organika/sdxl-detector](https://huggingface.co/Organika/sdxl-detector) (licence CC BY-NC 3.0, usage non commercial) exécuté dans le service, ou Sightengine. Aucune IA ne propose de verdict.
 
