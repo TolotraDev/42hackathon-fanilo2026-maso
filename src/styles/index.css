@@ -61,6 +61,8 @@ body,
 body {
   @apply bg-canvas font-sans text-ink antialiased;
   -webkit-tap-highlight-color: transparent;
+  /* Liens et textes saisis sans espace (adresses partagées) : passage à la ligne plutôt que débordement. */
+  overflow-wrap: break-word;
 }
 
 :focus-visible {

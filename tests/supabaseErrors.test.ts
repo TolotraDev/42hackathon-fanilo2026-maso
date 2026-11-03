@@ -21,3 +21,13 @@ describe('traduction des erreurs Supabase', () => {
     expect(toAuthFailure(error).code).toBe(expected)
   })
 })
+
+describe('requêtes interrompues', () => {
+  it.each([
+    [{ name: 'AbortError', message: 'The operation was aborted.' }],
+    [{ message: 'TypeError: Load failed' }],
+    [{ message: 'TypeError: NetworkError when attempting to fetch resource.' }],
+  ])('%o est une coupure réseau (à réessayer), pas un refus', (error) => {
+    expect(toAuthFailure(error).code).toBe('network')
+  })
+})
