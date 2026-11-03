@@ -44,14 +44,17 @@
     "minutesAgo_one": "il y a {{count}} min",
     "minutesAgo_other": "il y a {{count}} min",
     "noResult": "Aucun résultat pour cette recherche.",
-    "comingWith": "Disponible avec le module {{module}}."
+    "comingWith": "Disponible avec le module {{module}}.",
+    "resultsCount_one": "{{count}} résultat",
+    "resultsCount_other": "{{count}} résultats"
   },
   "veille": {
     "realtime": "En temps réel",
     "all": "Toutes",
     "urgent": "Urgent",
     "takeCharge": "Prendre en charge",
-    "reportRumor": "Signaler une rumeur"
+    "reportRumor": "Signaler une rumeur",
+    "breakdown": "Répartition"
   },
   "alertLevel": {
     "low": "Faible",
@@ -423,7 +426,7 @@
       "withdrawn": "Retirée",
       "valid": "Validée"
     },
-    "guestHint": "Mode invité : seules les personnes ayant accepté une visibilité publique apparaissent, sans leurs coordonnées.",
+    "guestHint": "Espace public : seules les personnes ayant accepté une visibilité publique apparaissent, sans leurs coordonnées.",
     "back": "Retour aux ressources",
     "person": {
       "notFound": "Cette personne n'est pas (ou plus) dans l'annuaire.",
@@ -565,7 +568,8 @@
       "invalidNumber": "Valeur ou année invalide.",
       "sourceRequired": "Source et date de mise à jour (AAAA-MM-JJ) obligatoires.",
       "csvTitle": "Importer des statistiques (CSV)"
-    }
+    },
+    "hint": "Trouvez les experts et les sources fiables."
   },
   "rediger": {
     "format": "Format",
@@ -922,8 +926,6 @@
     "magicLinkSent": "Un lien de connexion a été envoyé à {{email}}. Ouvrez-le sur cet appareil.",
     "forgot": "Mot de passe oublié ?",
     "or": "ou",
-    "guest": "Continuer sans compte",
-    "guestHint": "Accès limité à l'annuaire public et aux statistiques.",
     "demoTitle": "Mode démonstration",
     "demoHint": "Supabase n'est pas configuré : comptes fictifs, données conservées sur cet appareil. Mot de passe : {{password}}",
     "signIn": "Se connecter",
@@ -957,9 +959,14 @@
       "email_not_authorized": "Le service d'e-mail de Supabase refuse cette adresse : configurez un serveur SMTP ou créez le compte à la main.",
       "profile_missing": "Ce compte n'a pas de profil MASO. Demandez à l'administrateur de le créer (voir la configuration Supabase).",
       "configuration": "Supabase est mal configuré (clé, migrations ou fournisseur e-mail). Vérifiez le fichier .env et la configuration.",
-      "no_account": "Aucun compte MASO n'est associé à cette adresse. Vérifiez l'adresse ou demandez une invitation à l'administrateur."
+      "no_account": "Aucun compte MASO n'est associé à cette adresse. Vérifiez l'adresse ou demandez une invitation à l'administrateur.",
+      "shortCredentials": "L’e-mail et le mot de passe doivent contenir au moins 8 caractères.",
+      "shortEmail": "L’e-mail doit contenir au moins 8 caractères."
     },
-    "portal": "Consulter le portail public (sans compte)"
+    "portal": "Consulter le portail public",
+    "emailPlaceholder": "Adresse e-mail",
+    "showPassword": "Afficher le mot de passe",
+    "hidePassword": "Masquer le mot de passe"
   },
   "onboarding": {
     "skip": "Passer",
@@ -1159,9 +1166,9 @@
       "reports": "Rapports",
       "submit": "Signaler",
       "track": "Suivre",
-      "verify": "Vérifier un rapport"
+      "verify": "Vérifier un rapport",
+      "resources": "Ressources"
     },
-    "staffLogin": "Espace rédaction",
     "backToApp": "Retour à l'application",
     "footer": "MASO — vérifications réalisées et validées par des journalistes. Aucun verdict n'est produit automatiquement.",
     "title": "Vérifications publiées",
@@ -1322,7 +1329,8 @@
       "title": "Que voulez-vous faire ?",
       "submit": "Envoyez une image, un lien ou un message suspect.",
       "track": "Suivez votre signalement avec son code.",
-      "verify": "Contrôlez l’authenticité d’un rapport par QR."
+      "verify": "Contrôlez l’authenticité d’un rapport par QR.",
+      "resources": "Experts et statistiques sourcées."
     },
     "readReport": "Lire le rapport",
     "how": {
@@ -1340,6 +1348,7 @@
         "text": "Signé, partageable et vérifiable par QR code."
       }
     },
-    "quickVerdicts": "Accès rapide :"
+    "quickVerdicts": "Accès rapide :",
+    "signIn": "Connexion"
   }
 }

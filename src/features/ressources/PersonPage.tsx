@@ -8,6 +8,7 @@ import { FormMessage } from '@/features/auth/FormMessage'
 import { useAuthErrorMessage } from '@/features/auth/useAuthError'
 import { isPersistenceAvailable, listOpenCases, type CaseSummary } from '@/features/verifier/verificationApi'
 import { cn } from '@/lib/cn'
+import { useResourcesBase } from './basePath'
 import { PackNotice } from './PackNotice'
 import {
   createConfirmation,
@@ -37,9 +38,10 @@ type Feedback = { tone: 'error' | 'success'; text: string } | null
 
 export function BackToResources() {
   const { t } = useTranslation()
+  const base = useResourcesBase()
   return (
     <Link
-      to="/ressources"
+      to={base}
       className="inline-flex min-h-10 items-center gap-1.5 text-sm font-semibold text-cobalt hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cobalt"
     >
       <ArrowLeft className="size-4" aria-hidden />

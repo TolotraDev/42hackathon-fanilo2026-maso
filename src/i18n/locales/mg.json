@@ -44,14 +44,17 @@
     "minutesAgo_one": "{{count}} min lasa izay",
     "minutesAgo_other": "{{count}} min lasa izay",
     "noResult": "Tsy misy valiny amin'ity fikarohana ity.",
-    "comingWith": "Ho azo ampiasaina amin'ny môdiola {{module}}."
+    "comingWith": "Ho azo ampiasaina amin'ny môdiola {{module}}.",
+    "resultsCount_one": "{{count}} valiny",
+    "resultsCount_other": "{{count}} valiny"
   },
   "veille": {
     "realtime": "Amin'izao fotoana izao",
     "all": "Rehetra",
     "urgent": "Maika",
     "takeCharge": "Raisina an-tanana",
-    "reportRumor": "Hitatitra tsaho"
+    "reportRumor": "Hitatitra tsaho",
+    "breakdown": "Fizarana"
   },
   "alertLevel": {
     "low": "Ambany",
@@ -423,7 +426,7 @@
       "withdrawn": "Nesorina",
       "valid": "Nekena"
     },
-    "guestHint": "Fidirana vahiny : ireo olona nanaiky ho hita ampahibemaso ihany no aseho, tsy misy ny fifandraisana aminy.",
+    "guestHint": "Toerana ho an’ny besinimaro : ireo olona nanaiky ho hita ampahibemaso ihany no aseho, tsy misy ny fifandraisana aminy.",
     "back": "Hiverina amin'ny loharano",
     "person": {
       "notFound": "Tsy (na tsy) ao amin'ny lisitra intsony io olona io.",
@@ -565,7 +568,8 @@
       "invalidNumber": "Diso ny sanda na ny taona.",
       "sourceRequired": "Tsy maintsy misy loharano sy daty fanavaozana (TTTT-VV-AA).",
       "csvTitle": "Hampiditra antontan'isa (CSV)"
-    }
+    },
+    "hint": "Tadiavo ireo manam-pahaizana sy loharano azo itokisana."
   },
   "rediger": {
     "format": "Endrika",
@@ -922,8 +926,6 @@
     "magicLinkSent": "Nalefa tany amin'i {{email}} ny rohy fidirana. Sokafy amin'ity fitaovana ity.",
     "forgot": "Adino ny teny miafina ?",
     "or": "na",
-    "guest": "Hanohy tsy misy kaonty",
-    "guestHint": "Ny lisitry ny olona ho an'ny besinimaro sy ny antontan'isa ihany no azo jerena.",
     "demoTitle": "Fampisehoana",
     "demoHint": "Tsy voalamina ny Supabase : kaonty noforonina, voatahiry amin'ity fitaovana ity ny angona. Teny miafina : {{password}}",
     "signIn": "Hiditra",
@@ -957,9 +959,14 @@
       "email_not_authorized": "Lavin'ny serivisy mailaky ny Supabase io adiresy io : alamino ny SMTP na foròny tanana ny kaonty.",
       "profile_missing": "Tsy manana mombamomba MASO ity kaonty ity. Angataho amin'ny mpitantana ny hamorona azy.",
       "configuration": "Diso ny fandrindrana ny Supabase (lakile, migrations na mailaka). Jereo ny rakitra .env sy ny fandrindrana.",
-      "no_account": "Tsy misy kaonty MASO mifandray amin'io adiresy io. Jereo ny adiresy na mangataha fanasana amin'ny mpitantana."
+      "no_account": "Tsy misy kaonty MASO mifandray amin'io adiresy io. Jereo ny adiresy na mangataha fanasana amin'ny mpitantana.",
+      "shortCredentials": "Tsy maintsy misy litera 8 farafahakeliny ny mailaka sy ny tenimiafina.",
+      "shortEmail": "Tsy maintsy misy litera 8 farafahakeliny ny mailaka."
     },
-    "portal": "Hijery ny vavahady ho an'ny besinimaro (tsy mila kaonty)"
+    "portal": "Hijery ny vavahady ho an’ny besinimaro",
+    "emailPlaceholder": "Adiresy mailaka",
+    "showPassword": "Asehoy ny tenimiafina",
+    "hidePassword": "Afeno ny tenimiafina"
   },
   "onboarding": {
     "skip": "Dingana",
@@ -1159,9 +1166,9 @@
       "reports": "Tatitra",
       "submit": "Hitatitra",
       "track": "Hanaraka",
-      "verify": "Hanamarina tatitra"
+      "verify": "Hanamarina tatitra",
+      "resources": "Loharano"
     },
-    "staffLogin": "Toerana ho an'ny mpanoratra",
     "backToApp": "Hiverina amin'ny rindranasa",
     "footer": "MASO — fanamarinana nataon'ny mpanao gazety ary nankatoavin'izy ireo. Tsy misy didy avoakan'ny milina.",
     "title": "Fanamarinana navoaka",
@@ -1322,7 +1329,8 @@
       "title": "Inona no tianao hatao ?",
       "submit": "Alefaso ny sary, rohy na hafatra mampiahiahy.",
       "track": "Arahio amin’ny kaodiny ny tatitrao.",
-      "verify": "Hamarino amin’ny QR ny maha-tena izy ny tatitra."
+      "verify": "Hamarino amin’ny QR ny maha-tena izy ny tatitra.",
+      "resources": "Manam-pahaizana sy antontan’isa misy loharano."
     },
     "readReport": "Hamaky ny tatitra",
     "how": {
@@ -1340,6 +1348,7 @@
         "text": "Voasonia, azo zaraina ary azo hamarinina amin’ny QR."
       }
     },
-    "quickVerdicts": "Fidirana haingana :"
+    "quickVerdicts": "Fidirana haingana :",
+    "signIn": "Fidirana"
   }
 }

@@ -1,4 +1,4 @@
-import { FileSearch, LayoutDashboard, LogIn, Megaphone, Moon, Newspaper, QrCode, Sun, type LucideIcon } from 'lucide-react'
+import { BriefcaseBusiness, FileSearch, LayoutDashboard, LogIn, Megaphone, Moon, Newspaper, QrCode, Sun, type LucideIcon } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Link, NavLink, Outlet } from 'react-router-dom'
 import { LanguageSwitcher } from '@/components/layout/LanguageSwitcher'
@@ -10,7 +10,7 @@ import { cn } from '@/lib/cn'
 
 interface PortalLink {
   to: string
-  key: 'reports' | 'submit' | 'track' | 'verify'
+  key: 'reports' | 'submit' | 'track' | 'verify' | 'resources'
   icon: LucideIcon
   end: boolean
 }
@@ -19,7 +19,8 @@ const REPORTS: PortalLink = { to: '/portail', key: 'reports', icon: Newspaper, e
 const SUBMIT: PortalLink = { to: '/portail/signaler', key: 'submit', icon: Megaphone, end: false }
 const TRACK: PortalLink = { to: '/portail/suivi', key: 'track', icon: FileSearch, end: false }
 const VERIFY: PortalLink = { to: '/portail/verifier', key: 'verify', icon: QrCode, end: false }
-const LINKS = [REPORTS, SUBMIT, TRACK, VERIFY]
+const RESOURCES: PortalLink = { to: '/portail/ressources', key: 'resources', icon: BriefcaseBusiness, end: false }
+const LINKS = [REPORTS, SUBMIT, TRACK, VERIFY, RESOURCES]
 
 /** Lien de la barre du bas : même effet flottant que la barre de l'application (BottomNav). */
 function BottomItem({ to, end, icon: Icon, label }: { to: string; end?: boolean; icon: LucideIcon; label: string }) {
@@ -51,7 +52,10 @@ function BottomItem({ to, end, icon: Icon, label }: { to: string; end?: boolean;
   )
 }
 
-/** Barre du bas du portail sur mobile : Signaler, l'action principale du public, est le bouton central rond. */
+/**
+ * Barre du bas du portail sur mobile : Signaler, l'action principale du public, est le bouton central rond.
+ * Le suivi d'un signalement reste accessible depuis l'accueil et après l'envoi.
+ */
 function PortalBottomNav({ signedIn }: { signedIn: boolean }) {
   const { t } = useTranslation()
 
@@ -63,7 +67,7 @@ function PortalBottomNav({ signedIn }: { signedIn: boolean }) {
     >
       <div className="mx-auto flex max-w-lg items-end px-1 pb-1">
         <BottomItem to={REPORTS.to} end icon={REPORTS.icon} label={t('portail.link.reports')} />
-        <BottomItem to={TRACK.to} icon={TRACK.icon} label={t('portail.link.track')} />
+        <BottomItem to={RESOURCES.to} icon={RESOURCES.icon} label={t('portail.link.resources')} />
 
         <NavLink to={SUBMIT.to} className="group flex flex-1 flex-col items-center justify-end pb-1">
           {({ isActive }) => (
@@ -94,7 +98,7 @@ function PortalBottomNav({ signedIn }: { signedIn: boolean }) {
         <BottomItem
           to={signedIn ? '/' : '/connexion'}
           icon={signedIn ? LayoutDashboard : LogIn}
-          label={t('portail.staffShort')}
+          label={signedIn ? t('portail.staffShort') : t('portail.signIn')}
         />
       </div>
     </nav>
@@ -158,7 +162,7 @@ export function PortalLayout() {
               className="hidden min-h-10 items-center gap-2 whitespace-nowrap rounded-xl bg-[#1976D2] px-4 text-sm font-semibold text-white shadow-[0_10px_18px_rgba(25,118,210,0.28)] transition hover:brightness-105 lg:inline-flex"
             >
               {signedIn ? <LayoutDashboard className="size-4" aria-hidden /> : <LogIn className="size-4" aria-hidden />}
-              {signedIn ? t('portail.backToApp') : t('portail.staffLogin')}
+              {signedIn ? t('portail.backToApp') : t('portail.signIn')}
             </Link>
           </div>
         </div>
@@ -166,7 +170,8 @@ export function PortalLayout() {
 
       <main className="mx-auto w-full max-w-6xl flex-1 px-4 pb-28 pt-5 sm:px-6 lg:pb-10">
         <Lazy>
-          <Outlet />
+          {/* Pages partagées avec l'application (Ressources) : pas de recherche d'en-tête ici. */}
+          <Outlet context={{ query: '' }} />
         </Lazy>
       </main>
 

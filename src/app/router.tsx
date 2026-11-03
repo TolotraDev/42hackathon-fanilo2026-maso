@@ -1,6 +1,7 @@
 import { lazy } from 'react'
 import { createBrowserRouter } from 'react-router-dom'
 import { AppShell } from '@/components/layout/AppShell'
+import { PublicVisitor } from '@/features/auth/AuthProvider'
 import { LoginPage } from '@/features/auth/LoginPage'
 import { HomeRedirect, Lazy, PublicOnly, RequireAuth, RequireSection } from '@/features/auth/RouteGuards'
 import { NotFoundPage } from '@/features/NotFoundPage'
@@ -54,7 +55,7 @@ export const router = createBrowserRouter([
   { path: 'connexion', element: <PublicOnly><LoginPage /></PublicOnly> },
   { path: 'mot-de-passe-oublie', element: <PublicOnly><Lazy><ForgotPasswordPage /></Lazy></PublicOnly> },
   { path: 'nouveau-mot-de-passe', element: <Lazy><ResetPasswordPage /></Lazy> },
-  // W0 — Portail public : sans compte.
+  // W0 — Espace public : sans compte, première page de MASO.
   {
     path: 'portail',
     element: <Lazy><PortalLayout /></Lazy>,
@@ -66,6 +67,10 @@ export const router = createBrowserRouter([
       { path: 'suivi/:code', element: <TrackPage /> },
       { path: 'verifier', element: <VerifyPage /> },
       { path: 'verifier/:publicId', element: <VerifyPage /> },
+      // Ressources publiques : annuaire (visibilité publique, sans coordonnées) et statistiques sourcées.
+      { path: 'ressources', element: <PublicVisitor><RessourcesPage /></PublicVisitor> },
+      { path: 'ressources/statistiques', element: <PublicVisitor><StatisticsPage /></PublicVisitor> },
+      { path: 'ressources/personnes/:id', element: <PublicVisitor><PersonPage /></PublicVisitor> },
     ],
   },
   {

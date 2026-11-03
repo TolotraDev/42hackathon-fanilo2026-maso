@@ -1,4 +1,4 @@
-import { BadgeCheck, ChevronRight, FileSearch, ImageUp, Megaphone, QrCode, Search, ShieldCheck, SlidersHorizontal, UserCheck, type LucideIcon } from 'lucide-react'
+import { BadgeCheck, BriefcaseBusiness, ChevronRight, FileSearch, ImageUp, Megaphone, QrCode, Search, ShieldCheck, SlidersHorizontal, UserCheck, type LucideIcon } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
@@ -15,10 +15,11 @@ import { useLoad } from './useLoad'
 export const PORTAL_SELECT = 'min-h-11 w-full rounded-xl border border-line bg-canvas px-3 text-sm text-ink focus:border-cobalt focus:outline-none'
 const PAGE = 12
 
-const QUICK_ACTIONS: { to: string; key: 'submit' | 'track' | 'verify'; icon: LucideIcon }[] = [
+const QUICK_ACTIONS: { to: string; key: 'submit' | 'track' | 'verify' | 'resources'; icon: LucideIcon }[] = [
   { to: '/portail/signaler', key: 'submit', icon: Megaphone },
   { to: '/portail/suivi', key: 'track', icon: FileSearch },
   { to: '/portail/verifier', key: 'verify', icon: QrCode },
+  { to: '/portail/ressources', key: 'resources', icon: BriefcaseBusiness },
 ]
 
 const QUICK_VERDICTS: { verdict: Verdict; dot: string }[] = [
@@ -61,10 +62,10 @@ export function PortalHomePage() {
 
   return (
     <div className="space-y-6">
-      {/* Bandeau d'accueil : bleu marine uni de la charte, anneaux décoratifs et parcours en 3 étapes. */}
-      <section className="dashboard-rise relative overflow-hidden rounded-3xl bg-[#0A2F4F] text-white shadow-[0_18px_32px_rgba(10,47,79,0.22)]">
-        <div aria-hidden className="pointer-events-none absolute -right-24 -top-24 size-72 rounded-full border-[36px] border-white/[0.04]" />
-        <div aria-hidden className="pointer-events-none absolute -right-6 -top-6 size-28 rounded-full border-[14px] border-[#1976D2]/25" />
+      {/* Bandeau d'accueil : blanc en mode clair, bleu marine uni en mode sombre ; anneaux décoratifs et parcours en 3 étapes. */}
+      <section className="dashboard-rise relative overflow-hidden rounded-3xl border border-[#E1E6EC] bg-white text-[#0A2F4F] shadow-[0_18px_32px_rgba(10,47,79,0.08)] dark:border-transparent dark:bg-[#0A2F4F] dark:text-white dark:shadow-[0_18px_32px_rgba(10,47,79,0.22)]">
+        <div aria-hidden className="pointer-events-none absolute -right-24 -top-24 size-72 rounded-full border-[36px] border-[#0A2F4F]/[0.04] dark:border-white/[0.04]" />
+        <div aria-hidden className="pointer-events-none absolute -right-6 -top-6 size-28 rounded-full border-[14px] border-[#1976D2]/15 dark:border-[#1976D2]/25" />
         <div aria-hidden className="absolute inset-y-0 left-0 w-1.5 bg-[#1976D2]" />
 
         <div className="relative grid gap-8 px-5 py-7 sm:px-9 sm:py-10 lg:grid-cols-[1.35fr_1fr] lg:items-center">
@@ -76,14 +77,14 @@ export function PortalHomePage() {
             <div className="space-y-3">
               <h1 className="font-display text-[26px] font-extrabold leading-tight sm:text-4xl">{t('portail.heroTitle')}</h1>
               <span aria-hidden className="block h-1 w-14 rounded-full bg-[#1976D2]" />
-              <p className="max-w-xl text-sm leading-relaxed text-white/70 sm:text-base">{t('portail.heroSubtitle')}</p>
+              <p className="max-w-xl text-sm leading-relaxed text-[#5B6B7B] sm:text-base dark:text-white/70">{t('portail.heroSubtitle')}</p>
             </div>
 
-            {/* Recherche : une seule barre blanche, le bouton est intégré. */}
+            {/* Recherche : une seule barre, le bouton est intégré. */}
             <form
               role="search"
               onSubmit={apply}
-              className="flex items-center gap-1 rounded-2xl bg-white p-1.5 shadow-[0_12px_24px_rgba(0,0,0,0.18)] focus-within:ring-4 focus-within:ring-[#1976D2]/40"
+              className="flex items-center gap-1 rounded-2xl border-2 border-[#E1E6EC] bg-[#F3F5F8] p-1.5 transition focus-within:border-[#1976D2] focus-within:bg-white focus-within:ring-4 focus-within:ring-[#1976D2]/15 dark:border-transparent dark:bg-white dark:shadow-[0_12px_24px_rgba(0,0,0,0.18)] dark:focus-within:ring-[#1976D2]/40"
             >
               <label htmlFor="portal-query" className="sr-only">{t('portail.filter.query')}</label>
               <Search className="ml-2.5 size-5 shrink-0 text-[#5B6B7B]" aria-hidden />
@@ -107,7 +108,7 @@ export function PortalHomePage() {
 
             {/* Accès rapide par verdict : un clic filtre directement les rapports. */}
             <div className="-mt-1 flex flex-wrap items-center gap-2">
-              <span className="text-xs font-semibold text-white/55">{t('portail.quickVerdicts')}</span>
+              <span className="text-xs font-semibold text-[#5B6B7B] dark:text-white/55">{t('portail.quickVerdicts')}</span>
               {QUICK_VERDICTS.map(({ verdict, dot }) => {
                 const active = filters.verdict === verdict
                 return (
@@ -118,7 +119,9 @@ export function PortalHomePage() {
                     onClick={() => pickVerdict(active ? '' : verdict)}
                     className={cn(
                       'inline-flex min-h-8 items-center gap-1.5 rounded-full px-3 text-xs font-semibold transition',
-                      active ? 'bg-white text-[#0A2F4F]' : 'bg-white/[0.08] text-white/85 ring-1 ring-white/15 hover:bg-white/15 hover:text-white',
+                      active
+                        ? 'bg-[#0A2F4F] text-white dark:bg-white dark:text-[#0A2F4F]'
+                        : 'bg-[#F3F5F8] text-[#0A2F4F] ring-1 ring-[#E1E6EC] hover:ring-[#1976D2] dark:bg-white/[0.08] dark:text-white/85 dark:ring-white/15 dark:hover:bg-white/15 dark:hover:text-white',
                     )}
                   >
                     <span className={cn('size-2 rounded-full', dot)} aria-hidden />
@@ -131,40 +134,40 @@ export function PortalHomePage() {
             <div className="grid gap-2.5 sm:grid-cols-2">
               <Link
                 to="/portail/signaler"
-                className="group flex items-center gap-3 rounded-2xl bg-white p-3 text-[#0A2F4F] shadow-[0_10px_20px_rgba(0,0,0,0.18)] transition hover:-translate-y-0.5"
+                className="group flex items-center gap-3 rounded-2xl bg-[#1976D2] p-3 text-white shadow-[0_10px_18px_rgba(25,118,210,0.28)] transition hover:-translate-y-0.5 dark:bg-white dark:text-[#0A2F4F] dark:shadow-[0_10px_20px_rgba(0,0,0,0.18)]"
               >
-                <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-[#1976D2] text-white">
+                <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-white/15 text-white dark:bg-[#1976D2]">
                   <Megaphone className="size-5" aria-hidden />
                 </span>
                 <span className="min-w-0 flex-1">
                   <span className="block text-sm font-bold">{t('portail.cta.submit')}</span>
-                  <span className="block text-xs leading-snug text-[#5B6B7B]">{t('portail.cta.submitHint')}</span>
+                  <span className="block text-xs leading-snug text-white/80 dark:text-[#5B6B7B]">{t('portail.cta.submitHint')}</span>
                 </span>
-                <ChevronRight className="size-4 shrink-0 text-[#1976D2] transition group-hover:translate-x-0.5" aria-hidden />
+                <ChevronRight className="size-4 shrink-0 text-white transition group-hover:translate-x-0.5 dark:text-[#1976D2]" aria-hidden />
               </Link>
               <Link
                 to="/portail/signaler"
-                className="group flex items-center gap-3 rounded-2xl bg-white/[0.06] p-3 text-white ring-1 ring-white/15 transition hover:-translate-y-0.5 hover:bg-white/10"
+                className="group flex items-center gap-3 rounded-2xl bg-[#F3F5F8] p-3 text-[#0A2F4F] ring-1 ring-[#E1E6EC] transition hover:-translate-y-0.5 hover:ring-[#1976D2] dark:bg-white/[0.06] dark:text-white dark:ring-white/15 dark:hover:bg-white/10"
               >
-                <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-white/10 text-white">
+                <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-[#1976D2]/10 text-[#1976D2] dark:bg-white/10 dark:text-white">
                   <ImageUp className="size-5" aria-hidden />
                 </span>
                 <span className="min-w-0 flex-1">
                   <span className="block text-sm font-bold">{t('portail.cta.checkTitle')}</span>
-                  <span className="block text-xs leading-snug text-white/60">{t('portail.cta.checkHint')}</span>
+                  <span className="block text-xs leading-snug text-[#5B6B7B] dark:text-white/60">{t('portail.cta.checkHint')}</span>
                 </span>
-                <ChevronRight className="size-4 shrink-0 text-white/70 transition group-hover:translate-x-0.5" aria-hidden />
+                <ChevronRight className="size-4 shrink-0 text-[#5B6B7B] transition dark:text-white/70 group-hover:translate-x-0.5" aria-hidden />
               </Link>
             </div>
           </div>
 
           {/* Parcours d'un signalement : rappelle qu'un humain décide à chaque étape. */}
-          <div className="hidden rounded-2xl bg-white/[0.06] p-5 ring-1 ring-white/10 sm:block">
-            <h2 id="portal-how" className="mb-4 text-[11px] font-bold uppercase tracking-wider text-white/60">{t('portail.how.title')}</h2>
+          <div className="hidden rounded-2xl bg-[#F3F5F8] p-5 ring-1 ring-[#E1E6EC] sm:block dark:bg-white/[0.06] dark:ring-white/10">
+            <h2 id="portal-how" className="mb-4 text-[11px] font-bold uppercase tracking-wider text-[#5B6B7B] dark:text-white/60">{t('portail.how.title')}</h2>
             <ol aria-labelledby="portal-how">
             {HOW_STEPS.map(({ key, icon: Icon }, index) => (
               <li key={key} className="relative flex gap-3 pb-5 last:pb-0">
-                {index < HOW_STEPS.length - 1 && <span aria-hidden className="absolute left-5 top-11 h-[calc(100%-2.75rem)] w-px bg-white/15" />}
+                {index < HOW_STEPS.length - 1 && <span aria-hidden className="absolute left-5 top-11 h-[calc(100%-2.75rem)] w-px bg-[#E1E6EC] dark:bg-white/15" />}
                 <span
                   className={cn(
                     'flex size-10 shrink-0 items-center justify-center rounded-full',
@@ -174,8 +177,8 @@ export function PortalHomePage() {
                   <Icon className="size-5" aria-hidden />
                 </span>
                 <span className="min-w-0 pt-0.5">
-                  <span className="block text-sm font-bold text-white">{t(`portail.how.${key}.title`)}</span>
-                  <span className="block text-xs leading-relaxed text-white/65">{t(`portail.how.${key}.text`)}</span>
+                  <span className="block text-sm font-bold text-[#0A2F4F] dark:text-white">{t(`portail.how.${key}.title`)}</span>
+                  <span className="block text-xs leading-relaxed text-[#5B6B7B] dark:text-white/65">{t(`portail.how.${key}.text`)}</span>
                 </span>
               </li>
             ))}
@@ -186,7 +189,7 @@ export function PortalHomePage() {
 
       <section aria-labelledby="portal-quick" className="space-y-3">
         <h2 id="portal-quick" className="font-display text-sm font-bold uppercase tracking-wide text-navy dark:text-ink">{t('portail.quick.title')}</h2>
-        <div className="grid grid-cols-3 gap-2 sm:gap-3">
+        <div className="grid grid-cols-2 gap-2 sm:gap-3 lg:grid-cols-4">
           {QUICK_ACTIONS.map(({ to, key, icon: Icon }, index) => (
             <Link
               key={key}

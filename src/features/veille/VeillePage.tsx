@@ -58,7 +58,7 @@ export function VeillePage() {
           {t('veille.realtime')}
         </span>
         <span className="hidden text-xs text-ink-muted sm:inline">
-          {t('common.resultsCount', { count: alerts.length, defaultValue: `${alerts.length} résultat(s)` })}
+          {t('common.resultsCount', { count: alerts.length })}
         </span>
         <div className="ml-auto flex items-center gap-1.5 overflow-x-auto">
           {options.map((option) => {
@@ -171,7 +171,7 @@ export function VeillePage() {
           {/* Résumé de répartition */}
           <Card className="veille-in p-3" style={{ ['--i' as string]: 1 }}>
             <p className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-ink-muted">
-              {t('veille.breakdown', { defaultValue: 'Répartition' })}
+              {t('veille.breakdown')}
             </p>
             <ul className="space-y-2">
               {ALERT_LEVELS.slice().reverse().map((lvl) => {

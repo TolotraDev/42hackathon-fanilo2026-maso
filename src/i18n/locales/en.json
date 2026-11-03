@@ -44,14 +44,17 @@
     "minutesAgo_one": "{{count}} min ago",
     "minutesAgo_other": "{{count}} min ago",
     "noResult": "No result for this search.",
-    "comingWith": "Available with module {{module}}."
+    "comingWith": "Available with module {{module}}.",
+    "resultsCount_one": "{{count}} result",
+    "resultsCount_other": "{{count}} results"
   },
   "veille": {
     "realtime": "Real time",
     "all": "All",
     "urgent": "Urgent",
     "takeCharge": "Take charge",
-    "reportRumor": "Report a rumour"
+    "reportRumor": "Report a rumour",
+    "breakdown": "Breakdown"
   },
   "alertLevel": {
     "low": "Low",
@@ -423,7 +426,7 @@
       "withdrawn": "Withdrawn",
       "valid": "Validated"
     },
-    "guestHint": "Guest mode: only people who accepted public visibility are listed, without their contact details.",
+    "guestHint": "Public space: only people who accepted public visibility are listed, without their contact details.",
     "back": "Back to resources",
     "person": {
       "notFound": "This person is not (or no longer) in the directory.",
@@ -565,7 +568,8 @@
       "invalidNumber": "Invalid value or year.",
       "sourceRequired": "Source and update date (YYYY-MM-DD) required.",
       "csvTitle": "Import statistics (CSV)"
-    }
+    },
+    "hint": "Find experts and reliable sources."
   },
   "rediger": {
     "format": "Format",
@@ -922,8 +926,6 @@
     "magicLinkSent": "A sign-in link was sent to {{email}}. Open it on this device.",
     "forgot": "Forgot password?",
     "or": "or",
-    "guest": "Continue without an account",
-    "guestHint": "Limited to the public directory and statistics.",
     "demoTitle": "Demo mode",
     "demoHint": "Supabase is not configured: fictional accounts, data kept on this device. Password: {{password}}",
     "signIn": "Sign in",
@@ -957,9 +959,14 @@
       "email_not_authorized": "Supabase's email service refuses this address: configure an SMTP server or create the account manually.",
       "profile_missing": "This account has no MASO profile. Ask the administrator to create it (see the Supabase setup).",
       "configuration": "Supabase is misconfigured (key, migrations or email provider). Check the .env file and the setup.",
-      "no_account": "No MASO account is linked to this address. Check the address or ask the administrator for an invitation."
+      "no_account": "No MASO account is linked to this address. Check the address or ask the administrator for an invitation.",
+      "shortCredentials": "Email and password must be at least 8 characters long.",
+      "shortEmail": "Email must be at least 8 characters long."
     },
-    "portal": "Browse the public portal (no account)"
+    "portal": "Browse the public portal",
+    "emailPlaceholder": "Email address",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password"
   },
   "onboarding": {
     "skip": "Skip",
@@ -1159,9 +1166,9 @@
       "reports": "Reports",
       "submit": "Report",
       "track": "Track",
-      "verify": "Verify a report"
+      "verify": "Verify a report",
+      "resources": "Resources"
     },
-    "staffLogin": "Newsroom area",
     "backToApp": "Back to the app",
     "footer": "MASO — checks carried out and validated by journalists. No verdict is produced automatically.",
     "title": "Published fact-checks",
@@ -1322,7 +1329,8 @@
       "title": "What would you like to do?",
       "submit": "Send a suspicious image, link or message.",
       "track": "Follow your report with its code.",
-      "verify": "Check a report’s authenticity with its QR code."
+      "verify": "Check a report’s authenticity with its QR code.",
+      "resources": "Experts and sourced statistics."
     },
     "readReport": "Read the report",
     "how": {
@@ -1340,6 +1348,7 @@
         "text": "Signed, shareable and verifiable by QR code."
       }
     },
-    "quickVerdicts": "Quick access:"
+    "quickVerdicts": "Quick access:",
+    "signIn": "Sign in"
   }
 }
