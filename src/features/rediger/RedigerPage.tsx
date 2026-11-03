@@ -1,5 +1,5 @@
 import { Bold, Check, Italic, List, Quote, type LucideIcon } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Card, Textarea } from '@/components/ui'
 import { cn } from '@/lib/cn'
@@ -28,12 +28,32 @@ function readDraft(): Draft {
 }
 
 /** Marques de mise en forme (Markdown) insérées autour de la sélection. */
-const TOOLS: Array<{ id: 'bold' | 'italic' | 'list' | 'quote'; icon: LucideIcon; before: string; after: string }> = [
+const TOOLS: Array<{
+  id: 'bold' | 'italic' | 'list' | 'quote'
+  icon: LucideIcon
+  before: string
+  after: string
+}> = [
   { id: 'bold', icon: Bold, before: '**', after: '**' },
   { id: 'italic', icon: Italic, before: '_', after: '_' },
   { id: 'list', icon: List, before: '\n- ', after: '' },
   { id: 'quote', icon: Quote, before: '\n> ', after: '' },
 ]
+
+/** Couleurs douces par format, pour différencier visuellement les tags. */
+const FORMAT_TONES: Record<Format, string> = {
+  radio: 'border-cobalt bg-cobalt text-white',
+  post: 'border-emerald-500 bg-emerald-500 text-white',
+  article: 'border-purple-500 bg-purple-500 text-white',
+  debunk: 'border-red-500 bg-red-500 text-white',
+}
+
+const FORMAT_HOVER: Record<Format, string> = {
+  radio: 'hover:border-cobalt/50 hover:text-cobalt',
+  post: 'hover:border-emerald-500/50 hover:text-emerald-600',
+  article: 'hover:border-purple-500/50 hover:text-purple-600',
+  debunk: 'hover:border-red-500/50 hover:text-red-600',
+}
 
 /** M11 — Éditeur d'article, sans IA (l'assistant borné arrive en MOD-07). Brouillon gardé hors ligne. */
 export function RedigerPage() {
@@ -51,7 +71,9 @@ export function RedigerPage() {
     const area = bodyRef.current
     if (!area) return
     const { selectionStart: start, selectionEnd: end, value } = area
-    update({ body: value.slice(0, start) + before + value.slice(start, end) + after + value.slice(end) })
+    update({
+      body: value.slice(0, start) + before + value.slice(start, end) + after + value.slice(end),
+    })
     requestAnimationFrame(() => {
       area.focus()
       area.setSelectionRange(start + before.length, end + before.length)
@@ -62,8 +84,13 @@ export function RedigerPage() {
 
   return (
     <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_18rem] lg:items-start">
-      <Card className="overflow-hidden">
-        <div className="flex items-center gap-1 border-b border-line px-2 py-1.5">
+      {/* Éditeur principal */}
+      <Card
+        className="dashboard-rise overflow-hidden border-t-4 border-t-white/20 shadow-sm"
+        style={{ '--i': 0 } as CSSProperties}
+      >
+        {/* Barre d'outils */}
+        <div className="flex items-center gap-1 border-b border-line bg-canvas/30 px-2 py-1.5">
           {TOOLS.map(({ id, icon: Icon, before, after }) => (
             <button
               key={id}
@@ -71,12 +98,14 @@ export function RedigerPage() {
               onClick={() => applyTool(before, after)}
               aria-label={t(`rediger.toolbar.${id}`)}
               title={t(`rediger.toolbar.${id}`)}
-              className="flex size-10 items-center justify-center rounded-lg text-ink hover:bg-canvas"
+              className="flex size-10 items-center justify-center rounded-lg text-ink-muted transition-colors hover:bg-cobalt/10 hover:text-cobalt focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cobalt"
             >
               <Icon className="size-4" aria-hidden />
             </button>
           ))}
         </div>
+
+        {/* Zone de saisie */}
         <div className="space-y-3 p-4">
           <input
             value={draft.title}
@@ -95,21 +124,31 @@ export function RedigerPage() {
             className="w-full resize-y bg-transparent text-sm leading-relaxed text-ink placeholder:text-ink-muted/60 focus:outline-none"
           />
         </div>
-        <div className="flex flex-wrap items-center justify-between gap-2 border-t border-line px-4 py-2 text-xs text-ink-muted">
+
+        {/* Pied de carte */}
+        <div className="flex flex-wrap items-center justify-between gap-2 border-t border-line bg-canvas/30 px-4 py-2 text-xs text-ink-muted">
           <span>
             {t('rediger.words', { count: words })}
-            {draft.format === 'radio' && ` · ${t('rediger.radioDuration', { seconds: estimateRadioSeconds(`${draft.title} ${draft.body}`) })}`}
+            {draft.format === 'radio' &&
+              ` · ${t('rediger.radioDuration', { seconds: estimateRadioSeconds(`${draft.title} ${draft.body}`) })}`}
           </span>
-          <span className="inline-flex items-center gap-1">
-            <Check className="size-3.5 text-success" aria-hidden />
+          <span className="inline-flex items-center gap-1 font-medium text-success">
+            <Check className="size-3.5" aria-hidden />
             {t('rediger.savedLocally')}
           </span>
         </div>
       </Card>
 
+      {/* Colonne de droite */}
       <div className="space-y-4">
-        <Card className="p-4">
-          <p className="mb-2 font-display text-sm font-bold text-navy dark:text-ink">{t('rediger.format')}</p>
+        {/* Choix du format */}
+        <Card
+          className="dashboard-rise space-y-2 border-t-4 border-t-white/20 p-4 shadow-sm"
+          style={{ '--i': 1 } as CSSProperties}
+        >
+          <p className="font-display text-sm font-bold text-navy dark:text-ink">
+            {t('rediger.format')}
+          </p>
           <div className="grid grid-cols-2 gap-2">
             {FORMATS.map((format) => (
               <button
@@ -118,8 +157,10 @@ export function RedigerPage() {
                 aria-pressed={draft.format === format}
                 onClick={() => update({ format })}
                 className={cn(
-                  'min-h-10 rounded-xl border px-2 text-xs font-semibold transition',
-                  draft.format === format ? 'border-cobalt bg-cobalt text-white' : 'border-line text-ink-muted hover:text-ink',
+                  'min-h-10 rounded-xl border px-2 text-xs font-semibold transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cobalt',
+                  draft.format === format
+                    ? FORMAT_TONES[format]
+                    : cn('border-line bg-surface text-ink-muted', FORMAT_HOVER[format]),
                 )}
               >
                 {t(`rediger.formats.${format}`)}
@@ -127,8 +168,16 @@ export function RedigerPage() {
             ))}
           </div>
         </Card>
-        <Card className="p-4">
-          <label htmlFor="note" className="mb-2 block font-display text-sm font-bold text-navy dark:text-ink">
+
+        {/* Note rapide */}
+        <Card
+          className="dashboard-rise space-y-2 border-t-4 border-t-white/20 p-4 shadow-sm"
+          style={{ '--i': 2 } as CSSProperties}
+        >
+          <label
+            htmlFor="note"
+            className="block font-display text-sm font-bold text-navy dark:text-ink"
+          >
             {t('rediger.note')}
           </label>
           <Textarea
@@ -137,7 +186,7 @@ export function RedigerPage() {
             value={draft.note}
             onChange={(event) => update({ note: event.target.value })}
             placeholder={t('rediger.notePlaceholder')}
-            className="bg-cobalt/8"
+            className="bg-cobalt/5 focus:bg-surface"
           />
         </Card>
       </div>
