@@ -11,7 +11,7 @@ interface SegmentedControlProps<T extends string> {
 /** Onglets en pilule, comme « Actives / Projets » sur la maquette. */
 export function SegmentedControl<T extends string>({ value, options, onChange, label, className }: SegmentedControlProps<T>) {
   return (
-    <div role="tablist" aria-label={label} className={cn('flex rounded-full bg-line p-1', className)}>
+    <div role="tablist" aria-label={label} className={cn('flex rounded-full bg-line/80 p-1 dark:bg-white/10', className)}>
       {options.map((option) => (
         <button
           key={option.value}
@@ -21,7 +21,9 @@ export function SegmentedControl<T extends string>({ value, options, onChange, l
           onClick={() => onChange(option.value)}
           className={cn(
             'min-h-9 flex-1 rounded-full px-3 text-sm font-semibold transition',
-            option.value === value ? 'bg-cobalt text-white shadow-sm' : 'text-ink-muted hover:text-ink',
+            option.value === value
+              ? 'bg-cobalt text-white shadow-sm'
+              : 'text-ink-muted hover:text-ink dark:text-white/70 dark:hover:text-white',
           )}
         >
           {option.label}
