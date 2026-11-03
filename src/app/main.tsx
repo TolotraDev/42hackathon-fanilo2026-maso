@@ -6,10 +6,13 @@ import { AuthProvider } from '@/features/auth/AuthProvider'
 import { CaseStoreProvider } from '@/features/dossiers/CaseStoreProvider'
 import { initTheme, ThemeProvider } from '@/hooks/useTheme'
 import { logStartupDiagnostics } from '@/lib/diagnostics'
+import { captureInstallPrompt } from '@/lib/installPrompt'
 import '@/i18n'
 import '@/styles/index.css'
 import { router } from './router'
 
+// Avant tout : l'invitation à installer n'est envoyée qu'une fois par le navigateur, au chargement.
+captureInstallPrompt()
 initTheme()
 logStartupDiagnostics()
 // Nouvelle version déployée : le service worker la récupère et la page se recharge seule (autoUpdate).

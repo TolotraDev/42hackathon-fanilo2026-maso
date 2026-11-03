@@ -1747,5 +1747,21 @@
       "aiModelFailed": "Le détecteur d'images IA n'a pas pu analyser cette image (serveur surchargé) : réessayez dans un instant.",
       "aiLowDeclared": "Le détecteur d'images IA donne un score bas ({{percent}} %), mais le certificat C2PA déclare lui-même une image générée par IA : c'est le certificat qui compte ici."
     }
+  },
+  "install": {
+    "button": "Installer l'application",
+    "installed": "MASO est installé sur cet appareil.",
+    "accepted": "Installation lancée : MASO apparaîtra sur votre écran d'accueil (ou dans vos applications).",
+    "dismissed": "Installation annulée. Vous pouvez réessayer à tout moment depuis cette page.",
+    "howTitle": "Comment installer MASO sur cet appareil",
+    "how": {
+      "ios": "Sur iPhone ou iPad (Safari) :\n1. Touchez le bouton Partager (carré avec une flèche vers le haut), en bas ou en haut de l'écran.\n2. Faites défiler et choisissez « Sur l'écran d'accueil ».\n3. Touchez « Ajouter ». MASO apparaît sur l'écran d'accueil.",
+      "android": "Sur Android :\n1. Ouvrez le menu du navigateur (⋮ en haut à droite dans Chrome).\n2. Choisissez « Installer l'application » ou « Ajouter à l'écran d'accueil ».\n3. Confirmez avec « Installer ».\nSi l'option n'apparaît pas, rechargez la page une fois, puis réessayez.",
+      "desktop_chromium": "Sur ordinateur (Chrome ou Edge) :\n1. Cliquez sur l'icône d'installation à droite de la barre d'adresse (un écran avec une flèche).\n2. Ou ouvrez le menu ⋮ → « Caster, enregistrer et partager » → « Installer la page en tant qu'application » (Edge : … → Applications → « Installer ce site en tant qu'application »).\n3. Confirmez avec « Installer ».\nSi rien n'apparaît, rechargez la page une fois (Ctrl + R), puis réessayez.",
+      "desktop_safari": "Sur Mac (Safari 17 ou plus récent) : menu Fichier → « Ajouter au Dock ». Avec une version plus ancienne, ouvrez MASO dans Chrome ou Edge pour l'installer.",
+      "firefox": "Firefox sur ordinateur ne sait pas installer d'application web. Ouvrez cette page dans Chrome ou Edge, puis cliquez à nouveau sur « Installer l'application ». (Sur Android, Firefox propose « Installer » dans son menu ⋮.)",
+      "in_app": "Vous êtes dans le navigateur intégré d'une application (Facebook, Messenger, Instagram…), qui ne permet pas d'installer.\n1. Ouvrez le menu ⋯ en haut de l'écran.\n2. Choisissez « Ouvrir dans le navigateur » (Chrome ou Safari).\n3. Là, touchez à nouveau « Installer l'application ».",
+      "other": "Ouvrez le menu de votre navigateur et cherchez « Installer l'application » ou « Ajouter à l'écran d'accueil ». Si l'option n'existe pas, ouvrez MASO dans Chrome, Edge ou Safari."
+    }
   }
 }

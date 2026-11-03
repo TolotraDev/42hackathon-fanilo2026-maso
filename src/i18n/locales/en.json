@@ -1747,5 +1747,21 @@
       "aiModelFailed": "The AI image detector could not analyse this image (server overloaded): try again in a moment.",
       "aiLowDeclared": "The AI image detector gives a low score ({{percent}}%), but the C2PA certificate itself declares an AI-generated image: the certificate is what counts here."
     }
+  },
+  "install": {
+    "button": "Install the app",
+    "installed": "MASO is installed on this device.",
+    "accepted": "Installation started: MASO will appear on your home screen (or among your apps).",
+    "dismissed": "Installation cancelled. You can try again at any time from this page.",
+    "howTitle": "How to install MASO on this device",
+    "how": {
+      "ios": "On iPhone or iPad (Safari):\n1. Tap the Share button (square with an upward arrow), at the bottom or top of the screen.\n2. Scroll and choose \"Add to Home Screen\".\n3. Tap \"Add\". MASO appears on the home screen.",
+      "android": "On Android:\n1. Open the browser menu (⋮ at the top right in Chrome).\n2. Choose \"Install app\" or \"Add to Home screen\".\n3. Confirm with \"Install\".\nIf the option does not appear, reload the page once, then try again.",
+      "desktop_chromium": "On a computer (Chrome or Edge):\n1. Click the install icon on the right of the address bar (a screen with an arrow).\n2. Or open the ⋮ menu → \"Cast, save and share\" → \"Install page as app\" (Edge: … → Apps → \"Install this site as an app\").\n3. Confirm with \"Install\".\nIf nothing appears, reload the page once (Ctrl + R), then try again.",
+      "desktop_safari": "On a Mac (Safari 17 or later): File menu → \"Add to Dock\". With an older version, open MASO in Chrome or Edge to install it.",
+      "firefox": "Firefox on a computer cannot install web apps. Open this page in Chrome or Edge, then click \"Install the app\" again. (On Android, Firefox offers \"Install\" in its ⋮ menu.)",
+      "in_app": "You are in an app's built-in browser (Facebook, Messenger, Instagram…), which cannot install apps.\n1. Open the ⋯ menu at the top of the screen.\n2. Choose \"Open in browser\" (Chrome or Safari).\n3. There, tap \"Install the app\" again.",
+      "other": "Open your browser menu and look for \"Install app\" or \"Add to Home screen\". If the option does not exist, open MASO in Chrome, Edge or Safari."
+    }
   }
 }

@@ -13,6 +13,7 @@ import { deviceNotificationsOn, notificationsSupported, setDeviceNotifications }
 import { QrImage } from '@/features/portail/components'
 import { listDirectory, listIndicators, listSources } from '@/features/ressources/resourcesApi'
 import { useDataSaver } from '@/hooks/useDataSaver'
+import { InstallApp } from '@/components/InstallApp'
 import { useInstallPrompt } from '@/hooks/useInstallPrompt'
 import { useOnlineStatus } from '@/hooks/useOnlineStatus'
 import { useTheme, type ThemePreference } from '@/hooks/useTheme'
@@ -171,7 +172,7 @@ function PinSettings() {
 export function ProfilPage() {
   const { t } = useTranslation()
   const { preference, setPreference } = useTheme()
-  const { canInstall, installed, install } = useInstallPrompt()
+  const { installed } = useInstallPrompt()
   const { state, profile, role, leaveGuestMode } = useAuth()
   const navigate = useNavigate()
   const name = profile ? profile.fullName || profile.email : t('auth.guestMode')
@@ -292,25 +293,10 @@ export function ProfilPage() {
           </span>
           <div>
             <p className="text-sm font-semibold text-ink">{t('profil.install')}</p>
-            <p className="text-xs text-ink-muted">
-              {installed
-                ? t('profil.installed')
-                : canInstall
-                  ? t('profil.installHint')
-                  : t('profil.installUnavailable')}
-            </p>
+            <p className="text-xs text-ink-muted">{installed ? t('profil.installed') : t('profil.installHint')}</p>
           </div>
         </div>
-        {canInstall && !installed && (
-          <Button
-            block
-            onClick={() => void install()}
-            className="bg-cobalt text-white hover:bg-cobalt/90 border-none focus-visible:ring-cobalt"
-          >
-            <Download className="size-4" aria-hidden />
-            {t('profil.install')}
-          </Button>
-        )}
+        <InstallApp block />
       </Card>
 
       <p className="dashboard-fade text-center text-xs text-ink-muted">

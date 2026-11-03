@@ -1747,5 +1747,21 @@
       "aiModelFailed": "Tsy afaka namakafaka ity sary ity ny mpitsikilo sary IA (be loatra ny asan'ny mpizara) : andramo indray afaka kelikely.",
       "aiLowDeclared": "Ambany ny isa omen'ny mpitsikilo sary IA ({{percent}} %), saingy milaza ho sary noforonin'ny IA ny taratasy C2PA : io taratasy io no manan-danja eto."
     }
+  },
+  "install": {
+    "button": "Hametraka ny fampiharana",
+    "installed": "Efa voapetraka amin'ity fitaovana ity ny MASO.",
+    "accepted": "Natomboka ny fametrahana : hiseho eo amin'ny efijery fandraisana (na amin'ny fampiharanao) ny MASO.",
+    "dismissed": "Nofoanana ny fametrahana. Azonao averina amin'ny fotoana rehetra avy amin'ity pejy ity.",
+    "howTitle": "Ahoana no hametrahana ny MASO amin'ity fitaovana ity",
+    "how": {
+      "ios": "Amin'ny iPhone na iPad (Safari) :\n1. Tsindrio ny bokotra Zarao (efajoro misy zana-tsipika miakatra), any ambany na any ambony.\n2. Midina dia safidio « Sur l'écran d'accueil » (Ampio amin'ny efijery fandraisana).\n3. Tsindrio « Ajouter ». Hiseho eo amin'ny efijery fandraisana ny MASO.",
+      "android": "Amin'ny Android :\n1. Sokafy ny menu-n'ny navigateur (⋮ eo ambony ankavanana ao amin'ny Chrome).\n2. Safidio « Installer l'application » na « Ajouter à l'écran d'accueil ».\n3. Hamafiso amin'ny « Installer ».\nRaha tsy hita io safidy io, avereno alaina indray mandeha ny pejy, dia andramo indray.",
+      "desktop_chromium": "Amin'ny solosaina (Chrome na Edge) :\n1. Tsindrio ny kisary fametrahana eo ankavanan'ny bara adiresy (efijery misy zana-tsipika).\n2. Na sokafy ny menu ⋮ → « Caster, enregistrer et partager » → « Installer la page en tant qu'application » (Edge : … → Applications → « Installer ce site en tant qu'application »).\n3. Hamafiso amin'ny « Installer ».\nRaha tsy misy miseho, avereno alaina ny pejy (Ctrl + R), dia andramo indray.",
+      "desktop_safari": "Amin'ny Mac (Safari 17 na vaovao kokoa) : menu Fichier → « Ajouter au Dock ». Raha taloha kokoa, sokafy ao amin'ny Chrome na Edge ny MASO mba hametrahana azy.",
+      "firefox": "Tsy mahay mametraka fampiharana web ny Firefox amin'ny solosaina. Sokafy ao amin'ny Chrome na Edge ity pejy ity, dia tsindrio indray ny « Hametraka ny fampiharana ». (Amin'ny Android, misy « Installer » ao amin'ny menu ⋮ an'ny Firefox.)",
+      "in_app": "Ao anatin'ny navigateur an'ny fampiharana iray ianao (Facebook, Messenger, Instagram…), izay tsy mamela fametrahana.\n1. Sokafy ny menu ⋯ eo ambony.\n2. Safidio « Ouvrir dans le navigateur » (Chrome na Safari).\n3. Any, tsindrio indray ny « Hametraka ny fampiharana ».",
+      "other": "Sokafy ny menu-n'ny navigateur-nao ary tadiavo « Installer l'application » na « Ajouter à l'écran d'accueil ». Raha tsy misy, sokafy ao amin'ny Chrome, Edge na Safari ny MASO."
+    }
   }
 }

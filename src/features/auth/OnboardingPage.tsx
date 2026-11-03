@@ -1,10 +1,10 @@
-import { Download, FolderCheck, ShieldCheck, WifiOff, type LucideIcon } from 'lucide-react'
+import { FolderCheck, ShieldCheck, WifiOff, type LucideIcon } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { LanguageSwitcher } from '@/components/layout/LanguageSwitcher'
 import { Button, Card } from '@/components/ui'
-import { useInstallPrompt } from '@/hooks/useInstallPrompt'
+import { InstallApp } from '@/components/InstallApp'
 import { cn } from '@/lib/cn'
 import { AuthLayout } from './AuthLayout'
 import { markOnboarded } from './onboarding'
@@ -19,7 +19,6 @@ const SLIDES: Array<{ id: 's1' | 's2' | 's3'; icon: LucideIcon }> = [
 export function OnboardingPage() {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const { canInstall, installed, install } = useInstallPrompt()
   const [index, setIndex] = useState(0)
   const slide = SLIDES[index]
   const Icon = slide.icon
@@ -53,12 +52,7 @@ export function OnboardingPage() {
             <LanguageSwitcher className="justify-center" />
           </div>
         )}
-        {isLast && canInstall && !installed && (
-          <Button variant="secondary" onClick={() => void install()}>
-            <Download className="size-4" aria-hidden />
-            {t('onboarding.install')}
-          </Button>
-        )}
+        {isLast && <InstallApp variant="secondary" block />}
 
         <div className="flex items-center justify-between gap-4">
           <div className="flex gap-1.5" role="img" aria-label={t('onboarding.step', { current: index + 1, total: SLIDES.length })}>
