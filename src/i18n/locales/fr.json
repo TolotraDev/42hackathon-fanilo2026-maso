@@ -620,7 +620,18 @@
       "sourceRequired": "Source et date de mise à jour (AAAA-MM-JJ) obligatoires.",
       "csvTitle": "Importer des statistiques (CSV)"
     },
-    "hint": "Trouvez les experts et les sources fiables."
+    "hint": "Trouvez les experts et les sources fiables.",
+    "invite": {
+      "title": "Compte MASO",
+      "button": "Envoyer un lien d'invitation",
+      "hint": "{{name}} recevra à {{email}} un lien pour choisir son mot de passe et rejoindre MASO.",
+      "role": "Rôle",
+      "language": "Langue",
+      "send": "Envoyer l'invitation",
+      "sending": "Envoi…",
+      "cancel": "Annuler",
+      "noEmail": "Ajoutez une adresse e-mail à la fiche pour pouvoir inviter cette personne sur MASO."
+    }
   },
   "rediger": {
     "format": "Format",

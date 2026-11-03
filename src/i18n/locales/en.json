@@ -620,7 +620,18 @@
       "sourceRequired": "Source and update date (YYYY-MM-DD) required.",
       "csvTitle": "Import statistics (CSV)"
     },
-    "hint": "Find experts and reliable sources."
+    "hint": "Find experts and reliable sources.",
+    "invite": {
+      "title": "MASO account",
+      "button": "Send an invitation link",
+      "hint": "{{name}} will receive at {{email}} a link to choose a password and join MASO.",
+      "role": "Role",
+      "language": "Language",
+      "send": "Send the invitation",
+      "sending": "Sending…",
+      "cancel": "Cancel",
+      "noEmail": "Add an email address to the profile to invite this person to MASO."
+    }
   },
   "rediger": {
     "format": "Format",

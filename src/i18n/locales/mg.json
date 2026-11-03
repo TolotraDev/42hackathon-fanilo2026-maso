@@ -620,7 +620,18 @@
       "sourceRequired": "Tsy maintsy misy loharano sy daty fanavaozana (TTTT-VV-AA).",
       "csvTitle": "Hampiditra antontan'isa (CSV)"
     },
-    "hint": "Tadiavo ireo manam-pahaizana sy loharano azo itokisana."
+    "hint": "Tadiavo ireo manam-pahaizana sy loharano azo itokisana.",
+    "invite": {
+      "title": "Kaonty MASO",
+      "button": "Handefa rohy fanasana",
+      "hint": "Hahazo rohy ao amin'ny {{email}} i {{name}} hisafidianana ny teny miafiny sy hidirana ao amin'ny MASO.",
+      "role": "Andraikitra",
+      "language": "Fiteny",
+      "send": "Alefaso ny fanasana",
+      "sending": "Mandefa…",
+      "cancel": "Foano",
+      "noEmail": "Ampio adiresy mailaka ny fiche mba ahafahana manasa ity olona ity ao amin'ny MASO."
+    }
   },
   "rediger": {
     "format": "Endrika",

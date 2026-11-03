@@ -9,6 +9,7 @@ import { useAuthErrorMessage } from '@/features/auth/useAuthError'
 import { isPersistenceAvailable, listOpenCases, type CaseSummary } from '@/features/verifier/verificationApi'
 import { cn } from '@/lib/cn'
 import { useResourcesBase } from './basePath'
+import { InviteFromDirectory } from './InviteFromDirectory'
 import { PackNotice } from './PackNotice'
 import {
   createConfirmation,
@@ -340,6 +341,12 @@ export function PersonPage() {
                 <UserX className="size-4" aria-hidden />
                 {t('ressources.person.withdraw')}
               </Button>
+              {role === 'admin' && (
+                <div className="space-y-1 border-t border-line pt-3">
+                  <p className="text-xs font-semibold text-ink">{t('ressources.invite.title')}</p>
+                  <InviteFromDirectory person={person} />
+                </div>
+              )}
             </Card>
           )}
         </div>
