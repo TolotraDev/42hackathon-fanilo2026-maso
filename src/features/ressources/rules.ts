@@ -40,7 +40,7 @@ export function compare(claimed: number, official: number): Comparison {
 
 /** Lit un nombre saisi à la française ou à l'anglaise : « 3 000 », « 12,5 », « 1.5 ». */
 export function parseNumber(raw: string): number | null {
-  const cleaned = raw.replace(/[\s  ]/g, '').replace(/,(?=\d{1,2}$)/, '.').replace(/,/g, '')
+  const cleaned = raw.replace(/[\s  ]/g, '').replace(/,(?=\d{1,2}$)/, '.').replace(/,/g, '')
   if (!/^-?\d+(\.\d+)?$/.test(cleaned)) return null
   return Number(cleaned)
 }
@@ -61,17 +61,40 @@ export function groupIndicators(indicators: Indicator[]) {
 /** Recherche dans l'annuaire : nom, fonction, organisation, domaines. */
 export function filterPeople(
   people: DirectoryPerson[],
-  filters: { query: string; domain: string; region: string; language: string; organization: string; favoritesOnly: boolean },
+  filters: {
+    query: string
+    shellQuery?: string // Ajout de la propriété optionnelle
+    domain: string
+    region: string
+    language: string
+    organization: string
+    favoritesOnly: boolean
+  },
   favorites: Set<string>,
   matches: (query: string, ...fields: string[]) => boolean,
 ): DirectoryPerson[] {
-  return people.filter(
-    (person) =>
-      matches(filters.query, person.fullName, person.position ?? '', person.organization ?? '', ...person.domains) &&
-      (!filters.domain || person.domains.includes(filters.domain)) &&
-      (!filters.region || person.region === filters.region) &&
-      (!filters.language || person.languages.includes(filters.language as DirectoryPerson['languages'][number])) &&
-      (!filters.organization || person.organization === filters.organization) &&
-      (!filters.favoritesOnly || favorites.has(person.id)),
-  )
+  const { query, shellQuery = '', ...rest } = filters
+
+  return people.filter((person) => {
+    // Champs textuels pour la recherche
+    const haystack = [
+      person.fullName,
+      person.position ?? '',
+      person.organization ?? '',
+      ...person.domains,
+    ]
+
+    // Recherche locale (query) ET recherche globale (shellQuery) en AND
+    if (query && !matches(query, ...haystack)) return false
+    if (shellQuery && !matches(shellQuery, ...haystack)) return false
+
+    // Application des autres filtres
+    if (rest.domain && !person.domains.includes(rest.domain)) return false
+    if (rest.region && person.region !== rest.region) return false
+    if (rest.language && !person.languages.includes(rest.language as DirectoryPerson['languages'][number])) return false
+    if (rest.organization && person.organization !== rest.organization) return false
+    if (rest.favoritesOnly && !favorites.has(person.id)) return false
+
+    return true
+  })
 }
