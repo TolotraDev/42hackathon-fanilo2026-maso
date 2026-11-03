@@ -7,12 +7,14 @@ import { Badge, Card, Input } from '@/components/ui'
 import { useAuth } from '@/features/auth/AuthProvider'
 import { FormMessage } from '@/features/auth/FormMessage'
 import { cn } from '@/lib/cn'
+import { canAccessSection } from '@/lib/permissions'
 import { matchesQuery } from '@/lib/text'
 import { LANGUAGES } from '@/types/domain'
 import { PackNotice } from './PackNotice'
 import { filterPeople, needsRevalidation } from './rules'
 import { canManageResources } from './types'
 import { useDirectory } from './useResources'
+import { useResourcesBase } from './basePath'
 
 const SELECT =
   'min-h-11 w-full rounded-xl border border-line bg-surface px-3 text-sm text-ink transition-colors duration-150 hover:border-cobalt/50 focus:border-cobalt focus:outline-none focus-visible:ring-2 focus-visible:ring-cobalt/20'
@@ -43,6 +45,9 @@ export function RessourcesPage() {
   })
   
   const isGuest = role === 'public'
+  const base = useResourcesBase()
+  // W7 : l'équipe ouvre la bibliothèque des rapports, le public les rapports publiés du portail.
+  const libraryPath = canAccessSection(role, 'dossiers') ? '/dossiers/bibliotheque' : '/portail'
   const manager = canManageResources(role)
   const proposed = (useLocation().state as { proposed?: boolean } | null)?.proposed
 
@@ -84,10 +89,10 @@ export function RessourcesPage() {
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between dashboard-rise">
         <div>
           <h1 className="text-2xl font-display font-bold text-ink">
-            {t('nav.resources', 'Ressources')}
+            {t('nav.ressources')}
           </h1>
           <p className="text-sm text-ink-muted">
-            {t('nav.resourcesHint', 'Trouvez les experts et les sources fiables.')}
+            {t('ressources.hint')}
           </p>
         </div>
       </div>
@@ -103,7 +108,7 @@ export function RessourcesPage() {
         <Card className="overflow-hidden p-2 dashboard-rise" style={{ '--i': 1 } as CSSProperties}>
           <nav className="flex flex-col gap-1">
             <Link
-              to="/ressources/statistiques"
+              to={`${base}/statistiques`}
               className="group flex items-center gap-3 rounded-xl p-3 transition-colors hover:bg-canvas"
             >
               <div className={cn("flex size-10 shrink-0 items-center justify-center rounded-lg", ICON_TONES.cobalt)}>
@@ -138,20 +143,22 @@ export function RessourcesPage() {
               </Link>
             )}
 
-            <div className="flex items-center gap-3 rounded-xl p-3 opacity-60 cursor-not-allowed">
+            <Link
+              to={libraryPath}
+              className="group flex items-center gap-3 rounded-xl p-3 transition-colors hover:bg-canvas"
+            >
               <div className={cn("flex size-10 shrink-0 items-center justify-center rounded-lg", ICON_TONES.warning)}>
                 <Library className="size-5" />
               </div>
               <div className="flex-1">
-                <span className="block text-sm font-semibold text-ink">
+                <span className="block text-sm font-semibold text-ink group-hover:text-warning">
                   {t('ressources.reportLibrary')}
                 </span>
                 <span className="block text-xs text-ink-muted">
                   {t('ressources.reportLibraryHint')}
                 </span>
               </div>
-              <Badge tone="neutral">{t('verifier.soon')}</Badge>
-            </div>
+            </Link>
           </nav>
         </Card>
 
@@ -252,7 +259,10 @@ export function RessourcesPage() {
           {visible.map((person, index) => (
             <Card
               key={person.id}
-              onClick={() => navigate(`/ressources/personnes/${person.id}`)}
+              role="link"
+              tabIndex={0}
+              onClick={() => navigate(`${base}/personnes/${person.id}`)}
+              onKeyDown={(event) => event.key === 'Enter' && navigate(`${base}/personnes/${person.id}`)}
               className={cn(
                 'dashboard-rise group flex cursor-pointer items-center gap-4 p-3 transition-all duration-200 hover:border-cobalt/30 hover:shadow-sm',
                 !person.active && 'opacity-60'

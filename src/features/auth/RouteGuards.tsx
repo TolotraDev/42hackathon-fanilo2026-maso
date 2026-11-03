@@ -13,12 +13,14 @@ export function SplashScreen() {
   )
 }
 
-/** Espace connecté : compte ou mode invité. Sinon, présentation puis connexion. */
+/** Espace connecté : compte ou mode invité. Sinon, espace public à la racine, présentation puis connexion ailleurs. */
 export function RequireAuth({ children }: { children: React.ReactNode }) {
   const { state } = useAuth()
   const location = useLocation()
   if (state.status === 'loading') return <SplashScreen />
   if (state.status === 'signed_out') {
+    // MASO est d'abord une plateforme publique : la racine ouvre l'espace public, pas la connexion.
+    if (location.pathname === '/') return <Navigate to="/portail" replace />
     const target = isOnboarded() ? '/connexion' : '/bienvenue'
     return <Navigate to={target} replace state={state.voluntary ? undefined : { from: location.pathname }} />
   }

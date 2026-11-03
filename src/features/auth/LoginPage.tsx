@@ -1,10 +1,9 @@
-import { Eye, EyeOff, FlaskConical, Globe, LockKeyhole, LogIn, Mail, UserRound } from 'lucide-react'
+import { Eye, EyeOff, FlaskConical, Globe, LockKeyhole, LogIn, Mail } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { Avatar, Badge, Button, Card, Input, SegmentedControl } from '@/components/ui'
 import { DEMO_PASSWORD, DEMO_USERS } from '@/data/demo/users'
-import { homePathFor } from '@/lib/permissions'
 import { useAuth } from './AuthProvider'
 import { AuthLayout } from './AuthLayout'
 import { FormMessage } from './FormMessage'
@@ -12,12 +11,11 @@ import { useAuthErrorMessage } from './useAuthError'
 
 type Method = 'password' | 'magic_link'
 
-/** M1 / W1 — Connexion par mot de passe ou lien magique, mode invité, comptes de démonstration. */
+/** M1 / W1 — Connexion par mot de passe ou lien magique, comptes de démonstration ; le public passe par le portail. */
 export function LoginPage() {
   const { t } = useTranslation()
-  const { state, service, signIn, continueAsGuest } = useAuth()
+  const { state, service, signIn } = useAuth()
   const errorMessage = useAuthErrorMessage()
-  const navigate = useNavigate()
   const isDemo = service.mode === 'demo'
 
   const [method, setMethod] = useState<Method>('password')
@@ -48,7 +46,7 @@ export function LoginPage() {
     if (method === 'password') {
       const trimmedEmail = email.trim()
       if (trimmedEmail.length < 8 || password.length < 8) {
-        setError('Le email et le mot de passe doivent contenir au moins 8 caractères.')
+        setError(t('auth.error.shortCredentials'))
         return
       }
       void run(() => signIn(trimmedEmail, password))
@@ -57,7 +55,7 @@ export function LoginPage() {
 
     const trimmedEmail = email.trim()
     if (trimmedEmail.length < 8) {
-      setError('L’email doit contenir au moins 8 caractères.')
+      setError(t('auth.error.shortEmail'))
       return
     }
 
@@ -110,7 +108,7 @@ export function LoginPage() {
                   if (error) setError(null)
                 }}
                 className="border-2 border-cobalt/70 bg-white pl-10 pr-3 text-ink placeholder:text-ink-muted focus:border-cobalt focus:ring-4 focus:ring-cobalt/15 dark:border-cobalt/80 dark:bg-white/5 dark:text-white dark:placeholder:text-white/45"
-                placeholder="Adresse e-mail"
+                placeholder={t('auth.emailPlaceholder')}
               />
             </div>
           </div>
@@ -144,7 +142,7 @@ export function LoginPage() {
                 />
                 <button
                   type="button"
-                  aria-label={showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'}
+                  aria-label={showPassword ? t('auth.hidePassword') : t('auth.showPassword')}
                   onClick={() => setShowPassword((value) => !value)}
                   className="absolute inset-y-0 right-3 flex items-center text-ink-muted transition hover:text-ink dark:text-white/60 dark:hover:text-white"
                 >
@@ -169,25 +167,13 @@ export function LoginPage() {
           <span className="h-px flex-1 bg-line dark:bg-white/15" />
         </div>
 
-        <div className="space-y-1.5">
-          <Button
-            variant="secondary"
-            block
-            className="border-line bg-white text-ink hover:bg-surface/90 dark:border-white/10 dark:bg-white dark:text-[#0F2C46] dark:hover:bg-[#F1F5F9]"
-            onClick={() => {
-              continueAsGuest()
-              navigate(homePathFor('public'), { replace: true })
-            }}
-          >
-            <UserRound className="size-4" aria-hidden />
-            {t('auth.guest')}
-          </Button>
-          <p className="text-center text-xs text-ink-muted dark:text-white/70">{t('auth.guestHint')}</p>
-          <Link to="/portail" className="flex min-h-11 items-center justify-center gap-2 text-sm font-semibold text-ink hover:underline dark:text-white">
-            <Globe className="size-4" aria-hidden />
-            {t('auth.portal')}
-          </Link>
-        </div>
+        <Link
+          to="/portail"
+          className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-line bg-white px-4 text-sm font-semibold text-ink transition hover:bg-surface/90 dark:border-white/10 dark:bg-white dark:text-[#0F2C46] dark:hover:bg-[#F1F5F9]"
+        >
+          <Globe className="size-4" aria-hidden />
+          {t('auth.portal')}
+        </Link>
       </Card>
 
       {isDemo && (

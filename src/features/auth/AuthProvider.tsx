@@ -108,6 +108,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
 
+/**
+ * Pages de l'espace public : tout visiteur, connecté ou non, voit la vue publique
+ * (personnes à visibilité publique, sans coordonnées ; aucune action de gestion).
+ */
+export function PublicVisitor({ children }: { children: React.ReactNode }) {
+  const context = useAuth()
+  const value = useMemo<AuthContextValue>(() => ({ ...context, role: 'public', profile: null }), [context])
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+}
+
 export function useAuth(): AuthContextValue {
   const context = useContext(AuthContext)
   if (!context) throw new Error('useAuth doit être utilisé dans <AuthProvider>')

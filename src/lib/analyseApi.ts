@@ -15,14 +15,31 @@ export function stateForServiceError(error: unknown): StepState {
   return error instanceof ServiceError && error.reason === 'offline' ? 'waiting_network' : 'unavailable'
 }
 
+// Service injoignable : on le mémorise un moment pour ne pas renvoyer chaque fichier vers une adresse fermée
+// (une erreur réseau par analyse dans la console). Un nouveau contrôle est fait après le délai ou au retour du réseau.
+const RETRY_AFTER_MS = 30000
+let unreachableUntil = 0
+let pendingHealth: Promise<HealthResult> | null = null
+
+if (typeof window !== 'undefined') window.addEventListener('online', () => (unreachableUntil = 0))
+
+interface HealthResult {
+  status: string
+  capabilities: Record<string, boolean>
+}
+
 async function call<T>(path: string, init: RequestInit = {}, timeoutMs = 30000): Promise<T> {
   if (!BASE) throw new ServiceError('not_configured')
   if (typeof navigator !== 'undefined' && !navigator.onLine) throw new ServiceError('offline')
+  if (Date.now() < unreachableUntil) throw new ServiceError('unreachable')
   let response: Response
   try {
     response = await fetch(`${BASE}${path}`, { ...init, signal: AbortSignal.timeout(timeoutMs) })
-  } catch {
-    throw new ServiceError(typeof navigator !== 'undefined' && !navigator.onLine ? 'offline' : 'unreachable')
+  } catch (failure) {
+    if (typeof navigator !== 'undefined' && !navigator.onLine) throw new ServiceError('offline')
+    // Délai dépassé sur une longue analyse : le service répond, il est seulement lent.
+    if (!(failure instanceof DOMException && failure.name === 'TimeoutError')) unreachableUntil = Date.now() + RETRY_AFTER_MS
+    throw new ServiceError('unreachable')
   }
   if (!response.ok) {
     const body = (await response.json().catch(() => null)) as { detail?: string } | null
@@ -93,7 +110,11 @@ export interface FactCheckClaim {
 
 export const analyseApi = {
   configured: BASE !== null,
-  health: () => call<{ status: string; capabilities: Record<string, boolean> }>('/health', {}, 5000),
+  /** Un seul contrôle à la fois, partagé entre les écrans (et le double montage du mode strict de React). */
+  health: () =>
+    (pendingHealth ??= call<HealthResult>('/health', {}, 5000).finally(() => {
+      pendingHealth = null
+    })),
   provenance: (file: Blob) => call<ProvenanceResult>('/image/provenance', upload(file)),
   aiClue: (file: Blob) => call<AiClueResult>('/image/ai-clue', upload(file), 45000),
   video: (file: Blob) => call<VideoResult>('/video/analyse', upload(file), 120000),
