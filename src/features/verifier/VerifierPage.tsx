@@ -1,10 +1,12 @@
-import { FileText, Image, Link2, LoaderCircle, Search, Server, Video, ArrowRight, type LucideIcon } from 'lucide-react'
+import { ClipboardPaste, FileText, Image, Link2, LoaderCircle, Search, Server, Video, ArrowRight, type LucideIcon } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
-import { Badge, Button, Card, CaseStatusBadge, Input, SectionTitle, VerdictBadge } from '@/components/ui'
+import { Badge, Button, Card, CaseStatusBadge, Input, SectionTitle, Textarea, VerdictBadge } from '@/components/ui'
+import { FormMessage } from '@/features/auth/FormMessage'
 import { useOnlineStatus } from '@/hooks/useOnlineStatus'
 import { analyseApi, type FactCheckClaim } from '@/lib/analyseApi'
+import { classifyInput } from '@/lib/analysis/synthesis'
 import { VERDICTS, type Language } from '@/types/domain'
 import { setPendingMedia } from './pendingMedia'
 import { isPersistenceAvailable, searchLibrary, type CaseSummary } from './verificationApi'
@@ -30,6 +32,47 @@ export function VerifierPage() {
   const [searching, setSearching] = useState(false)
   const [results, setResults] = useState<SearchResults | null>(null)
   const [health, setHealth] = useState<Health>({ state: 'checking' })
+  const [pasted, setPasted] = useState('')
+  const [pasteBusy, setPasteBusy] = useState(false)
+  const [pasteError, setPasteError] = useState<string | null>(null)
+
+  /** Fichier collé (Ctrl+V d'une capture) ou déposé : image ou vidéo, analysé directement. */
+  const openFile = (file: File | undefined) => {
+    if (!file) return false
+    if (file.type.startsWith('image/')) {
+      setPendingMedia({ file })
+      navigate('/verifier/image')
+      return true
+    }
+    if (file.type.startsWith('video/')) {
+      setPendingMedia({ file })
+      navigate('/verifier/video')
+      return true
+    }
+    setPasteError(t('verifier.paste.unsupported'))
+    return false
+  }
+
+  /** Contenu collé : un lien (page, publication), l'adresse d'une image ou d'une vidéo, ou un texte reçu. */
+  const analysePasted = async (event?: React.FormEvent) => {
+    event?.preventDefault()
+    setPasteError(null)
+    const input = classifyInput(pasted)
+    if (input.kind === 'empty') return
+    if (input.kind === 'text') return navigate(`/verifier/texte?texte=${encodeURIComponent(input.text.slice(0, 5000))}`)
+    if (input.kind === 'link') return navigate(`/verifier/lien?url=${encodeURIComponent(input.url)}`)
+    const kind = input.kind === 'image_url' ? 'image' : 'video'
+    setPasteBusy(true)
+    try {
+      const file = await analyseApi.fetchMedia(input.url, kind)
+      setPendingMedia({ file, sourceUrl: input.url })
+      navigate(kind === 'image' ? '/verifier/image' : '/verifier/video')
+    } catch {
+      setPasteError(t('verifier.paste.fetchFailed'))
+    } finally {
+      setPasteBusy(false)
+    }
+  }
 
   useEffect(() => {
     analyseApi
@@ -73,6 +116,40 @@ export function VerifierPage() {
     <div className="grid grid-cols-1 gap-4 lg:grid-cols-[1fr_360px] lg:items-start">
       {/* Colonne principale */}
       <div className="min-w-0 space-y-4">
+        {/* Coller ou déposer : lien, image, vidéo ou texte reçu (Facebook, WhatsApp…) */}
+        <Card
+          className="p-4"
+          onDragOver={(event) => event.preventDefault()}
+          onDrop={(event) => {
+            event.preventDefault()
+            openFile(event.dataTransfer.files[0])
+          }}
+        >
+          <form onSubmit={(event) => void analysePasted(event)} className="space-y-3">
+            <label htmlFor="paste-input" className="flex items-center gap-2 font-display text-base font-bold text-navy dark:text-ink">
+              <ClipboardPaste className="size-5 text-cobalt" aria-hidden />
+              {t('verifier.paste.title')}
+            </label>
+            <p className="text-xs text-ink-muted">{t('verifier.paste.hint')}</p>
+            <Textarea
+              id="paste-input"
+              rows={3}
+              value={pasted}
+              onChange={(event) => setPasted(event.target.value)}
+              onPaste={(event) => {
+                const file = event.clipboardData.files[0]
+                if (file && openFile(file)) event.preventDefault()
+              }}
+              placeholder={t('verifier.paste.placeholder')}
+            />
+            {pasteError && <FormMessage tone="error">{pasteError}</FormMessage>}
+            <Button type="submit" block disabled={!pasted.trim() || pasteBusy}>
+              {pasteBusy ? <LoaderCircle className="size-4 animate-spin" aria-hidden /> : <Search className="size-4" aria-hidden />}
+              {pasteBusy ? t('verifier.paste.fetching') : t('verifier.paste.analyse')}
+            </Button>
+          </form>
+        </Card>
+
         {/* Recherche */}
         <Card className="dashboard-rise overflow-hidden" style={{ ['--i' as string]: 0 }}>
           <div className="border-b border-line px-4 py-3">

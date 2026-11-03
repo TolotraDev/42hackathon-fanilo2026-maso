@@ -4,7 +4,9 @@ import os
 from dataclasses import dataclass, field
 from pathlib import Path
 
-PROJECT_ENV = Path(__file__).resolve().parents[3] / ".env"
+# .env à la racine du projet en développement ; absent dans un conteneur (variables fournies par l'hébergeur).
+_PARENTS = Path(__file__).resolve().parents
+PROJECT_ENV = _PARENTS[3] / ".env" if len(_PARENTS) > 3 else Path("/nonexistent/.env")
 
 
 def load_env_file(path: Path) -> None:

@@ -12,5 +12,6 @@ COPY app ./app
 RUN useradd --create-home maso
 USER maso
 
+# Le port est fourni par l'hébergeur (Render, Railway…) ; l'adresse IP réelle du visiteur vient du proxy (limite de débit).
 EXPOSE 8000
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000} --proxy-headers --forwarded-allow-ips='*'"]

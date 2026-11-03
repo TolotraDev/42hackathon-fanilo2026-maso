@@ -1,16 +1,19 @@
-import { Archive, ExternalLink, FileSearch, Search } from 'lucide-react'
+import { Archive, ExternalLink, FileSearch, FileText, ImageUp, Search } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Link, useSearchParams } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { Badge, Button, Card, CaseStatusBadge, Input } from '@/components/ui'
 import { FormMessage } from '@/features/auth/FormMessage'
-import { analyseApi, ServiceError, stateForServiceError, type FactCheckClaim, type LinkResult } from '@/lib/analyseApi'
+import { analyseApi, ServiceError, stateForServiceError, type FactCheckClaim, type LinkResult, type PageResult } from '@/lib/analyseApi'
+import { linkFindings } from '@/lib/analysis/synthesis'
 import { domainOf, normalizeUrl } from '@/lib/analysis/url'
 import type { StepResult } from '@/lib/analysis/types'
 import type { ClueLevel } from '@/types/domain'
 import { AttachToCase } from './AttachToCase'
 import { BackToHub } from './ImageAnalysisPage'
+import { setPendingMedia } from './pendingMedia'
 import { FactList, StepCard } from './StepCard'
+import { SynthesisCard } from './SynthesisCard'
 import { findCasesWithUrl, findSourceByDomain, isPersistenceAvailable, type CaseSummary, type SourceRecord } from './verificationApi'
 
 /** Un domaine très récent est un signal classique de site opportuniste (section 7, M5). */
@@ -27,6 +30,8 @@ export function qualifySourceScore(score: number | null): ClueLevel | undefined 
   if (score < 6.5) return 'weak'
   return 'none'
 }
+
+const NETWORK_NAMES: Record<string, string> = { facebook: 'Facebook', instagram: 'Instagram', tiktok: 'TikTok', x: 'X (Twitter)', youtube: 'YouTube', whatsapp: 'WhatsApp' }
 
 /** Motifs de refus d'une adresse par le service (protection des réseaux internes). */
 const REJECTIONS = ['private_address', 'unsupported_port', 'unsupported_scheme', 'invalid_host', 'host_not_found', 'too_many_redirects'] as const
@@ -50,8 +55,16 @@ export function LinkAnalysisPage() {
   const [existing, setExisting] = useState<StepResult<Existing>>({ state: 'pending' })
   const [archive, setArchive] = useState<{ busy: boolean; url?: string; error?: boolean }>({ busy: false })
   const [invalid, setInvalid] = useState(false)
+  const [page, setPage] = useState<StepResult<PageResult>>({ state: 'pending' })
+  const [mediaBusy, setMediaBusy] = useState(false)
+  const [mediaError, setMediaError] = useState(false)
+  const navigate = useNavigate()
 
-  const formatDate = (iso: string) => new Intl.DateTimeFormat(i18n.resolvedLanguage, { dateStyle: 'medium' }).format(new Date(iso))
+  // Date lue sur une page web : format libre, affichée telle quelle si elle n'est pas reconnue.
+  const formatDate = (iso: string) => {
+    const date = new Date(iso)
+    return Number.isNaN(date.getTime()) ? iso : new Intl.DateTimeFormat(i18n.resolvedLanguage, { dateStyle: 'medium' }).format(date)
+  }
   const waybackDate = (stamp?: string) =>
     stamp ? formatDate(`${stamp.slice(0, 4)}-${stamp.slice(4, 6)}-${stamp.slice(6, 8)}T00:00:00Z`) : ''
 
@@ -63,6 +76,8 @@ export function LinkAnalysisPage() {
     setServer({ state: 'running' })
     setSource({ state: 'running' })
     setExisting({ state: 'running' })
+    setPage({ state: 'running' })
+    setMediaError(false)
 
     const serverTask = analyseApi
       .link(target)
@@ -88,12 +103,30 @@ export function LinkAnalysisPage() {
       }
     })()
 
+    // Lecture de la page (titre, image, date) : sert aussi à chercher les vérifications par le titre.
+    const pageTask = analyseApi
+      .page(target)
+      .then((data) => {
+        setPage({ state: 'done', data, tool: data.tool })
+        return data
+      })
+      .catch((error: unknown) => {
+        setPage({ state: stateForServiceError(error) })
+        return null
+      })
+
     const existingTask = (async () => {
       if (!navigator.onLine) return setExisting({ state: 'waiting_network' })
-      const [cases, factcheck] = await Promise.all([
+      const noFactcheck = { available: false, claims: [] as FactCheckClaim[] }
+      const [cases, byUrl, pageData] = await Promise.all([
         isPersistenceAvailable() ? findCasesWithUrl(target).catch(() => []) : Promise.resolve([]),
-        analyseApi.factcheck(target).catch(() => ({ available: false, claims: [] as FactCheckClaim[] })),
+        analyseApi.factcheck(target).catch(() => noFactcheck),
+        pageTask,
       ])
+      const title = pageData && !pageData.blocked ? pageData.title?.trim() : null
+      const byTitle = title && title.length >= 8 ? await analyseApi.factcheck(title.slice(0, 200), i18n.resolvedLanguage).catch(() => noFactcheck) : noFactcheck
+      const claims = [...byUrl.claims, ...byTitle.claims].filter((claim, index, all) => all.findIndex((other) => other.url === claim.url) === index)
+      const factcheck = { available: byUrl.available || byTitle.available, claims }
       setExisting({
         state: 'done',
         clue: cases.length || factcheck.claims.length ? 'to_examine' : 'none',
@@ -102,8 +135,23 @@ export function LinkAnalysisPage() {
       })
     })()
 
-    await Promise.all([serverTask, sourceTask, existingTask])
-  }, [])
+    await Promise.all([serverTask, sourceTask, existingTask, pageTask])
+  }, [i18n.resolvedLanguage])
+
+  /** Analyse l'image de la page comme un fichier envoyé, avec son adresse publique (recherche inversée directe). */
+  const analysePageImage = async (imageUrl: string) => {
+    setMediaBusy(true)
+    setMediaError(false)
+    try {
+      const file = await analyseApi.fetchMedia(imageUrl, 'image')
+      setPendingMedia({ file, sourceUrl: imageUrl, origin: url })
+      navigate('/verifier/image')
+    } catch {
+      setMediaError(true)
+    } finally {
+      setMediaBusy(false)
+    }
+  }
 
   useEffect(() => {
     if (url) void run(url)
@@ -166,10 +214,88 @@ export function LinkAnalysisPage() {
 
       {url && (
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-start">
+          <div className="min-w-0 space-y-3">
+          <SynthesisCard
+            running={[server.state, source.state, existing.state, page.state].some((state) => state === 'running' || state === 'pending')}
+            claims={existing.data?.claims}
+            factcheckAvailable={existing.data ? existing.data.factcheckAvailable : true}
+            unreadable={Boolean(page.data?.blocked)}
+            findings={linkFindings({
+              domain: domainInfo?.domain,
+              ageDays: domainInfo?.available ? domainInfo.age_days : null,
+              https: https ? https.https : null,
+              source: knownSource ? { name: knownSource.name, score: knownSource.score } : null,
+              sourceChecked: source.state === 'done' && source.data?.reason !== 'no_database',
+              page: page.data
+                ? { title: page.data.title, site: page.data.site_name, publishedAt: page.data.published_at && formatDate(page.data.published_at), social: page.data.social, blocked: page.data.blocked }
+                : null,
+              archived: latest?.archived ? { timestamp: waybackDate(latest.timestamp) } : null,
+              cases: existing.data?.cases.map((item) => ({ title: item.title })),
+            })}
+          />
           <ol className="space-y-3">
             <li>
               <StepCard
                 index={1}
+                title={t('verifier.link.step.page')}
+                state={page.state}
+                tool={page.tool}
+                limits={t('verifier.limits.page')}
+                summary={
+                  page.state === 'waiting_network'
+                    ? t('verifier.summary.waitingNetwork')
+                    : page.state === 'unavailable'
+                      ? t('verifier.summary.unavailable')
+                      : page.data &&
+                        (page.data.blocked
+                          ? t('verifier.link.pageBlocked', { network: NETWORK_NAMES[page.data.social ?? ''] ?? page.data.social })
+                          : page.data.title
+                            ? page.data.title
+                            : t('verifier.link.pageEmpty'))
+                }
+              >
+                {page.data && !page.data.blocked && (
+                  <div className="space-y-3">
+                    {page.data.image && (
+                      <img src={page.data.image} alt={t('verifier.link.pageImage')} className="max-h-56 w-full rounded-xl bg-canvas object-contain" loading="lazy" referrerPolicy="no-referrer" />
+                    )}
+                    <FactList
+                      items={[
+                        [t('verifier.link.pageTitle'), page.data.title],
+                        [t('verifier.link.pageDescription'), page.data.description],
+                        [t('verifier.link.pageSite'), page.data.site_name],
+                        [t('verifier.link.pagePublished'), page.data.published_at && formatDate(page.data.published_at)],
+                        [t('verifier.link.pageAuthor'), page.data.author],
+                      ]}
+                    />
+                  </div>
+                )}
+                {page.data?.blocked && <p className="whitespace-pre-line text-xs text-ink">{t('verifier.link.socialHelp')}</p>}
+              </StepCard>
+              {page.data && !page.data.blocked && (page.data.image || page.data.title || page.data.description) && (
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {page.data.image && (
+                    <Button className="min-h-10 text-xs" disabled={mediaBusy} onClick={() => void analysePageImage(page.data!.image!)}>
+                      <ImageUp className="size-4" aria-hidden />
+                      {mediaBusy ? t('verifier.link.fetchingImage') : t('verifier.link.analyseImage')}
+                    </Button>
+                  )}
+                  {(page.data.title || page.data.description) && (
+                    <Link
+                      to={`/verifier/texte?texte=${encodeURIComponent([page.data.title, page.data.description].filter(Boolean).join('\n'))}`}
+                      className="inline-flex min-h-10 items-center gap-1.5 rounded-xl border border-line px-3 text-xs font-semibold text-cobalt hover:bg-canvas"
+                    >
+                      <FileText className="size-4" aria-hidden />
+                      {t('verifier.link.analyseText')}
+                    </Link>
+                  )}
+                </div>
+              )}
+              {mediaError && <FormMessage tone="error">{t('verifier.link.imageFailed')}</FormMessage>}
+            </li>
+            <li>
+              <StepCard
+                index={2}
                 title={t('verifier.link.step.https')}
                 state={server.state}
                 clue={https ? (https.https ? 'none' : 'weak') : undefined}
@@ -179,7 +305,7 @@ export function LinkAnalysisPage() {
             </li>
             <li>
               <StepCard
-                index={2}
+                index={3}
                 title={t('verifier.link.step.domain')}
                 state={server.state}
                 clue={qualifyDomainAge(domainInfo?.age_days)}
@@ -208,7 +334,7 @@ export function LinkAnalysisPage() {
             </li>
             <li>
               <StepCard
-                index={3}
+                index={4}
                 title={t('verifier.link.step.hosting')}
                 state={server.state}
                 tool={link?.tools.hosting}
@@ -228,7 +354,7 @@ export function LinkAnalysisPage() {
             </li>
             <li>
               <StepCard
-                index={4}
+                index={5}
                 title={t('verifier.link.step.directory')}
                 state={source.state}
                 clue={source.clue}
@@ -248,7 +374,7 @@ export function LinkAnalysisPage() {
             </li>
             <li>
               <StepCard
-                index={5}
+                index={6}
                 title={t('verifier.link.step.existing')}
                 state={existing.state}
                 clue={existing.clue}
@@ -284,7 +410,7 @@ export function LinkAnalysisPage() {
             </li>
             <li>
               <StepCard
-                index={6}
+                index={7}
                 title={t('verifier.link.step.archive')}
                 state={server.state}
                 tool={link?.tools.archive}
@@ -312,6 +438,7 @@ export function LinkAnalysisPage() {
               </StepCard>
             </li>
           </ol>
+          </div>
 
           <div className="space-y-4">
             {isPersistenceAvailable() && source.state === 'done' && (

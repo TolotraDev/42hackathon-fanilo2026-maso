@@ -6,11 +6,13 @@ import { Badge, Card } from '@/components/ui'
 import { analyseApi, stateForServiceError, type VideoResult } from '@/lib/analyseApi'
 import { MAX_BYTES, sniffMime } from '@/lib/analysis/fileType'
 import { sha256Hex } from '@/lib/analysis/hash'
+import { videoFindings } from '@/lib/analysis/synthesis'
 import type { StepResult } from '@/lib/analysis/types'
 import { AttachToCase } from './AttachToCase'
 import { FileDrop } from './FileDrop'
 import { BackToHub } from './ImageAnalysisPage'
 import { setPendingMedia, takePendingMedia } from './pendingMedia'
+import { SynthesisCard } from './SynthesisCard'
 import { FactList, StepCard } from './StepCard'
 
 interface VideoReception {
@@ -91,7 +93,17 @@ export function VideoAnalysisPage() {
           </Card>
         </div>
 
-        <ol className="space-y-3 lg:col-start-2 lg:row-span-2 lg:row-start-1">
+        <div className="min-w-0 space-y-3 lg:col-start-2 lg:row-span-2 lg:row-start-1">
+        {server.data && (
+          <SynthesisCard
+            findings={videoFindings({
+              keyframes: server.data.keyframes.length,
+              sceneChanges: server.data.keyframes.filter((frame) => frame.reason === 'scene_change').length,
+              durationS: server.data.info.duration_s,
+            })}
+          />
+        )}
+        <ol className="space-y-3">
           <li>
             <StepCard
               index={1}
@@ -177,6 +189,7 @@ export function VideoAnalysisPage() {
             </>
           )}
         </ol>
+        </div>
 
         <div className="space-y-4 lg:col-start-1 lg:row-start-2">
           {reception.state === 'done' && !rejected && (

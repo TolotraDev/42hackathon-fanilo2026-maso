@@ -31,6 +31,9 @@ Avancement par module : voir [docs/MODULES.md](docs/MODULES.md#avancement).
   - Navigation adaptée au rôle ; écran Administration : invitation, changement de rôle, suspension, statistiques d'usage
   - **Mode démonstration** sans backend : 4 comptes fictifs (un par rôle) quand Supabase n'est pas configuré
 - [x] MOD-03 — Vérifier : hub, analyse image et analyse de lien
+  - **Collez ou déposez un contenu** : lien (article, publication Facebook), adresse d'une image ou d'une vidéo, message reçu, ou image copiée (Ctrl+V) ; MASO choisit l'analyse adaptée
+  - **Ce que disent les indices** en tête de chaque analyse : niveau de vigilance, vérifications déjà publiées par les médias (note, média, lien), chaque indice avec sa source ; jamais de verdict automatique
+  - Lien : lecture de la page (titre, image, date de publication), **analyse de l'image de la page** en un clic ; publication de réseau social non lisible signalée avec la marche à suivre
   - **Analyse d'image** en étapes affichées en direct : empreinte SHA-256 et perceptuelle, « déjà vue ? » dans la base (retrouve une photo recadrée ou recompressée), métadonnées (appareil, date, GPS sur carte), provenance C2PA, analyse de recompression (ELA) avec carte, recherche inversée (5 moteurs), indice IA, checklist visuelle
   - Chaque résultat est un **indice qualifié** (aucun indice / faible / à examiner) avec ses limites et l'outil utilisé — jamais un verdict
   - **Vidéo** : informations techniques et images clés (changements de plan), chacune analysable comme une image
@@ -182,6 +185,7 @@ IA dans l'application : assistant éditorial via Groq, Gemini ou Ollama (au choi
 - [Tester le MOD-05 pas à pas](docs/GUIDE_TEST_MOD05.md)
 - [Tester le MOD-06 pas à pas](docs/GUIDE_TEST_MOD06.md)
 - [Tester les MOD-07 et MOD-08 pas à pas](docs/GUIDE_TEST_MOD07_08.md)
+- [Mettre MASO en ligne (Render, Vercel, téléphone)](docs/DEPLOIEMENT.md) · vérifier sa configuration : `npm run check:config`
 - [Conventions](docs/CONVENTIONS.md)
 - [Charte graphique](docs/DESIGN.md)
 

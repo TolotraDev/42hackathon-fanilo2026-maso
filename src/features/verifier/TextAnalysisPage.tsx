@@ -1,16 +1,18 @@
 import { ArrowLeft, BarChart3, FileText, Quote, Search, TriangleAlert } from 'lucide-react'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { Badge, Button, Card, SectionTitle, Textarea, VerdictBadge } from '@/components/ui'
 import { listIndicators } from '@/features/ressources/resourcesApi'
 import type { Indicator } from '@/features/ressources/types'
 import { useOnlineStatus } from '@/hooks/useOnlineStatus'
 import { analyseApi, type FactCheckClaim } from '@/lib/analyseApi'
+import { textFindings } from '@/lib/analysis/synthesis'
 import { analyzeText, type TextAnalysis } from '@/lib/analysis/textClaims'
 import { matchesQuery } from '@/lib/text'
 import type { Language, Verdict } from '@/types/domain'
 import { AttachToCase } from './AttachToCase'
+import { SynthesisCard } from './SynthesisCard'
 import { isPersistenceAvailable, searchLibrary } from './verificationApi'
 
 const MAX_TEXT = 5000
@@ -47,7 +49,11 @@ function matchFigures(analysis: TextAnalysis, indicators: Indicator[]): FigureMa
 export function TextAnalysisPage() {
   const { t, i18n } = useTranslation()
   const online = useOnlineStatus()
-  const [text, setText] = useState('')
+  const [params] = useSearchParams()
+  // Texte transmis par « Vérifier » (contenu collé) ou par l'analyse d'un lien : analysé dès l'ouverture.
+  const [text, setText] = useState(() => params.get('texte') ?? '')
+  const autoRun = useRef(Boolean(params.get('texte')))
+  const [factcheckOn, setFactcheckOn] = useState(true)
   const [analysis, setAnalysis] = useState<TextAnalysis | null>(null)
   const [indicators, setIndicators] = useState<Indicator[]>([])
   const [existing, setExisting] = useState<{ library: Array<{ id: string; title: string; verdict: Verdict | null }>; claims: FactCheckClaim[] } | null>(null)
@@ -62,16 +68,26 @@ export function TextAnalysisPage() {
     const result = analyzeText(text.slice(0, MAX_TEXT))
     setAnalysis(result)
     setExisting(null)
-    // Vérifications existantes : bibliothèque MASO et Google Fact Check, sur la première affirmation.
+    // Vérifications existantes : bibliothèque MASO et Google Fact Check, sur les deux premières affirmations.
     const query = (result.claims[0]?.text ?? text).slice(0, 200)
     if (!online || query.trim().length < 3) return
     const language = (i18n.resolvedLanguage ?? 'fr') as Language
-    const [library, factcheck] = await Promise.all([
+    const queries = [...new Set([query, ...result.claims.slice(1, 2).map((claim) => claim.text.slice(0, 200))])]
+    const noFactcheck = { available: false, claims: [] as FactCheckClaim[] }
+    const [library, ...factchecks] = await Promise.all([
       isPersistenceAvailable() ? searchLibrary(result.entities.places[0] ?? query.split(' ').slice(0, 4).join(' ')).catch(() => []) : Promise.resolve([]),
-      analyseApi.factcheck(query, language).catch(() => ({ available: false, claims: [] as FactCheckClaim[] })),
+      ...queries.map((item) => analyseApi.factcheck(item, language).catch(() => noFactcheck)),
     ])
-    setExisting({ library, claims: factcheck.claims })
+    const claims = factchecks.flatMap((item) => item.claims).filter((claim, index, all) => all.findIndex((other) => other.url === claim.url) === index)
+    setFactcheckOn(factchecks.some((item) => item.available))
+    setExisting({ library, claims })
   }
+
+  useEffect(() => {
+    if (!autoRun.current || text.trim().length < 10) return
+    autoRun.current = false
+    void run()
+  }, [])
 
   return (
     <div className="mx-auto max-w-4xl space-y-4">
@@ -99,6 +115,23 @@ export function TextAnalysisPage() {
 
       {analysis && (
         <>
+          <SynthesisCard
+            running={online && !existing}
+            claims={existing?.claims}
+            factcheckAvailable={factcheckOn}
+            findings={textFindings({
+              signals: analysis.signals.map((signal) => signal.id),
+              claims: analysis.claims.length,
+              figures: figures.map((figure) => ({
+                raw: figure.raw,
+                percent: figure.percent,
+                indicator: figure.indicator.name,
+                official: figure.indicator.value,
+                year: figure.indicator.year,
+                source: figure.indicator.source,
+              })),
+            })}
+          />
           <p className="flex items-start gap-2 rounded-xl bg-cobalt/10 px-3 py-2 text-xs text-ink">
             <TriangleAlert className="mt-0.5 size-4 shrink-0 text-cobalt" aria-hidden />
             {t('textAnalysis.noVerdict')}
