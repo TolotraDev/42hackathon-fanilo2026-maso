@@ -24,7 +24,7 @@ Avant de commencer, poussez la dernière version sur GitHub. Vercel et Render li
 |---|---|---|
 | **Assistant IA** (rédaction) | https://console.groq.com → *API Keys* → *Create API Key* | `LLM_API_KEY` (avec `LLM_PROVIDER=groq`) |
 | **Vérifications déjà publiées** par les médias (AFP Factuel, Africa Check…) | https://console.cloud.google.com → créer un projet → *API et services* → *Bibliothèque* → activer **Fact Check Tools API** → *Identifiants* → *Créer des identifiants* → *Clé API* | `GOOGLE_FACTCHECK_API_KEY` |
-| **Détecteur d'images générées par IA** | https://huggingface.co → *Settings* → *Access Tokens* → *New token*, type **Read** | `HF_TOKEN` |
+| **Détecteur d'images générées par IA** | https://huggingface.co → *Settings* → *Access Tokens* → *Create new token* → onglet **Fine-grained** → cocher **Make calls to Inference Providers** → *Create token* (un jeton de type « Read » ne suffit pas) | `HF_TOKEN` |
 
 Pour tester en local d'abord :
 1. Ajoutez ces 4 lignes dans le fichier `.env` à la racine (`LLM_PROVIDER=groq` remplace `ollama`).

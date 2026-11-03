@@ -78,11 +78,16 @@ if (!factcheckKey) {
 
 const hfToken = value('HF_TOKEN')
 if (!hfToken) {
-  off('Détecteur d’images IA (Hugging Face) non configuré', 'huggingface.co → Settings → Access Tokens → New token (type « Read ») → HF_TOKEN')
+  off('Détecteur d’images IA (Hugging Face) non configuré', 'huggingface.co → Settings → Access Tokens → Create new token → « Fine-grained » → cocher « Make calls to Inference Providers » → HF_TOKEN')
 } else {
-  const test = await probe('https://huggingface.co/api/whoami-v2', { headers: { Authorization: `Bearer ${hfToken}` } })
-  if ((valid.hf = test.status === 200)) ok('Hugging Face : jeton valide')
-  else ko(`Hugging Face : jeton refusé (code ${test.status})`, 'créer un nouveau jeton de type « Read »')
+  // Un jeton valide ne suffit pas : il doit avoir la permission d'appeler les modèles (Inference Providers).
+  const pixel = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGP4z8AAAAMBAQDJ/pLvAAAAAElFTkSuQmCC', 'base64')
+  const model = value('AI_IMAGE_MODEL') || 'umm-maybe/AI-image-detector'
+  const test = await probe(`https://router.huggingface.co/hf-inference/models/${model}`, { method: 'POST', headers: { Authorization: `Bearer ${hfToken}`, 'Content-Type': 'image/png' }, body: pixel })
+  if ((valid.hf = test.status === 200)) ok('Hugging Face : jeton valide, détecteur d’images IA joignable', model)
+  else if (test.status === 401 || test.status === 403)
+    ko(`Hugging Face : jeton sans la permission d’appeler les modèles (code ${test.status})`, 'huggingface.co → Settings → Access Tokens → Create new token → onglet « Fine-grained » → cocher « Make calls to Inference Providers » → copier dans HF_TOKEN')
+  else ko(`Hugging Face : détecteur injoignable (code ${test.status})`, 'réessayer dans quelques minutes (le modèle démarre parfois lentement)')
 }
 
 const provider = value('LLM_PROVIDER') || (value('GROQ_API_KEY') ? 'groq' : value('GEMINI_API_KEY') ? 'gemini' : '')
@@ -92,9 +97,15 @@ if (!provider) {
 } else if (provider === 'groq') {
   if (!llmKey) ko('Groq choisi mais LLM_API_KEY vide', 'console.groq.com → API Keys → Create API Key')
   else {
+    const model = value('GROQ_MODEL') || 'openai/gpt-oss-120b'
     const test = await probe('https://api.groq.com/openai/v1/models', { headers: { Authorization: `Bearer ${llmKey}` } })
-    if ((valid.llm = test.status === 200)) ok('Groq : clé valide', value('GROQ_MODEL') || 'llama-3.3-70b-versatile')
-    else ko(`Groq : clé refusée (code ${test.status})`, 'recréer une clé sur console.groq.com')
+    if (test.status !== 200) ko(`Groq : clé refusée (code ${test.status})`, 'recréer une clé sur console.groq.com')
+    else {
+      // Groq retire régulièrement des modèles : on vérifie que celui choisi existe encore.
+      const models = JSON.parse(test.body).data.map((item) => item.id)
+      if ((valid.llm = models.includes(model))) ok('Groq : clé valide', model)
+      else ko(`Groq : le modèle « ${model} » n’existe plus`, `mettre GROQ_MODEL=openai/gpt-oss-120b (disponibles : ${models.filter((id) => !/whisper|guard|orpheus/.test(id)).join(', ')})`)
+    }
   }
 } else if (provider === 'gemini') {
   if (!llmKey) ko('Gemini choisi mais LLM_API_KEY vide', 'aistudio.google.com → Get API key')

@@ -40,6 +40,12 @@ def test_lien_interne_refuse():
     assert response.status_code == 422
 
 
-def test_factcheck_sans_cle():
+def test_factcheck_sans_cle(monkeypatch):
+    # Indépendant du .env de la machine : on simule l'absence de clé.
+    from dataclasses import replace
+
+    from app import main
+
+    monkeypatch.setattr(main, "settings", replace(main.settings, factcheck_api_key=""))
     body = client.get("/factcheck", params={"query": "inondation Antananarivo"}).json()
     assert body["available"] is False

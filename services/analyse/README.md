@@ -44,7 +44,7 @@ Puis dans le `.env` du front : `VITE_ANALYSE_API_URL=http://localhost:8000`.
 | `REQUESTS_PER_MINUTE` | `60` | Limite par adresse IP |
 | `LLM_PROVIDER` | vide (premier configuré) | `groq`, `gemini` ou `ollama` |
 | `LLM_API_KEY` | vide | Clé du fournisseur choisi (ou `GROQ_API_KEY` / `GEMINI_API_KEY`) |
-| `GROQ_MODEL` / `GEMINI_MODEL` | `llama-3.3-70b-versatile` / `gemini-2.0-flash` | Modèle utilisé |
+| `GROQ_MODEL` / `GEMINI_MODEL` | `openai/gpt-oss-120b` / `gemini-2.0-flash` | Modèle utilisé |
 | `OLLAMA_URL` / `OLLAMA_MODEL` | vide / `llama3.1` | Modèle local ; l'assistant n'est annoncé que si Ollama répond et que le modèle est installé |
 
 Sans clé, chaque analyse concernée est simplement signalée « non configurée » dans l'application ; le reste fonctionne.

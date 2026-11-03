@@ -7,6 +7,9 @@ import { fileURLToPath, URL } from 'node:url'
 export default defineConfig({
   define: {
     __APP_VERSION__: JSON.stringify(process.env.npm_package_version ?? '0.0.0'),
+    // Commit déployé (fourni par Vercel) et date de construction : affichés dans la console au démarrage.
+    __BUILD_COMMIT__: JSON.stringify((process.env.VERCEL_GIT_COMMIT_SHA ?? 'local').slice(0, 7)),
+    __BUILD_TIME__: JSON.stringify(new Date().toISOString()),
   },
   plugins: [
     react(),

@@ -70,7 +70,10 @@ export function createDemoAuth(): AuthService {
 
     async signInWithPassword(email, password) {
       const user = readUsers().find((candidate) => candidate.email === email.trim().toLowerCase())
-      if (!user || user.password !== password) throw new AuthFailure('invalid_credentials')
+      if (!user || user.password !== password) {
+        console.error('[MASO] Connexion refusée en mode démonstration : seuls les comptes de démonstration existent ici (site construit sans Supabase).', { email })
+        throw new AuthFailure('invalid_credentials')
+      }
       if (!user.active) throw new AuthFailure('account_suspended')
       writeStorage(SESSION_KEY, user.id)
       emit('signed_in')

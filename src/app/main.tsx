@@ -5,11 +5,13 @@ import { registerSW } from 'virtual:pwa-register'
 import { AuthProvider } from '@/features/auth/AuthProvider'
 import { CaseStoreProvider } from '@/features/dossiers/CaseStoreProvider'
 import { initTheme, ThemeProvider } from '@/hooks/useTheme'
+import { logStartupDiagnostics } from '@/lib/diagnostics'
 import '@/i18n'
 import '@/styles/index.css'
 import { router } from './router'
 
 initTheme()
+logStartupDiagnostics()
 registerSW({ immediate: true })
 
 createRoot(document.getElementById('root')!).render(

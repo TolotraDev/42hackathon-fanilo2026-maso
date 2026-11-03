@@ -58,6 +58,9 @@ def ai_clue(client: httpx.Client, token: str, model: str, data: bytes) -> dict:
         content=data,
         timeout=30,
     )
+    if response.status_code in (401, 403):
+        # Jeton refusé : il doit avoir la permission « Make calls to Inference Providers ».
+        return {"available": False, "model": model, "error": "token_not_allowed"}
     response.raise_for_status()
     labels = response.json()
     score = max(

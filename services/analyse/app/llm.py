@@ -104,7 +104,7 @@ def configured_provider() -> LLMProvider | None:
     ollama_url = os.getenv("OLLAMA_URL", "")
     available: dict[str, LLMProvider] = {}
     if groq_key:
-        available["groq"] = GroqProvider(groq_key, os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile"))
+        available["groq"] = GroqProvider(groq_key, os.getenv("GROQ_MODEL", "openai/gpt-oss-120b"))
     if gemini_key:
         available["gemini"] = GeminiProvider(gemini_key, os.getenv("GEMINI_MODEL", "gemini-2.0-flash"))
     if ollama_url:
