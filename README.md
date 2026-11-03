@@ -158,6 +158,7 @@ Liens, captures (`screenshots/`) et vidéo : à compléter en MOD-08.
 - Le **code PIN** protège l'accès sur l'appareil ; il ne chiffre pas les données locales.
 - Les paramètres (W13) et les badges demandent la migration `202611031000_parametres_badges.sql` sur le serveur ; sans elle, les valeurs par défaut s'appliquent.
 - Le circuit « À vérifier » (journaliste → fact-checker → rédacteur en chef) demande les migrations `202611031100_statut_a_verifier.sql` puis `202611031101_circuit_verification.sql`, exécutées séparément.
+- Les médias du rapport public (photos, vidéos, liens, obligatoires pour publier) demandent la migration `202611031200_medias_publics.sql`.
 - Les traductions malgaches doivent être relues par un locuteur natif.
 - Données de démonstration : personnes et sources fictives (numéros `+261 00…` inexistants, e-mails `@example.org`) ; statistiques réelles de la Banque mondiale (WDI).
 - Feuille de route après le hackathon : voir [docs/CAHIER_DES_CHARGES.md](docs/CAHIER_DES_CHARGES.md#19-feuille-de-route).

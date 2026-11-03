@@ -39,6 +39,7 @@ Pour **chacun des fichiers ci-dessous, dans cet ordre** : ouvrir le fichier dans
 | 11 | `supabase/migrations/202611031000_parametres_badges.sql` | Paramètres (veille, modèles, mentions), badges QR des journalistes (MOD-07, MOD-08) |
 | 12 | `supabase/migrations/202611031100_statut_a_verifier.sql` | Nouveau statut « À vérifier ». **À exécuter seul**, dans sa propre requête, avant le n° 13 |
 | 13 | `supabase/migrations/202611031101_circuit_verification.sql` | Circuit journaliste → fact-checker → rédacteur en chef (« À refaire » avec motif, notifications) |
+| 14 | `supabase/migrations/202611031200_medias_publics.sql` | Photos, vidéos et liens montrés dans le rapport public (obligatoires pour publier) ; seuls les fichiers publiés sont lisibles par tous |
 
 > Projet déjà configuré lors d'un module précédent : n'exécuter **que les nouveaux fichiers** (ex. le n° 6 pour MOD-03).
 > Les n° 12 et 13 se lancent **dans deux requêtes séparées** (Run, puis New query) : PostgreSQL n'accepte pas d'utiliser un nouveau statut dans la même requête que celle qui le crée.

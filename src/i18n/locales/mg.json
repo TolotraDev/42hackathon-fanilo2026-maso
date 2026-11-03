@@ -961,7 +961,7 @@
       "addClaim": "Hanampy filazana",
       "unsupported": "Filazana tsy misy porofo : mariho porofo iray farafahakeliny.",
       "publicEvidences": "Porofo aseho ny besinimaro",
-      "publicEvidencesHint": "Mariho fotsiny izay azo avoaka (tsy misy loharano miafina na angon-drakitra manokana).",
+      "publicEvidencesHint": "Tsy maintsy misy : sary, horonantsary, sarin'efijery na rohy iray farafahakeliny, ho hitan'ny besinimaro ao amin'ny pejin'ny tatitra. Izay azo avoaka ihany no marihina (tsy misy loharano miafina na angona manokana).",
       "publishedAs": "Tatitra navoaka : {{id}}.",
       "openPublic": "Hijery ny pejy ho an'ny besinimaro"
     },
@@ -1327,6 +1327,7 @@
       "explanation_missing": "Feno ny fanazavana",
       "claims_missing": "Misy filazana iray farafahakeliny",
       "unsupported_claim": "Mifandray amin'ny porofo ny filazana tsirairay",
+      "public_media_missing": "Farafahakeliny sary, horonantsary, sarin'efijery na rohy iray no aseho ny besinimaro",
       "self_validation": "Olona hafa no nanolotra ny didy"
     },
     "blocker": {
@@ -1424,7 +1425,8 @@
       "qrLabel": "Kaody QR hanamarinana ny tatitra {{id}}",
       "qrHint": "Skanao ity kaody QR ity hanamarinana fa tena izy ity tatitra ity ary tsy novaina.",
       "verifyNow": "Hanamarina izao",
-      "editorSigned": "Navoaka sy nosoniavin'i {{name}}, lehiben'ny mpanoratra"
+      "editorSigned": "Navoaka sy nosoniavin'i {{name}}, lehiben'ny mpanoratra",
+      "mediaUnavailable": "Tsy azo vonjimaika ny rakitra."
     },
     "share": {
       "title": "Voamarina : {{verdict}} — {{title}}",

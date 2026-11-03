@@ -88,7 +88,7 @@ describe('circuit : journaliste → fact-checker → rédacteur en chef', () => 
     expect(suggestion.claims).toHaveLength(2)
     expect(suggestion.claims[0].evidenceIds).toEqual(['img', 'rep'])
     expect(suggestion.explanation).toContain('C2PA')
-    expect(suggestion.publicEvidenceIds).toEqual(['img', 'rep'])
+    expect(suggestion.publicEvidenceIds).toEqual(['img', 'lnk', 'rep'])
     const saved = applyMutation(review, { kind: 'save_report', caseId: 'c', report: { id: 'r', status: 'draft', updatedAt: editor.now, ...suggestion } }, editor)
     const published = applyMutation(saved, { kind: 'editorial_decision', caseId: 'c', decision: 'validate_publish', comment: 'Publié' }, { ...editor, publication: { publicId: 'MASO-2026-0001', editorName: 'Rédactrice en chef', newsroom: 'MASO' } })
     expect(published.case.status).toBe('published')

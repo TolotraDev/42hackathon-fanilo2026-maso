@@ -10,6 +10,8 @@ export interface PublicEvidence {
   sha256: string | null
   origin: string | null
   added_at: string
+  /** Fichier de la preuve (photo, vidéo) dans le stockage, lisible par le public une fois publié. */
+  storage_path?: string | null
 }
 
 export interface PublicReport {

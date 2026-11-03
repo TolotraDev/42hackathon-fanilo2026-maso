@@ -1,11 +1,13 @@
-import { ArrowLeft, BadgeCheck, ExternalLink, FileDown, ShieldCheck } from 'lucide-react'
-import { useEffect } from 'react'
+import { ArrowLeft, BadgeCheck, ExternalLink, FileDown, Link2, ShieldCheck } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useParams } from 'react-router-dom'
 import { Badge, Button, Card, SectionTitle, VerdictBadge } from '@/components/ui'
 import { FormMessage } from '@/features/auth/FormMessage'
+import { supabase } from '@/lib/supabase'
 import { HumanNotice, QrImage, reportUrl, SharePanel, useFormatDate, usePortalError, verifyUrl } from './components'
 import { portalApi } from './portalApi'
+import type { PublicEvidence } from './types'
 import { downloadBlob, publicReportPdf } from './publicReportPdf'
 import { useLoad } from './useLoad'
 
@@ -100,7 +102,8 @@ export function PublicReportPage() {
               {report.evidences.map((evidence) => (
                 <li key={evidence.label} id={`preuve-${evidence.label}`} className="space-y-1 rounded-xl bg-canvas p-3 text-sm">
                   <p className="font-semibold text-ink">[{evidence.label}] {t(`dossiers.evidenceType.${evidence.type}`)}{evidence.origin ? ` — ${evidence.origin}` : ''}</p>
-                  {[evidence.archive_url, evidence.url].filter(Boolean).map((link) => (
+                  <EvidenceMedia evidence={evidence} />
+                  {[evidence.archive_url, evidence.type === 'link' ? null : evidence.url].filter(Boolean).map((link) => (
                     <a key={link} href={link!} target="_blank" rel="noreferrer noopener" className="flex items-center gap-1 break-all text-xs text-cobalt hover:underline">
                       <ExternalLink className="size-3.5 shrink-0" aria-hidden />
                       {link}
@@ -156,4 +159,65 @@ export function PublicReportPage() {
       </div>
     </article>
   )
+}
+
+/** Fichier d'une preuve publiée (photo, vidéo) : adresse temporaire, lisible par le public une fois le rapport publié. */
+function usePublicFile(path: string | null | undefined) {
+  const [url, setUrl] = useState<string | null>(null)
+  const [failed, setFailed] = useState(false)
+  useEffect(() => {
+    if (!path || !supabase) return
+    let cancelled = false
+    supabase.storage
+      .from('evidences')
+      .createSignedUrl(path, 3600)
+      .then(({ data, error }) => {
+        if (cancelled) return
+        if (error || !data) setFailed(true)
+        else setUrl(data.signedUrl)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [path])
+  return { url, failed }
+}
+
+/** La preuve elle-même, montrée au public : photo, vidéo (lecteur) ou lien vers la page d'origine. */
+function EvidenceMedia({ evidence }: { evidence: PublicEvidence }) {
+  const { t } = useTranslation()
+  const isImage = evidence.type === 'image' || evidence.type === 'screenshot'
+  const isVideo = evidence.type === 'video'
+  const { url, failed } = usePublicFile(isImage || isVideo ? evidence.storage_path : null)
+  const label = `${evidence.label} — ${t(`dossiers.evidenceType.${evidence.type}`)}`
+
+  if (isImage && url) {
+    return (
+      <a href={url} target="_blank" rel="noreferrer noopener" className="block">
+        <img src={url} alt={label} loading="lazy" className="max-h-96 w-full rounded-xl bg-surface object-contain" />
+      </a>
+    )
+  }
+  if (isVideo && url) {
+    return <video src={url} controls preload="metadata" playsInline className="max-h-96 w-full rounded-xl bg-black" aria-label={label} />
+  }
+  if (evidence.type === 'link' && evidence.url) {
+    let host = evidence.url
+    try {
+      host = new URL(evidence.url).hostname.replace(/^www\./, '')
+    } catch {
+      // adresse conservée telle quelle
+    }
+    return (
+      <a href={evidence.url} target="_blank" rel="noreferrer noopener" className="flex items-center gap-3 rounded-xl border border-line bg-surface p-3 hover:border-cobalt">
+        <Link2 className="size-5 shrink-0 text-cobalt" aria-hidden />
+        <span className="min-w-0">
+          <span className="block text-sm font-semibold text-ink">{host}</span>
+          <span className="block truncate text-xs text-ink-muted">{evidence.url}</span>
+        </span>
+      </a>
+    )
+  }
+  if ((isImage || isVideo) && evidence.storage_path && failed) return <p className="text-xs text-ink-muted">{t('portail.report.mediaUnavailable')}</p>
+  return null
 }

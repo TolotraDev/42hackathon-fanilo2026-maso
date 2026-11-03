@@ -961,7 +961,7 @@
       "addClaim": "Add a claim",
       "unsupported": "Unsupported claim: tick at least one piece of evidence.",
       "publicEvidences": "Evidence shown to the public",
-      "publicEvidencesHint": "Only tick what can be published (no confidential source or personal data).",
+      "publicEvidencesHint": "Required: at least one photo, video, screenshot or link, which the public will see on the report page. Only tick what can be published (no confidential source or personal data).",
       "publishedAs": "Report published: {{id}}.",
       "openPublic": "See the public page"
     },
@@ -1327,6 +1327,7 @@
       "explanation_missing": "The explanation is filled in",
       "claims_missing": "At least one claim is listed",
       "unsupported_claim": "Each claim refers to evidence",
+      "public_media_missing": "At least one photo, video, screenshot or link is shown to the public",
       "self_validation": "The verdict was proposed by someone else"
     },
     "blocker": {
@@ -1424,7 +1425,8 @@
       "qrLabel": "Verification QR code for report {{id}}",
       "qrHint": "Scan this QR code to check that this report is authentic and has not been altered.",
       "verifyNow": "Verify now",
-      "editorSigned": "Published and signed by {{name}}, editor-in-chief"
+      "editorSigned": "Published and signed by {{name}}, editor-in-chief",
+      "mediaUnavailable": "File temporarily unavailable."
     },
     "share": {
       "title": "Checked: {{verdict}} — {{title}}",

@@ -10,6 +10,7 @@ export type PublicationBlocker =
   | 'explanation_missing'
   | 'claims_missing'
   | 'unsupported_claim'
+  | 'public_media_missing'
   | 'self_validation'
 
 export const PUBLICATION_BLOCKERS: PublicationBlocker[] = [
@@ -19,12 +20,18 @@ export const PUBLICATION_BLOCKERS: PublicationBlocker[] = [
   'explanation_missing',
   'claims_missing',
   'unsupported_claim',
+  'public_media_missing',
   'self_validation',
 ]
 
 /** Une affirmation est étayée si elle a un texte et renvoie à au moins une preuve du dossier. */
 export function isSupported(claim: ReportClaim, detail: CaseDetail): boolean {
   return claim.text.trim() !== '' && claim.evidenceIds.some((id) => detail.evidences.some((evidence) => evidence.id === id))
+}
+
+/** Photo, vidéo, capture ou lien : ce que le public doit pouvoir voir lui-même dans le rapport publié. */
+export function isPublicMedia(evidence: { type: string }): boolean {
+  return ['image', 'video', 'screenshot', 'link'].includes(evidence.type)
 }
 
 /** Ce qui empêche de valider et publier — copie de public.report_blockers. */
@@ -37,6 +44,7 @@ export function reportBlockers(detail: CaseDetail, userId: string | null): Publi
   if (!report.explanation.trim()) blockers.push('explanation_missing')
   if (report.claims.length === 0) blockers.push('claims_missing')
   else if (report.claims.some((claim) => !isSupported(claim, detail))) blockers.push('unsupported_claim')
+  if (!detail.evidences.some((evidence) => isPublicMedia(evidence) && report.publicEvidenceIds.includes(evidence.id))) blockers.push('public_media_missing')
   if (record.proposedBy === userId && record.status !== 'validated') blockers.push('self_validation')
   return blockers
 }
@@ -81,6 +89,7 @@ export function buildPublicPayload(
         sha256: evidence.sha256,
         origin: evidence.origin,
         added_at: evidence.createdAt,
+        storage_path: evidence.storagePath,
       })),
     newsroom: options.newsroom,
     validated_by: options.editorName,

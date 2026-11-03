@@ -961,7 +961,7 @@
       "addClaim": "Ajouter une affirmation",
       "unsupported": "Affirmation non étayée : cochez au moins une preuve.",
       "publicEvidences": "Preuves montrées au public",
-      "publicEvidencesHint": "Ne cochez que ce qui peut être publié (pas de source confidentielle ni de donnée personnelle).",
+      "publicEvidencesHint": "Obligatoire : au moins une photo, vidéo, capture ou lien, que le public verra sur la page du rapport. Ne cochez que ce qui peut être publié (pas de source confidentielle ni de donnée personnelle).",
       "publishedAs": "Rapport publié : {{id}}.",
       "openPublic": "Voir la page publique"
     },
@@ -1327,6 +1327,7 @@
       "explanation_missing": "L'explication est remplie",
       "claims_missing": "Au moins une affirmation est listée",
       "unsupported_claim": "Chaque affirmation renvoie à une preuve",
+      "public_media_missing": "Au moins une photo, vidéo, capture ou lien est montré au public",
       "self_validation": "Le verdict a été proposé par quelqu'un d'autre"
     },
     "blocker": {
@@ -1424,7 +1425,8 @@
       "qrLabel": "QR code de vérification du rapport {{id}}",
       "qrHint": "Scannez ce QR code pour vérifier que ce rapport est authentique et n'a pas été modifié.",
       "verifyNow": "Vérifier maintenant",
-      "editorSigned": "Publié et signé par {{name}}, rédacteur en chef"
+      "editorSigned": "Publié et signé par {{name}}, rédacteur en chef",
+      "mediaUnavailable": "Fichier momentanément indisponible."
     },
     "share": {
       "title": "Vérifié : {{verdict}} — {{title}}",

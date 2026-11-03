@@ -4,6 +4,7 @@ import type { TFunction } from 'i18next'
 import type { FactCheckClaim } from '@/lib/analyseApi'
 import { findingText } from '@/lib/analysis/findingText'
 import { vigilance, type Finding, type FindingLevel, type Vigilance } from '@/lib/analysis/synthesis'
+import { isPublicMedia } from '@/features/revue/publication'
 import type { Language } from '@/types/domain'
 import type { CaseDetail, EvidenceRecord, ReportDraft } from './model'
 
@@ -129,6 +130,7 @@ export function suggestReport(detail: CaseDetail, t: TFunction, language: Langua
     explanation: [justification, notable.length ? `${t('dossiers.suggest.clues')}\n${notable.join('\n')}` : ''].filter(Boolean).join('\n\n'),
     method: t('dossiers.suggest.method', { tools: tools.length ? tools.join(', ') : '—' }),
     claims,
-    publicEvidenceIds: support,
+    // Le public voit le contenu vérifié lui-même : photos, vidéos et liens du dossier, plus les preuves citées.
+    publicEvidenceIds: [...new Set([...detail.evidences.filter((evidence) => isPublicMedia(evidence)).map((evidence) => evidence.id), ...support])],
   }
 }

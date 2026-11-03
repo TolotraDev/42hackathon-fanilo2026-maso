@@ -145,7 +145,8 @@ select matches(pg_temp.run_as('a0000000-0000-4000-8000-000000000003',
   'publish_via_review', 'la publication passe obligatoirement par la revue (signature)');
 
 insert into public.reports (case_id, content, claim_evidence_links)
-select id, '{"summary":"Photo ancienne.","explanation":"La photo date de 2024."}',
+select id, jsonb_build_object('summary', 'Photo ancienne.', 'explanation', 'La photo date de 2024.',
+  'public_evidence_ids', to_jsonb((select ids from t_evidence))),
   jsonb_build_array(jsonb_build_object('text', 'La photo date de 2024', 'evidence_ids', to_jsonb((select ids from t_evidence))))
 from t_case;
 
