@@ -181,6 +181,7 @@ IA dans l'application : assistant éditorial via Groq, Gemini ou Ollama (au choi
 - [Tester le MOD-04 pas à pas](docs/GUIDE_TEST_MOD04.md)
 - [Tester le MOD-05 pas à pas](docs/GUIDE_TEST_MOD05.md)
 - [Tester le MOD-06 pas à pas](docs/GUIDE_TEST_MOD06.md)
+- [Tester les MOD-07 et MOD-08 pas à pas](docs/GUIDE_TEST_MOD07_08.md)
 - [Conventions](docs/CONVENTIONS.md)
 - [Charte graphique](docs/DESIGN.md)
 
