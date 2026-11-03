@@ -118,7 +118,7 @@ export function applyMutation(detail: CaseDetail | null, mutation: Mutation, ctx
     case 'propose_verdict': {
       if (ctx.role !== 'fact_checker' && ctx.role !== 'editor_in_chief') throw new CaseRuleError('role_not_allowed')
       if (!mutation.justification.trim()) throw new CaseRuleError('justification_required')
-      if (detail.case.status !== 'in_analysis' && detail.case.status !== 'correction_requested') throw new CaseRuleError('transition_not_allowed')
+      if (!['in_analysis', 'correction_requested', 'to_verify'].includes(detail.case.status)) throw new CaseRuleError('transition_not_allowed')
       const blockers = verdictBlockers(detail, mutation.evidenceIds)
       if (blockers.length) throw new CaseRuleError('submission_blocked', blockers)
       const proposed: CaseDetail = {

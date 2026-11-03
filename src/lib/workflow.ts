@@ -11,8 +11,17 @@ const STAFF_TRANSITIONS: Transition[] = [
   'in_analysis>awaiting_response',
   'awaiting_response>in_analysis',
   'correction_requested>in_analysis',
+  // Le journaliste valide son rapport d'analyse : il part au fact-checker.
+  'in_analysis>to_verify',
+  'correction_requested>to_verify',
 ]
-const VERDICT_TRANSITIONS: Transition[] = ['in_analysis>to_review', 'correction_requested>to_review']
+const VERDICT_TRANSITIONS: Transition[] = [
+  'in_analysis>to_review',
+  'correction_requested>to_review',
+  // Le fact-checker envoie au rédacteur en chef (verdict et note), ou renvoie au journaliste avec un motif.
+  'to_verify>to_review',
+  'to_verify>correction_requested',
+]
 const EDITOR_TRANSITIONS: Transition[] = [
   'to_review>correction_requested',
   'to_review>in_analysis',

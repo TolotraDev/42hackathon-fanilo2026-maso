@@ -440,6 +440,7 @@
   "caseStatus": {
     "new": "New",
     "in_analysis": "In analysis",
+    "to_verify": "To verify",
     "awaiting_response": "Awaiting response",
     "to_review": "To review",
     "correction_requested": "Correction requested",
@@ -796,7 +797,8 @@
       "figures": "Quoted figures",
       "checklist": "Checklist",
       "report": "Report",
-      "history": "History"
+      "history": "History",
+      "analysis": "Analysis"
     },
     "export": {
       "pdf": "Export as PDF",
@@ -833,7 +835,8 @@
         "closed": "Close without follow-up",
         "to_review": "Submit",
         "new": "New",
-        "published": "Publish"
+        "published": "Publish",
+        "to_verify": "Send to the fact-checker"
       },
       "reason": "Reason (required)",
       "confirm": "Confirm: {{status}}",
@@ -972,7 +975,64 @@
     },
     "fromAlert": "Public report {{code}}",
     "fromAlertHint_one": "From public report {{code}} ({{count}} report). The file and link received will be added as evidence.",
-    "fromAlertHint_other": "From public report {{code}} ({{count}} reports). The file and link received will be added as evidence."
+    "fromAlertHint_other": "From public report {{code}} ({{count}} reports). The file and link received will be added as evidence.",
+    "analysis": {
+      "fileUnavailable": "Evidence file unavailable (offline or not uploaded yet).",
+      "target": {
+        "image": "Image analysis",
+        "link": "Link analysis",
+        "text": "Text analysis"
+      },
+      "claimLabel": "Case claim (text)",
+      "savedTitle": "Validated analysis report ({{label}})",
+      "savedAt": "Generated and validated on {{date}}",
+      "note": "Journalist's note",
+      "overall": "Overall vigilance level",
+      "publishedCheck": "Published check",
+      "limitsTitle": "Limits",
+      "pdfTitle": "Analysis report — {{title}}",
+      "pdfFooter": "MASO — analysis report exported on {{date}} (status: {{status}}). Internal document: clues, not a verdict.",
+      "exportPdf": "Export as PDF",
+      "origin": "Automatic analysis report, validated by the journalist",
+      "defaultReason": "Analysis report validated by the journalist, to verify.",
+      "submitted": "Report saved and sent to the fact-checker.",
+      "submitFailed": "The report could not be sent. Try again.",
+      "startHint": "Click \"Start analysis\" (on the right): each piece of evidence and the claim will be analysed automatically here.",
+      "none": "No validated analysis report in this case.",
+      "redoTitle": "Analysis to redo — fact-checker's reason:",
+      "liveTitle": "Analysis report",
+      "liveHint": "Each piece of evidence (image, link) and the claim are analysed as in \"Check\". Review the clues, add evidence or sources if needed, then validate: the report is saved and sent to the fact-checker.",
+      "nothing": "Nothing to analyse: add evidence (image, link) or a claim of at least 10 characters.",
+      "validateTitle": "Validate the report",
+      "waiting": "Analyses running: {{done}} of {{total}} done…",
+      "noteLabel": "Note for the fact-checker (optional)",
+      "notePlaceholder": "E.g. \"The account that posted the image was created last week.\"",
+      "validate": "Validate and send to the fact-checker",
+      "validateHint": "The report becomes a piece of evidence (citable P1, P2…); the fact-checker is notified."
+    },
+    "toVerify": {
+      "title": "Analysis to verify",
+      "checker": "Review the analysis report ({{label}}) in the \"Analysis\" tab and the evidence, then send it to the editor-in-chief with your verdict and note, or send it back to the journalist.",
+      "waiting": "The analysis report is waiting for a fact-checker's verification.",
+      "redo": "To redo",
+      "redoHint": "Reason sent to the journalist (required): what is missing or must be reviewed.",
+      "redoPlaceholder": "E.g. \"The reverse search was not done; add the source of the first publication.\"",
+      "sendBack": "Send back to the journalist",
+      "sentBack": "Sent back to the journalist with your reason.",
+      "proposeHint": "Your justification serves as the note for the editor-in-chief and as the basis of the proposed public report."
+    },
+    "suggest": {
+      "summary": "\"{{claim}}\": {{verdict}}.",
+      "clues": "What the analysis tools show:",
+      "method": "Automatic analysis of the evidence ({{tools}}), validated by the journalist; human verification by a fact-checker; review and publication by the editor-in-chief.",
+      "notice": "Report proposed automatically from the fact-checker's verdict and note and the validated analysis report. Review, edit, then save.",
+      "apply": "Automatic proposal",
+      "blank": "New blank report",
+      "reviewNotice": "No report yet: here is the one MASO proposes (verdict, fact-checker's note, validated analysis). Use it as is or edit it before publishing.",
+      "use": "Use this report",
+      "edit": "Edit it",
+      "saved": "Proposed report saved: you can publish or edit it."
+    }
   },
   "profil": {
     "language": "Language",
@@ -1207,7 +1267,8 @@
       "validated": "Case validated by {{name}}",
       "published": "Report published by {{name}}",
       "mentioned": "{{name}} mentioned you",
-      "public_report": "New report from the public"
+      "public_report": "New report from the public",
+      "analysis_submitted": "Analysis to verify (sent by {{name}})"
     }
   },
   "bibliotheque": {
@@ -1295,7 +1356,9 @@
     "correctionAdded": "Correction published.",
     "editorOnly": "Only the editor-in-chief decides on publication.",
     "notInReview": "This case is not under review. It will be once the fact-checker proposes a verdict.",
-    "openEvidence": "Open"
+    "openEvidence": "Open",
+    "checkerNote": "Fact-checker's note",
+    "analysisReport": "Analysis report validated by the journalist ({{label}})"
   },
   "portail": {
     "home": "Public portal home",
@@ -1360,7 +1423,8 @@
       "authenticity": "Authenticity",
       "qrLabel": "Verification QR code for report {{id}}",
       "qrHint": "Scan this QR code to check that this report is authentic and has not been altered.",
-      "verifyNow": "Verify now"
+      "verifyNow": "Verify now",
+      "editorSigned": "Published and signed by {{name}}, editor-in-chief"
     },
     "share": {
       "title": "Checked: {{verdict}} — {{title}}",
@@ -1680,7 +1744,8 @@
       "videoKeyframes": "{{count}} keyframe(s) extracted: reverse-search them to find the original video.",
       "aiQuota": "AI image detector unavailable: no credit left with the provider (switch to Sightengine, free).",
       "aiUnreachable": "AI image detector unreachable from this site: the analysis service is not responding or refuses the site address (ALLOWED_ORIGINS setting on Render).",
-      "aiModelFailed": "The AI image detector could not analyse this image (server overloaded): try again in a moment."
+      "aiModelFailed": "The AI image detector could not analyse this image (server overloaded): try again in a moment.",
+      "aiLowDeclared": "The AI image detector gives a low score ({{percent}}%), but the C2PA certificate itself declares an AI-generated image: the certificate is what counts here."
     }
   }
 }

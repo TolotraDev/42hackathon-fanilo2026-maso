@@ -1,4 +1,4 @@
-import { ArrowLeft, ExternalLink, FileDown, ShieldCheck } from 'lucide-react'
+import { ArrowLeft, BadgeCheck, ExternalLink, FileDown, ShieldCheck } from 'lucide-react'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useParams } from 'react-router-dom'
@@ -58,9 +58,14 @@ export function PublicReportPage() {
         <p className="text-base font-semibold text-ink">{report.summary}</p>
         <p className="text-xs text-ink-muted">
           {t('portail.report.publishedBy', { date: formatDate(report.published_at), newsroom: report.newsroom })}
-          {report.validated_by && ` · ${t('portail.report.validatedBy', { name: report.validated_by })}`}
           {[report.region, report.theme].filter(Boolean).length > 0 && ` · ${[report.region, report.theme].filter(Boolean).join(' · ')}`}
         </p>
+        {report.validated_by && (
+          <p className="flex items-center gap-2 rounded-xl bg-success/10 px-3 py-2 text-sm text-ink">
+            <BadgeCheck className="size-4 shrink-0 text-success" aria-hidden />
+            {t('portail.report.editorSigned', { name: report.validated_by })}
+          </p>
+        )}
         <p className="text-xs text-ink-muted">{t(`verdictDefinition.${report.verdict}`)}</p>
       </Card>
 

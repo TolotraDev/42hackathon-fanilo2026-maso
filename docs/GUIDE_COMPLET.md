@@ -90,20 +90,23 @@ Ces règles sont vérifiées **par le serveur**, pas seulement par l'affichage :
 ### A.6 Les étapes d'un dossier (statuts)
 
 ```
-Nouveau → En analyse → (En attente de réponse) → À relire → Publié
-                                                     │
-                                                     ├→ Correction demandée → À relire
-                                                     ├→ En analyse (vérification complémentaire)
-                                                     └→ Classé (rejeté)
+Nouveau → En analyse → À vérifier → À relire → Publié
+              ▲            │            │
+              │            │            ├→ Correction demandée (par le rédacteur en chef)
+              │            │            ├→ En analyse (vérification complémentaire)
+              │            │            └→ Classé (rejeté)
+              │            └→ Correction demandée (« À refaire » du fact-checker, avec motif)
+              └── le journaliste corrige puis renvoie
 ```
 
 | Statut | Signification |
 |---|---|
 | **Nouveau** | Le dossier vient d'être créé |
-| **En analyse** | L'équipe vérifie |
+| **En analyse** | Le journaliste relit le rapport d'analyse automatique et complète le dossier |
+| **À vérifier** | Le journaliste a validé son rapport d'analyse : au tour du fact-checker |
 | **En attente de réponse** | On attend la réponse d'une personne contactée |
-| **À relire** | Le fact-checker a proposé un verdict : au tour du rédacteur en chef |
-| **Correction demandée** | Le rédacteur en chef a renvoyé le dossier pour correction |
+| **À relire** | Le fact-checker a vérifié et proposé un verdict avec sa note : au tour du rédacteur en chef |
+| **Correction demandée** | Le fact-checker (« À refaire ») ou le rédacteur en chef a renvoyé le dossier, avec un motif |
 | **Validé** | Accepté, pas encore publié |
 | **Publié** | Visible par tous sur le portail public, signé |
 | **Classé** | Fermé sans publication |
@@ -199,6 +202,24 @@ Ils sont dans le dossier `docs/exemples/` du projet. Copiez-les sur le bureau po
 4. Le formulaire est prérempli avec le texte et la région du signalement. Mettez un titre clair : `Photo d'inondation « à Antananarivo ce matin »`. *Affirmation à vérifier* : `Antananarivo est inondée ce matin`. **Créer le dossier**.
 
 ✅ **Résultat** : le dossier s'ouvre. La photo du signalement est déjà la preuve **P1**. Côté public, le suivi passe à **Pris en charge**.
+
+### Étape 2 bis — Mettre en analyse : le rapport d'analyse automatique
+
+**Pourquoi** : dès la mise en analyse, MASO passe chaque preuve aux mêmes outils que « Vérifier » et prépare un rapport d'indices, avec leurs sources.
+
+1. À droite du dossier, **Faire avancer le dossier** → **Mettre en analyse** → motif `Image virale à vérifier` → **Confirmer**.
+2. L'onglet **Analyse** s'ouvre tout seul. Chaque élément est analysé en direct :
+   - **P1 — Image** : empreinte, déjà vue dans MASO, métadonnées, certificat C2PA, recompression, recherche inversée, indice IA ;
+   - chaque **lien** du dossier : page, HTTPS, âge du domaine, hébergeur, archives, vérifications déjà publiées ;
+   - **l'affirmation** elle-même : signaux de manipulation, affirmations vérifiables, chiffres.
+3. Attendez la fin (le compteur « Analyses en cours » disparaît). Le **niveau de vigilance global** s'affiche.
+4. Écrivez éventuellement une **note pour le fact-checker**, puis :
+   - **Valider et envoyer au fact-checker** : le rapport est enregistré comme une **preuve** du dossier (par exemple **P3**, citable) et le dossier passe **À vérifier** ;
+   - **Exporter en PDF** : le même rapport, en document.
+
+✅ **Résultat** : le statut devient **À vérifier**. Les fact-checkers reçoivent la notification « Analyse à vérifier ».
+
+> Si le fact-checker renvoie l'analyse (« À refaire »), le journaliste voit son **motif en rouge** en haut de l'onglet **Analyse**. Il complète, puis valide à nouveau.
 
 ### Étape 3 — Analyser l'image (Vérifier → Image)
 
@@ -321,9 +342,16 @@ Panneau **Faire avancer le dossier** → **Mettre en analyse** → *Motif* : `En
    Tout fonctionne. Le badge indique **En attente d'envoi**.
 3. Rétablissez le réseau : en quelques secondes, tout part au serveur, dans l'ordre et sans doublon. Le badge passe à **À jour**.
 
-### Étape 9 — Le fact-checker rédige le rapport et propose le verdict
+### Étape 9 — Le fact-checker vérifie, puis envoie au rédacteur en chef ou renvoie au journaliste
 
-Déconnectez-vous et connectez-vous en **fact-checker**. La cloche signale « … vous a attribué un dossier ».
+Déconnectez-vous et connectez-vous en **fact-checker**. La cloche signale « Analyse à vérifier ».
+
+#### 9.0 Vérifier le rapport d'analyse du journaliste
+
+Ouvrez le dossier : l'onglet **Analyse** montre le **rapport validé** (indices, sources, note du journaliste). Vérifiez-le en humain : preuves, sources, checklist.
+
+- **Il manque quelque chose ?** Encadré **À refaire** → écrivez le motif, par exemple `Faites la recherche inversée et ajoutez la source de la première publication.` → **Renvoyer au journaliste**. Le dossier passe **Correction demandée** et le journaliste est prévenu avec ce motif.
+- **C'est solide ?** Passez à **9.3 Proposer le verdict** : votre **justification** sert de **note pour le rédacteur en chef**. Rédiger le rapport public (9.1) est facultatif : MASO en propose un automatiquement au rédacteur en chef.
 
 #### 9.1 Rédiger le rapport (onglet Rapport)
 
@@ -376,7 +404,9 @@ Un journaliste ne voit pas ce formulaire : proposer un verdict est le rôle du f
 Connectez-vous en **rédacteur en chef**. L'**Accueil** affiche **À relire : 1** et la cloche « Rapport à relire ». Cliquez la notification.
 
 L'écran **Revue éditoriale** montre :
-- le verdict proposé, la confiance, qui l'a proposé, la justification ;
+- le verdict proposé, la confiance, qui l'a proposé, et la **note du fact-checker** ;
+- s'il n'y a pas encore de rapport : le **rapport proposé automatiquement** (résumé, explication avec les indices marquants, méthode). **Utiliser ce rapport** l'enregistre tel quel ; **Le modifier** ouvre l'onglet **Rapport**, prérempli, où l'on peut aussi repartir d'un **Nouveau rapport vide** ;
+- le **rapport d'analyse validé par le journaliste**, à déplier ;
 - le **rapport**, avec chaque affirmation et ses preuves. Une affirmation **non étayée** est encadrée en rouge ;
 - les **preuves** (celles marquées « Publique » seront visibles) ;
 - les points de **checklist** encore ouverts et leur explication ;
@@ -398,7 +428,7 @@ L'écran **Revue éditoriale** montre :
 3. En **rédacteur en chef** : **Comparaison de versions** → le mot **mars** apparaît en vert.
 4. **Valider et publier** → commentaire `Preuves solides` → **Valider, signer et publier**.
 
-✅ « Rapport signé et publié ». MASO affiche :
+✅ « Rapport signé et publié ». Sur la page publique, chacun voit **« Publié et signé par … , rédacteur en chef »**. MASO affiche :
 - un **numéro public** (ex. `MASO-2026-0001`) ;
 - le **lien** de la page publique et un **QR code** ;
 - les boutons de partage **WhatsApp / Facebook**.

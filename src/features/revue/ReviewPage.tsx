@@ -1,4 +1,4 @@
-import { ArrowLeft, CircleCheck, CircleX, ExternalLink, Gavel, GitCompare, ShieldCheck } from 'lucide-react'
+import { ArrowLeft, CircleCheck, CircleX, ExternalLink, Gavel, GitCompare, PenLine, ShieldCheck, Sparkles } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useParams } from 'react-router-dom'
@@ -6,11 +6,14 @@ import { Badge, Button, Card, CaseStatusBadge, SectionTitle, Textarea, VerdictBa
 import { useAuth } from '@/features/auth/AuthProvider'
 import { FormMessage } from '@/features/auth/FormMessage'
 import { useCase, useCaseStore } from '@/features/dossiers/CaseStoreProvider'
-import { DECISION_TYPES, type CaseDetail, type DecisionType, type ReportClaim } from '@/features/dossiers/model'
+import { SavedReport } from '@/features/dossiers/AnalysisTab'
+import { latestAutoReport, suggestReport } from '@/features/dossiers/analysisReport'
+import { DECISION_TYPES, type CaseDetail, type DecisionType, type ReportClaim, type ReportDraft } from '@/features/dossiers/model'
 import { useCaseErrorMessage } from '@/features/dossiers/useCaseError'
 import { QrImage, reportUrl, SharePanel, verifyUrl } from '@/features/portail/components'
 import { useOnlineStatus } from '@/hooks/useOnlineStatus'
 import { cn } from '@/lib/cn'
+import type { Language } from '@/types/domain'
 import { diffWords, hasChanges, type DiffPart } from './diff'
 import { evidenceLabel, isSupported, PUBLICATION_BLOCKERS, reportBlockers } from './publication'
 
@@ -104,6 +107,7 @@ export function ReviewPage() {
   const choice = allowed.includes(decision) ? decision : allowed[0]
   const publishBlocked = choice === 'validate_publish' && blockers.length > 0
   const published = report?.status === 'published' && report.publicId
+  const analysisReport = latestAutoReport(detail)
 
   const send = async (action: () => Promise<unknown>, success: string) => {
     if (!store) return false
@@ -142,7 +146,12 @@ export function ReviewPage() {
               {record.confidence && <Badge>{t('dossiers.verdict.confidence')} : {t(`confidence.${record.confidence}`)}</Badge>}
               <span className="text-xs text-ink-muted">{t('dossiers.verdict.proposedBy', { name: names(record.proposedBy) })}</span>
             </div>
-            <p className="text-ink">{record.justification}</p>
+            {record.justification && (
+              <p className="rounded-xl bg-canvas px-3 py-2 text-ink">
+                <span className="font-semibold">{t('revue.checkerNote')} : </span>
+                {record.justification}
+              </p>
+            )}
           </div>
         ) : (
           <p className="text-sm text-ink-muted">{t('dossiers.verdict.none')}</p>
@@ -154,7 +163,7 @@ export function ReviewPage() {
           <Card className="space-y-3 p-4">
             <SectionTitle>{t('dossiers.tab.report')}</SectionTitle>
             {!report ? (
-              <p className="text-sm text-ink-muted">{t('revue.noReport')}</p>
+              <SuggestedReport detail={detail} canSave={isEditor && inReview && Boolean(store)} onSave={(draft) => send(() => store!.mutate({ kind: 'save_report', caseId: record.id, report: draft }), t('dossiers.suggest.saved'))} />
             ) : (
               <>
                 {(['summary', 'explanation', 'method'] as const).map((field) => (
@@ -187,6 +196,15 @@ export function ReviewPage() {
               </>
             )}
           </Card>
+
+          {analysisReport && (
+            <details className="rounded-2xl border border-line bg-surface p-4">
+              <summary className="cursor-pointer font-display text-sm font-bold text-navy dark:text-ink">{t('revue.analysisReport', { label: analysisReport.label })}</summary>
+              <div className="pt-3">
+                <SavedReport report={analysisReport.report} label={analysisReport.label} />
+              </div>
+            </details>
+          )}
 
           <Card className="space-y-2 p-4">
             <SectionTitle>{t('dossiers.tab.evidences')}</SectionTitle>
@@ -351,6 +369,36 @@ export function ReviewPage() {
           {feedback && !(isEditor && inReview) && <FormMessage tone={feedback.tone}>{feedback.text}</FormMessage>}
         </aside>
       </div>
+    </div>
+  )
+}
+
+/** Pas encore de rapport : proposition automatique (verdict, note du fact-checker, analyse validée). */
+function SuggestedReport({ detail, canSave, onSave }: { detail: CaseDetail; canSave: boolean; onSave: (draft: ReportDraft) => Promise<boolean> }) {
+  const { t, i18n } = useTranslation()
+  if (!detail.case.verdict) return <p className="text-sm text-ink-muted">{t('revue.noReport')}</p>
+  const suggestion = suggestReport(detail, t, (i18n.resolvedLanguage ?? 'fr') as Language)
+  return (
+    <div className="space-y-3">
+      <p className="rounded-xl bg-cobalt/10 px-3 py-2 text-sm text-ink">{t('dossiers.suggest.reviewNotice')}</p>
+      {(['summary', 'explanation', 'method'] as const).map((field) => (
+        <div key={field} className="space-y-1">
+          <p className="text-xs font-semibold uppercase text-ink-muted">{t(`dossiers.report.${field}`)}</p>
+          <p className="whitespace-pre-line text-sm text-ink">{suggestion[field] || '—'}</p>
+        </div>
+      ))}
+      {canSave && (
+        <div className="flex flex-wrap gap-2">
+          <Button className="min-h-10 text-xs" onClick={() => void onSave({ id: crypto.randomUUID(), status: 'draft', updatedAt: new Date().toISOString(), ...suggestion })}>
+            <Sparkles className="size-4" aria-hidden />
+            {t('dossiers.suggest.use')}
+          </Button>
+          <Link to={`/dossiers/${detail.case.id}?onglet=report`} className="inline-flex min-h-10 items-center gap-1.5 rounded-xl border border-line px-3 text-xs font-semibold text-cobalt hover:bg-canvas">
+            <PenLine className="size-4" aria-hidden />
+            {t('dossiers.suggest.edit')}
+          </Link>
+        </div>
+      )}
     </div>
   )
 }

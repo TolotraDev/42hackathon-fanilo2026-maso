@@ -105,6 +105,8 @@ def health() -> dict:
     return {
         "status": "ok",
         "version": __version__,
+        # Adresses de site autorisées (rien de secret) : permet de vérifier le réglage ALLOWED_ORIGINS.
+        "allowed_origins": settings.allowed_origins,
         "capabilities": {
             "provenance": c2pa_ready,
             "ai_clue": bool(settings.hf_token or (settings.sightengine_user and settings.sightengine_secret) or (settings.ai_local_enabled and local_detector.is_ready())),

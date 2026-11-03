@@ -108,7 +108,10 @@ export function imageFindings(facts: ImageFacts): Finding[] {
   if (facts.ai?.available && facts.ai.score !== undefined) {
     const percent = Math.round(facts.ai.score * 100)
     const level: FindingLevel = facts.ai.score >= 0.85 ? 'alert' : facts.ai.score >= 0.6 ? 'caution' : 'ok'
-    out.push({ level, key: level === 'ok' ? 'aiLow' : 'aiHigh', params: { percent }, source: { name: facts.ai.model ?? 'IA' } })
+    // Le certificat C2PA déclare une image IA : un score bas du détecteur ne rassure pas (simple information).
+    const declaredAi = Boolean(provenance?.present && provenance.ai_generated)
+    if (level === 'ok' && declaredAi) out.push({ level: 'info', key: 'aiLowDeclared', params: { percent }, source: { name: facts.ai.model ?? 'IA' } })
+    else out.push({ level, key: level === 'ok' ? 'aiLow' : 'aiHigh', params: { percent }, source: { name: facts.ai.model ?? 'IA' } })
   } else if (facts.ai && !facts.ai.available) {
     const error = facts.ai.error
     const key = error === 'quota_exceeded' ? 'aiQuota' : error === 'service_unreachable' ? 'aiUnreachable' : error?.startsWith('model_') && error !== 'model_not_prepared' ? 'aiModelFailed' : 'aiUnavailable'

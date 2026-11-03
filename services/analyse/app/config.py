@@ -1,6 +1,7 @@
 """Réglages lus dans les variables d'environnement (aucun secret dans le code)."""
 
 import os
+import re
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -31,8 +32,14 @@ def _list(name: str, default: str) -> list[str]:
 
 
 def _origins(items: list[str]) -> list[str]:
-    """Adresses de site tolérantes aux erreurs de saisie courantes : guillemets, « / » final, majuscules."""
-    return [item.strip("'\" ").rstrip("/").lower() for item in items]
+    """Adresses de site tolérantes aux erreurs de saisie courantes : séparateurs « ; », espaces ou retours
+    à la ligne, nom de la variable recopié dans la valeur, guillemets, « / » final, majuscules."""
+    found: list[str] = []
+    for item in re.split(r"[,;\s]+", " ".join(items)):
+        item = re.sub(r"^ALLOWED_ORIGINS=", "", item.strip("'\""), flags=re.IGNORECASE).strip("'\"").rstrip("/").lower()
+        if item and item not in found:
+            found.append(item)
+    return found
 
 
 @dataclass(frozen=True)

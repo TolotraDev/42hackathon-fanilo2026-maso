@@ -7,6 +7,7 @@ import type { LocalDb } from '@/features/dossiers/localDb'
 
 export const NOTIFICATION_KINDS = [
   'assigned',
+  'analysis_submitted',
   'review_requested',
   'correction_requested',
   'verification_requested',
@@ -74,7 +75,9 @@ export function notificationsFor(
   if (from && from !== to) {
     const reason = after.history.at(-1)?.reason ?? null
     const editors = members.filter((member) => member.role === 'editor_in_chief').map((member) => member.id)
-    if (to === 'to_review') out.push(...make(recipients(editors, members, actorId), 'review_requested', record.title))
+    const factCheckers = members.filter((member) => member.role === 'fact_checker').map((member) => member.id)
+    if (to === 'to_verify') out.push(...make(recipients(factCheckers, members, actorId), 'analysis_submitted', record.title))
+    else if (to === 'to_review') out.push(...make(recipients(editors, members, actorId), 'review_requested', record.title))
     else if (to === 'correction_requested') out.push(...make(recipients(team, members, actorId), 'correction_requested', reason))
     else if (to === 'in_analysis' && from === 'to_review') out.push(...make(recipients(team, members, actorId), 'verification_requested', reason))
     else if (to === 'closed' && from === 'to_review') out.push(...make(recipients(team, members, actorId), 'rejected', reason))

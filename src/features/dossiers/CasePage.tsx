@@ -1,10 +1,11 @@
 import { ArrowLeft, ClipboardCopy, CloudOff, FileDown, RotateCw, Trash2 } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useSearchParams } from 'react-router-dom'
 import { Badge, Button, Card, CaseStatusBadge } from '@/components/ui'
 import { FormMessage } from '@/features/auth/FormMessage'
 import { cn } from '@/lib/cn'
+import { AnalysisTab } from './AnalysisTab'
 import { useCase, useCaseStore } from './CaseStoreProvider'
 import { DecisionPanel } from './DecisionPanel'
 import { casePdf, caseSections, caseText } from './exportCase'
@@ -48,13 +49,15 @@ export function useCaseAction() {
   return { run, feedback, setFeedback }
 }
 
-const TABS = ['summary', 'evidences', 'sources', 'contacts', 'figures', 'checklist', 'report', 'history'] as const
+const TABS = ['summary', 'analysis', 'evidences', 'sources', 'contacts', 'figures', 'checklist', 'report', 'history'] as const
 type Tab = (typeof TABS)[number]
 
 function tabCount(detail: CaseDetail, tab: Tab): string | null {
   switch (tab) {
     case 'evidences':
       return String(detail.evidences.length)
+    case 'analysis':
+      return null
     case 'sources':
       return String(detail.sources.length)
     case 'contacts':
@@ -74,7 +77,14 @@ export function CasePage() {
   const { id } = useParams()
   const { store, syncStates, team } = useCaseStore()
   const { detail, offline } = useCase(id)
-  const [tab, setTab] = useState<Tab>('summary')
+  const [params] = useSearchParams()
+  const [tab, setTab] = useState<Tab>(() => TABS.find((value) => value === params.get('onglet')) ?? 'summary')
+  // Mise en analyse, renvoi au journaliste, analyse à vérifier : on ouvre directement le rapport d'analyse.
+  const status = detail?.case.status
+  const requested = params.get('onglet')
+  useEffect(() => {
+    if (!requested && status && ['in_analysis', 'to_verify', 'correction_requested'].includes(status)) setTab('analysis')
+  }, [status, requested])
   const [errors, setErrors] = useState<string[]>([])
   const [exportMessage, setExportMessage] = useState<Feedback>(null)
   const sync = (id && syncStates[id]) || 'synced'
@@ -206,6 +216,7 @@ export function CasePage() {
           </div>
           <div role="tabpanel">
             {tab === 'summary' && <SummaryTab detail={detail} />}
+            {tab === 'analysis' && <AnalysisTab detail={detail} />}
             {tab === 'evidences' && <EvidencesTab detail={detail} />}
             {tab === 'sources' && <SourcesTab detail={detail} />}
             {tab === 'contacts' && <ContactsTab detail={detail} />}

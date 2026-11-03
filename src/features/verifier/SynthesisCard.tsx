@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Badge, Card } from '@/components/ui'
 import type { FactCheckClaim } from '@/lib/analyseApi'
 import { ratingKind, vigilance, type Finding, type FindingLevel, type Vigilance } from '@/lib/analysis/synthesis'
+import { findingText } from '@/lib/analysis/findingText'
 import { cn } from '@/lib/cn'
 import type { Tone } from '@/types/domain'
 
@@ -16,8 +17,6 @@ const VIGILANCE: Record<Displayed, { icon: LucideIcon; tone: Tone; border: strin
   running: { icon: LoaderCircle, tone: 'neutral', border: 'border-l-line' },
   unreadable: { icon: ShieldOff, tone: 'neutral', border: 'border-l-line' },
 }
-/** Noms affichés des réseaux sociaux (le service renvoie un identifiant en minuscules). */
-const NETWORKS: Record<string, string> = { facebook: 'Facebook', instagram: 'Instagram', tiktok: 'TikTok', x: 'X (Twitter)', youtube: 'YouTube', whatsapp: 'WhatsApp' }
 const RATING_TONES = { false: 'danger', misleading: 'warning', true: 'success', other: 'neutral' } as const
 
 interface SynthesisCardProps {
@@ -41,12 +40,7 @@ export function SynthesisCard({ findings, claims = [], running = false, factchec
   const { icon: Icon, tone, border } = VIGILANCE[level]
   const order: FindingLevel[] = ['alert', 'caution', 'ok', 'info']
   const sorted = [...findings].sort((a, b) => order.indexOf(a.level) - order.indexOf(b.level))
-  const text = (finding: Finding) => {
-    const params = { ...finding.params }
-    if (params.verdict) params.verdict = t(`verdict.${params.verdict}`)
-    if (params.network) params.network = NETWORKS[params.network] ?? params.network
-    return finding.key.startsWith('signal.') ? t(`textAnalysis.${finding.key}.title`) : t(`synthesis.finding.${finding.key}`, params)
-  }
+  const text = (finding: Finding) => findingText(t, finding)
 
   return (
     <Card className={cn('space-y-3 border-l-4 p-4', border)} aria-live="polite" aria-busy={running}>

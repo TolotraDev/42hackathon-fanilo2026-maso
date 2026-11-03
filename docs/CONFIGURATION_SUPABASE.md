@@ -37,8 +37,11 @@ Pour **chacun des fichiers ci-dessous, dans cet ordre** : ouvrir le fichier dans
 | 9 | `supabase/migrations/202611021700_dossiers.sql` | Checklist guidée, règles de soumission du verdict, création hors ligne (MOD-05) |
 | 10 | `supabase/migrations/202611021800_publication.sql` | Revue éditoriale, signature et publication, portail public, signalements, notifications (MOD-06) |
 | 11 | `supabase/migrations/202611031000_parametres_badges.sql` | Paramètres (veille, modèles, mentions), badges QR des journalistes (MOD-07, MOD-08) |
+| 12 | `supabase/migrations/202611031100_statut_a_verifier.sql` | Nouveau statut « À vérifier ». **À exécuter seul**, dans sa propre requête, avant le n° 13 |
+| 13 | `supabase/migrations/202611031101_circuit_verification.sql` | Circuit journaliste → fact-checker → rédacteur en chef (« À refaire » avec motif, notifications) |
 
 > Projet déjà configuré lors d'un module précédent : n'exécuter **que les nouveaux fichiers** (ex. le n° 6 pour MOD-03).
+> Les n° 12 et 13 se lancent **dans deux requêtes séparées** (Run, puis New query) : PostgreSQL n'accepte pas d'utiliser un nouveau statut dans la même requête que celle qui le crée.
 > Ne **pas** exécuter `supabase/seed.sql` sur le projet en ligne : il sert uniquement à la base locale.
 > En cas d'erreur, ne pas relancer le même fichier : noter le message d'erreur et le transmettre à Lorraine.
 

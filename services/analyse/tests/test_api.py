@@ -55,3 +55,10 @@ def test_adresses_du_site_tolerantes_aux_erreurs_de_saisie():
     from app.config import _origins
 
     assert _origins([' "https://Maso.vercel.app/" ', "http://localhost:5173/"]) == ["https://maso.vercel.app", "http://localhost:5173"]
+
+
+def test_adresses_saisies_avec_d_autres_separateurs():
+    from app.config import _origins
+
+    value = ["ALLOWED_ORIGINS=https://maso.vercel.app/; http://localhost:5173\nhttps://maso.vercel.app"]
+    assert _origins(value) == ["https://maso.vercel.app", "http://localhost:5173"]

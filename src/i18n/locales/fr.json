@@ -440,6 +440,7 @@
   "caseStatus": {
     "new": "Nouveau",
     "in_analysis": "En analyse",
+    "to_verify": "À vérifier",
     "awaiting_response": "En attente de réponse",
     "to_review": "À relire",
     "correction_requested": "Correction demandée",
@@ -796,7 +797,8 @@
       "figures": "Chiffres cités",
       "checklist": "Checklist",
       "report": "Rapport",
-      "history": "Historique"
+      "history": "Historique",
+      "analysis": "Analyse"
     },
     "export": {
       "pdf": "Exporter en PDF",
@@ -833,7 +835,8 @@
         "closed": "Classer sans suite",
         "to_review": "Soumettre",
         "new": "Nouveau",
-        "published": "Publier"
+        "published": "Publier",
+        "to_verify": "Envoyer au fact-checker"
       },
       "reason": "Motif (obligatoire)",
       "confirm": "Confirmer : {{status}}",
@@ -972,7 +975,64 @@
     },
     "fromAlert": "Signalement public {{code}}",
     "fromAlertHint_one": "Depuis le signalement {{code}} ({{count}} signalement). Le fichier et le lien reçus seront ajoutés comme preuves.",
-    "fromAlertHint_other": "Depuis le signalement {{code}} ({{count}} signalements). Le fichier et le lien reçus seront ajoutés comme preuves."
+    "fromAlertHint_other": "Depuis le signalement {{code}} ({{count}} signalements). Le fichier et le lien reçus seront ajoutés comme preuves.",
+    "analysis": {
+      "fileUnavailable": "Fichier de la preuve indisponible (hors ligne ou non encore envoyé).",
+      "target": {
+        "image": "Analyse d'image",
+        "link": "Analyse de lien",
+        "text": "Analyse de texte"
+      },
+      "claimLabel": "Affirmation du dossier (texte)",
+      "savedTitle": "Rapport d'analyse validé ({{label}})",
+      "savedAt": "Généré et validé le {{date}}",
+      "note": "Note du journaliste",
+      "overall": "Niveau de vigilance global",
+      "publishedCheck": "Vérification publiée",
+      "limitsTitle": "Limites",
+      "pdfTitle": "Rapport d'analyse — {{title}}",
+      "pdfFooter": "MASO — rapport d'analyse exporté le {{date}} (statut : {{status}}). Document interne : des indices, pas un verdict.",
+      "exportPdf": "Exporter en PDF",
+      "origin": "Rapport d'analyse automatique, validé par le journaliste",
+      "defaultReason": "Rapport d'analyse validé par le journaliste, à vérifier.",
+      "submitted": "Rapport enregistré et envoyé au fact-checker.",
+      "submitFailed": "Le rapport n'a pas pu être envoyé. Réessayez.",
+      "startHint": "Cliquez sur « Mettre en analyse » (à droite) : chaque preuve et l'affirmation seront analysées automatiquement ici.",
+      "none": "Aucun rapport d'analyse validé dans ce dossier.",
+      "redoTitle": "Analyse à refaire — motif du fact-checker :",
+      "liveTitle": "Rapport d'analyse",
+      "liveHint": "Chaque preuve (image, lien) et l'affirmation sont analysées comme dans « Vérifier ». Relisez les indices, ajoutez preuves ou sources si besoin, puis validez : le rapport est enregistré et envoyé au fact-checker.",
+      "nothing": "Rien à analyser : ajoutez une preuve (image, lien) ou une affirmation d'au moins 10 caractères.",
+      "validateTitle": "Valider le rapport",
+      "waiting": "Analyses en cours : {{done}} sur {{total}} terminées…",
+      "noteLabel": "Note pour le fact-checker (facultatif)",
+      "notePlaceholder": "Ex. « Le compte qui a publié l'image a été créé la semaine dernière. »",
+      "validate": "Valider et envoyer au fact-checker",
+      "validateHint": "Le rapport devient une preuve du dossier (citable P1, P2…) ; le fact-checker est prévenu."
+    },
+    "toVerify": {
+      "title": "Analyse à vérifier",
+      "checker": "Relisez le rapport d'analyse ({{label}}) dans l'onglet « Analyse » et les preuves, puis envoyez au rédacteur en chef avec votre verdict et votre note, ou renvoyez au journaliste.",
+      "waiting": "Le rapport d'analyse attend la vérification d'un fact-checker.",
+      "redo": "À refaire",
+      "redoHint": "Motif envoyé au journaliste (obligatoire) : ce qui manque ou ce qui doit être revu.",
+      "redoPlaceholder": "Ex. « La recherche inversée n'a pas été faite ; ajoutez la source de la première publication. »",
+      "sendBack": "Renvoyer au journaliste",
+      "sentBack": "Renvoyé au journaliste avec votre motif.",
+      "proposeHint": "Votre justification sert de note pour le rédacteur en chef et de base au rapport public proposé."
+    },
+    "suggest": {
+      "summary": "« {{claim}} » : {{verdict}}.",
+      "clues": "Ce que montrent les outils d'analyse :",
+      "method": "Analyse automatique des preuves ({{tools}}), validée par le journaliste ; vérification humaine par un fact-checker ; relecture et publication par le rédacteur en chef.",
+      "notice": "Rapport proposé automatiquement à partir du verdict et de la note du fact-checker et du rapport d'analyse validé. Relisez, modifiez, puis enregistrez.",
+      "apply": "Proposition automatique",
+      "blank": "Nouveau rapport vide",
+      "reviewNotice": "Pas encore de rapport : voici celui que MASO propose (verdict, note du fact-checker, analyse validée). Utilisez-le tel quel ou modifiez-le avant de publier.",
+      "use": "Utiliser ce rapport",
+      "edit": "Le modifier",
+      "saved": "Rapport proposé enregistré : vous pouvez publier ou le modifier."
+    }
   },
   "profil": {
     "language": "Langue",
@@ -1207,7 +1267,8 @@
       "validated": "Dossier validé par {{name}}",
       "published": "Rapport publié par {{name}}",
       "mentioned": "{{name}} vous a mentionné",
-      "public_report": "Nouveau signalement du public"
+      "public_report": "Nouveau signalement du public",
+      "analysis_submitted": "Analyse à vérifier (envoyée par {{name}})"
     }
   },
   "bibliotheque": {
@@ -1295,7 +1356,9 @@
     "correctionAdded": "Correction publiée.",
     "editorOnly": "Seul le rédacteur en chef décide de la publication.",
     "notInReview": "Ce dossier n'est pas en relecture. Il y passera quand le fact-checker proposera un verdict.",
-    "openEvidence": "Ouvrir"
+    "openEvidence": "Ouvrir",
+    "checkerNote": "Note du fact-checker",
+    "analysisReport": "Rapport d'analyse validé par le journaliste ({{label}})"
   },
   "portail": {
     "home": "Accueil du portail public",
@@ -1360,7 +1423,8 @@
       "authenticity": "Authenticité",
       "qrLabel": "QR code de vérification du rapport {{id}}",
       "qrHint": "Scannez ce QR code pour vérifier que ce rapport est authentique et n'a pas été modifié.",
-      "verifyNow": "Vérifier maintenant"
+      "verifyNow": "Vérifier maintenant",
+      "editorSigned": "Publié et signé par {{name}}, rédacteur en chef"
     },
     "share": {
       "title": "Vérifié : {{verdict}} — {{title}}",
@@ -1680,7 +1744,8 @@
       "videoKeyframes": "{{count}} image(s) clé(s) extraite(s) : faites leur recherche inversée pour retrouver la vidéo d'origine.",
       "aiQuota": "Détecteur d'images IA indisponible : plus de crédit chez le fournisseur (passer à Sightengine, gratuit).",
       "aiUnreachable": "Détecteur d'images IA injoignable depuis ce site : le service d'analyse ne répond pas ou refuse l'adresse du site (réglage ALLOWED_ORIGINS sur Render).",
-      "aiModelFailed": "Le détecteur d'images IA n'a pas pu analyser cette image (serveur surchargé) : réessayez dans un instant."
+      "aiModelFailed": "Le détecteur d'images IA n'a pas pu analyser cette image (serveur surchargé) : réessayez dans un instant.",
+      "aiLowDeclared": "Le détecteur d'images IA donne un score bas ({{percent}} %), mais le certificat C2PA déclare lui-même une image générée par IA : c'est le certificat qui compte ici."
     }
   }
 }

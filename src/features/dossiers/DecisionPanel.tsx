@@ -1,4 +1,4 @@
-import { CircleCheck, CircleX, ExternalLink, Gavel, Send } from 'lucide-react'
+import { CircleCheck, CircleX, ExternalLink, Gavel, RotateCcw, Send } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
@@ -8,6 +8,7 @@ import { FormMessage } from '@/features/auth/FormMessage'
 import { canTransition } from '@/lib/workflow'
 import { cn } from '@/lib/cn'
 import { CONFIDENCE_LEVELS, VERDICTS, type CaseStatus, type ConfidenceLevel, type Verdict } from '@/types/domain'
+import { latestAutoReport } from './analysisReport'
 import { useCaseAction } from './CasePage'
 import type { CaseDetail } from './model'
 import { IN_REVIEW, STATUS_ACTIONS_IN_CASE, verdictBlockers } from './rules'
@@ -32,7 +33,11 @@ export function DecisionPanel({ detail, names }: { detail: CaseDetail; names: (i
 
   const inReview = IN_REVIEW.includes(record.status)
   const actions = inReview ? [] : STATUS_ACTIONS_IN_CASE.filter((to) => to !== 'to_review' && canTransition(record.status, to, role))
-  const canPropose = (role === 'fact_checker' || role === 'editor_in_chief') && (record.status === 'in_analysis' || record.status === 'correction_requested')
+  const canPropose = (role === 'fact_checker' || role === 'editor_in_chief') && ['in_analysis', 'correction_requested', 'to_verify'].includes(record.status)
+  // Le fact-checker renvoie l'analyse au journaliste, avec un motif.
+  const canSendBack = record.status === 'to_verify' && canTransition('to_verify', 'correction_requested', role)
+  const [redo, setRedo] = useState('')
+  const analysisReport = latestAutoReport(detail)
   const blockers = verdictBlockers(detail, form.evidenceIds)
 
   return (
@@ -80,6 +85,36 @@ export function DecisionPanel({ detail, names }: { detail: CaseDetail; names: (i
         </Card>
       )}
 
+      {record.status === 'to_verify' && (
+        <Card className="space-y-1 border-l-4 border-l-warning p-4">
+          <p className="font-display text-sm font-bold text-navy dark:text-ink">{t('dossiers.toVerify.title')}</p>
+          <p className="text-xs text-ink-muted">{canPropose ? t('dossiers.toVerify.checker', { label: analysisReport?.label ?? '—' }) : t('dossiers.toVerify.waiting')}</p>
+        </Card>
+      )}
+
+      {canSendBack && (
+        <Card className="p-4">
+          <form
+            className="space-y-2"
+            onSubmit={async (event) => {
+              event.preventDefault()
+              if (await run({ kind: 'change_status', caseId: record.id, to: 'correction_requested', reason: redo }, t('dossiers.toVerify.sentBack'))) setRedo('')
+            }}
+          >
+            <p className="flex items-center gap-2 font-display text-sm font-bold text-navy dark:text-ink">
+              <RotateCcw className="size-4 text-danger" aria-hidden />
+              {t('dossiers.toVerify.redo')}
+            </p>
+            <label htmlFor="redo-reason" className="text-xs text-ink-muted">{t('dossiers.toVerify.redoHint')}</label>
+            <Textarea id="redo-reason" rows={3} required value={redo} onChange={(event) => setRedo(event.target.value)} placeholder={t('dossiers.toVerify.redoPlaceholder')} />
+            <Button type="submit" variant="secondary" block disabled={!redo.trim()}>
+              <RotateCcw className="size-4" aria-hidden />
+              {t('dossiers.toVerify.sendBack')}
+            </Button>
+          </form>
+        </Card>
+      )}
+
       {canPropose && (
         <Card className="p-4">
           <form
@@ -93,6 +128,7 @@ export function DecisionPanel({ detail, names }: { detail: CaseDetail; names: (i
               <Gavel className="size-4 text-cobalt" aria-hidden />
               {t('dossiers.verdict.propose')}
             </p>
+            {record.status === 'to_verify' && <p className="text-xs text-ink-muted">{t('dossiers.toVerify.proposeHint')}</p>}
             <div className="space-y-1.5">
               <label htmlFor="verdict" className="text-sm font-semibold text-ink">{t('dossiers.verdict.label')}</label>
               <select id="verdict" className={SELECT} value={form.verdict} onChange={(event) => setForm({ ...form, verdict: event.target.value as Verdict })}>

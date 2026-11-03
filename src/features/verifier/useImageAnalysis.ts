@@ -56,7 +56,8 @@ const loadImage = (file: Blob) =>
   })
 
 /** Lance les étapes de la section 9 sur une image et les met à jour en direct. */
-export function useImageAnalysis(file: File | null) {
+/** `excludeCaseId` : analyse lancée depuis un dossier, dont les propres preuves ne comptent pas comme « déjà vues ». */
+export function useImageAnalysis(file: File | null, excludeCaseId: string | null = null) {
   const [steps, setSteps] = useState<ImageSteps>(initialSteps)
   const [finished, setFinished] = useState(false)
 
@@ -118,7 +119,7 @@ export function useImageAnalysis(file: File | null) {
           if (!isPersistenceAvailable()) return { state: 'not_applicable', data: { matches: [], reason: 'no_database' } }
           if (!navigator.onLine) return { state: 'waiting_network' }
           try {
-            const matches = await findSimilarImages(received.sha256, received.phash)
+            const matches = (await findSimilarImages(received.sha256, received.phash)).filter((match) => match.case_id !== excludeCaseId)
             return { state: 'done', clue: matches.length ? 'to_examine' : 'none', data: { matches }, tool: 'pHash (distance de Hamming ≤ 10)' }
           } catch {
             return { state: 'unavailable' }
@@ -165,7 +166,7 @@ export function useImageAnalysis(file: File | null) {
     return () => {
       cancelled = true
     }
-  }, [file])
+  }, [file, excludeCaseId])
 
   return { steps, finished }
 }

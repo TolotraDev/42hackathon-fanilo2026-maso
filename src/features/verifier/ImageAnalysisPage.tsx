@@ -1,15 +1,16 @@
 import { ArrowLeft, ExternalLink, Map as MapIcon } from 'lucide-react'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import { Card, CaseStatusBadge, Textarea, VerdictBadge } from '@/components/ui'
 import { analyseApi, type FactCheckClaim } from '@/lib/analyseApi'
+import { cn } from '@/lib/cn'
 import { reverseSearchLinks } from '@/lib/analysis/reverseSearch'
-import { imageFindings } from '@/lib/analysis/synthesis'
+import { imageFindings, type Finding } from '@/lib/analysis/synthesis'
 import { AttachToCase } from './AttachToCase'
 import { FileDrop } from './FileDrop'
 import { SynthesisCard } from './SynthesisCard'
-import { takePendingMedia } from './pendingMedia'
+import { takePendingMedia, type PendingMedia } from './pendingMedia'
 import { FactList, StepCard } from './StepCard'
 import { useImageAnalysis, type ImageSteps } from './useImageAnalysis'
 import { emptyVisualChecklist, VisualChecklist } from './VisualChecklist'
@@ -42,11 +43,47 @@ function analysisRecord(steps: ImageSteps, extra: Record<string, unknown>) {
 
 /** M4 — Analyse d'image : étapes de la section 9 en direct, checklist visuelle, ajout au dossier. */
 export function ImageAnalysisPage() {
-  const { t, i18n } = useTranslation()
   const [media, setMedia] = useState(() => takePendingMedia())
-  const file = media?.file ?? null
-  const { steps, finished } = useImageAnalysis(file)
-  const sourceUrl = media?.sourceUrl ?? null
+
+  if (!media) {
+    return (
+      <div className="mx-auto max-w-xl space-y-4">
+        <BackToHub />
+        <FileDrop kind="image" onFile={(picked) => setMedia({ file: picked })} />
+      </div>
+    )
+  }
+  return (
+    <div className="space-y-4">
+      <BackToHub />
+      <ImageAnalysisView media={media} />
+    </div>
+  )
+}
+
+/** Résultat d'une analyse, enregistré avec le rapport d'analyse d'un dossier. */
+export interface AnalysisOutcome {
+  findings: Finding[]
+  claims: FactCheckClaim[]
+  /** Copie des étapes et de leurs résultats (pour le fact-checker et le PDF). */
+  record: Record<string, unknown>
+}
+
+interface ImageAnalysisViewProps {
+  media: PendingMedia
+  /** Intégrée au dossier : pas de bouton « Ajouter à un dossier », résultat remonté à la fin. */
+  embedded?: boolean
+  /** Dossier d'où l'analyse est lancée : ses propres preuves ne sont pas « déjà vues ». */
+  caseId?: string
+  onDone?: (outcome: AnalysisOutcome) => void
+}
+
+/** Rapport d'analyse d'une image (page Vérifier, ou rapport d'analyse d'un dossier). */
+export function ImageAnalysisView({ media, embedded = false, caseId, onDone }: ImageAnalysisViewProps) {
+  const { t, i18n } = useTranslation()
+  const file = media.file
+  const { steps, finished } = useImageAnalysis(file, caseId ?? null)
+  const sourceUrl = media.sourceUrl ?? null
   // Vérifications déjà publiées sur la même image (possible quand l'image a une adresse publique).
   const [published, setPublished] = useState<{ url: string; claims: FactCheckClaim[]; available: boolean } | null>(null)
   useEffect(() => {
@@ -64,34 +101,44 @@ export function ImageAnalysisPage() {
   const [showMap, setShowMap] = useState(false)
   const [visual, setVisual] = useState(emptyVisualChecklist)
   const [foundLinks, setFoundLinks] = useState('')
-  const previewUrl = useMemo(() => (file ? URL.createObjectURL(file) : null), [file])
-  const engines = reverseSearchLinks(media?.sourceUrl ?? null)
+  const previewUrl = useMemo(() => URL.createObjectURL(file), [file])
+  useEffect(() => () => URL.revokeObjectURL(previewUrl), [previewUrl])
+  const engines = reverseSearchLinks(media.sourceUrl ?? null)
   const reception = steps.reception.data
   const formatDate = (iso: string) =>
     new Intl.DateTimeFormat(i18n.resolvedLanguage, { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(iso))
-
-  if (!file) {
-    return (
-      <div className="mx-auto max-w-xl space-y-4">
-        <BackToHub />
-        <FileDrop kind="image" onFile={(picked) => setMedia({ file: picked })} />
-      </div>
-    )
-  }
 
   const meta = steps.metadata.data
   const provenance = steps.provenance.data
   const matches = steps.already_seen.data?.matches ?? []
   const rejected = reception?.rejected
+  const findings = imageFindings({
+    matches: matches.map((match) => ({ case_title: match.case_title, verdict: match.verdict, exact: match.exact })),
+    metadata: meta
+      ? { finding: meta.finding, software: meta.software, takenAt: meta.takenAt && formatDate(meta.takenAt), device: [meta.make, meta.model].filter(Boolean).join(' ') }
+      : undefined,
+    provenance: provenance?.available ? provenance : undefined,
+    elaClue: steps.recompression.clue,
+    ai: steps.ai_clue.state === 'done' ? steps.ai_clue.data : steps.ai_clue.state === 'unavailable' ? { available: false, error: steps.ai_clue.data?.error ?? 'service_unreachable' } : undefined,
+    sourceUrl,
+    })
+  const claims = published?.url === sourceUrl ? (published?.claims ?? []) : []
+  // Fin de l'analyse (et de la recherche de vérifications publiées) : le résultat remonte au dossier, une fois.
+  const reported = useRef(false)
+  const complete = finished && (!sourceUrl || published?.url === sourceUrl)
+  useEffect(() => {
+    if (!complete || reported.current || !onDone) return
+    reported.current = true
+    onDone({ findings, claims, record: analysisRecord(steps, { visual_checklist: visual }) })
+  }, [complete, findings, claims, steps, visual, onDone])
 
   return (
     <div className="space-y-4">
-      <BackToHub />
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] lg:grid-rows-[auto_1fr] lg:items-start">
+      <div className={cn('grid grid-cols-1 gap-4', !embedded && 'lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] lg:grid-rows-[auto_1fr] lg:items-start')}>
         {/* Mobile : aperçu → résultats → outils. Web : aperçu et outils à gauche, résultats à droite. */}
-        <div className="lg:col-start-1 lg:row-start-1">
+        <div className={cn(!embedded && 'lg:col-start-1 lg:row-start-1')}>
           <Card className="overflow-hidden">
-            {previewUrl && <img src={previewUrl} alt={t('verifier.image.preview')} className="max-h-80 w-full bg-canvas object-contain" />}
+            {previewUrl && <img src={previewUrl} alt={t('verifier.image.preview')} className={cn('w-full bg-canvas object-contain', embedded ? 'max-h-56' : 'max-h-80')} />}
             <div className="space-y-1 p-3 text-xs text-ink-muted">
               <p className="truncate font-semibold text-ink">{file.name}</p>
               {reception && (
@@ -104,22 +151,13 @@ export function ImageAnalysisPage() {
           </Card>
         </div>
 
-        <div className="min-w-0 space-y-3 lg:col-start-2 lg:row-span-2 lg:row-start-1">
+        <div className={cn('min-w-0 space-y-3', !embedded && 'lg:col-start-2 lg:row-span-2 lg:row-start-1')}>
         {!rejected && (
           <SynthesisCard
             running={!finished}
-            claims={published?.url === sourceUrl ? published?.claims : []}
+            claims={claims}
             factcheckAvailable={!sourceUrl || published?.available !== false}
-            findings={imageFindings({
-              matches: matches.map((match) => ({ case_title: match.case_title, verdict: match.verdict, exact: match.exact })),
-              metadata: meta
-                ? { finding: meta.finding, software: meta.software, takenAt: meta.takenAt && formatDate(meta.takenAt), device: [meta.make, meta.model].filter(Boolean).join(' ') }
-                : undefined,
-              provenance: provenance?.available ? provenance : undefined,
-              elaClue: steps.recompression.clue,
-              ai: steps.ai_clue.state === 'done' ? steps.ai_clue.data : steps.ai_clue.state === 'unavailable' ? { available: false, error: steps.ai_clue.data?.error ?? 'service_unreachable' } : undefined,
-              sourceUrl,
-            })}
+            findings={findings}
           />
         )}
         <ol className="space-y-3" aria-label={t('verifier.stepsTitle')}>
@@ -336,7 +374,9 @@ export function ImageAnalysisPage() {
                   limits={t('verifier.limits.ai_clue')}
                   summary={
                     steps.ai_clue.state === 'unavailable' && steps.ai_clue.data && !steps.ai_clue.data.available
-                      ? t('verifier.image.aiNotConfigured')
+                      ? steps.ai_clue.data.error?.startsWith('model_') && steps.ai_clue.data.error !== 'model_not_prepared'
+                        ? t('synthesis.finding.aiModelFailed')
+                        : t('verifier.image.aiNotConfigured')
                       : stateSummary(steps.ai_clue.state) ??
                         (steps.ai_clue.data?.score !== undefined &&
                           t('verifier.image.aiScore', { percent: Math.round(steps.ai_clue.data.score * 100) }))
@@ -348,24 +388,24 @@ export function ImageAnalysisPage() {
         </ol>
         </div>
 
-        <div className="space-y-4 lg:col-start-1 lg:row-start-2">
+        <div className={cn('space-y-4', !embedded && 'lg:col-start-1 lg:row-start-2')}>
           {!rejected && steps.reception.state === 'done' && (
             <>
               <VisualChecklist value={visual} onChange={setVisual} />
-              <AttachToCase
+              {!embedded && <AttachToCase
                 evidence={(origin) => ({
 type: 'image',
                     file,
                     sha256: reception?.sha256,
                     phash: reception?.phash,
-                    url: media?.sourceUrl ?? undefined,
-                    origin: origin || media?.origin || null,
+                    url: media.sourceUrl ?? undefined,
+                    origin: origin || media.origin || null,
                     analysis: analysisRecord(steps, {
                       visual_checklist: visual,
                       found_links: foundLinks.split('\n').map((line) => line.trim()).filter(Boolean),
                     }),
                   })}
-              />
+              />}
             </>
           )}
         

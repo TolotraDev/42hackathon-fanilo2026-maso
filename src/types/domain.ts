@@ -15,6 +15,7 @@ export const STAFF_ROLES: readonly Role[] = ['journalist', 'fact_checker', 'edit
 export const CASE_STATUSES = [
   'new',
   'in_analysis',
+  'to_verify',
   'awaiting_response',
   'to_review',
   'correction_requested',
@@ -73,6 +74,7 @@ export const VERDICT_TONES: Record<Verdict, Tone> = {
 export const CASE_STATUS_TONES: Record<CaseStatus, Tone> = {
   new: 'neutral',
   in_analysis: 'info',
+  to_verify: 'warning',
   awaiting_response: 'info',
   to_review: 'warning',
   correction_requested: 'danger',

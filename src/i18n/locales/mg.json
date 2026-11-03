@@ -440,6 +440,7 @@
   "caseStatus": {
     "new": "Vaovao",
     "in_analysis": "Am-pamakafakana",
+    "to_verify": "Hamarinina",
     "awaiting_response": "Miandry valiny",
     "to_review": "Hojerena indray",
     "correction_requested": "Angatahina fanitsiana",
@@ -796,7 +797,8 @@
       "figures": "Isa voatonona",
       "checklist": "Lisitra fanamarinana",
       "report": "Tatitra",
-      "history": "Tantara"
+      "history": "Tantara",
+      "analysis": "Famakafakana"
     },
     "export": {
       "pdf": "Haondrana PDF",
@@ -833,7 +835,8 @@
         "closed": "Hikatona",
         "to_review": "Halefa",
         "new": "Vaovao",
-        "published": "Havoaka"
+        "published": "Havoaka",
+        "to_verify": "Alefa any amin'ny mpanamarina"
       },
       "reason": "Antony (tsy maintsy atao)",
       "confirm": "Hamafiso : {{status}}",
@@ -972,7 +975,64 @@
     },
     "fromAlert": "Tatitra avy amin'ny besinimaro {{code}}",
     "fromAlertHint_one": "Avy amin'ny tatitra {{code}} (tatitra {{count}}). Hampidirina ho porofo ny rakitra sy ny rohy voaray.",
-    "fromAlertHint_other": "Avy amin'ny tatitra {{code}} (tatitra {{count}}). Hampidirina ho porofo ny rakitra sy ny rohy voaray."
+    "fromAlertHint_other": "Avy amin'ny tatitra {{code}} (tatitra {{count}}). Hampidirina ho porofo ny rakitra sy ny rohy voaray.",
+    "analysis": {
+      "fileUnavailable": "Tsy azo ny rakitry ny porofo (tsy misy tambajotra na mbola tsy nalefa).",
+      "target": {
+        "image": "Famakafakana sary",
+        "link": "Famakafakana rohy",
+        "text": "Famakafakana soratra"
+      },
+      "claimLabel": "Fanambarana ao amin'ny raki-tahiry (soratra)",
+      "savedTitle": "Tatitra famakafakana nankatoavina ({{label}})",
+      "savedAt": "Noforonina sy nankatoavina ny {{date}}",
+      "note": "Fanamarihan'ny mpanao gazety",
+      "overall": "Haavon'ny fitandremana ankapobeny",
+      "publishedCheck": "Fanamarinana navoaka",
+      "limitsTitle": "Fetra",
+      "pdfTitle": "Tatitra famakafakana — {{title}}",
+      "pdfFooter": "MASO — tatitra famakafakana navoaka ny {{date}} (sata : {{status}}). Antontan-taratasy anatiny : famantarana fa tsy didy.",
+      "exportPdf": "Avoaka ho PDF",
+      "origin": "Tatitra famakafakana mandeha ho azy, nankatoavin'ny mpanao gazety",
+      "defaultReason": "Tatitra famakafakana nankatoavin'ny mpanao gazety, hamarinina.",
+      "submitted": "Voatahiry ny tatitra ary nalefa tany amin'ny mpanamarina.",
+      "submitFailed": "Tsy lasa ny tatitra. Andramo indray.",
+      "startHint": "Tsindrio ny « Ampidiro amin'ny famakafakana » (ankavanana) : ho voakafaka ho azy eto ny porofo tsirairay sy ny fanambarana.",
+      "none": "Tsy misy tatitra famakafakana nankatoavina ato.",
+      "redoTitle": "Famakafakana averina — antony nomen'ny mpanamarina :",
+      "liveTitle": "Tatitra famakafakana",
+      "liveHint": "Kafakafaina toy ny ao amin'ny « Hanamarina » ny porofo tsirairay (sary, rohy) sy ny fanambarana. Vakio ny famantarana, ampio porofo na loharano raha ilaina, dia ankatoavy : voatahiry ny tatitra ary alefa any amin'ny mpanamarina.",
+      "nothing": "Tsy misy hokafakafaina : ampio porofo (sary, rohy) na fanambarana 10 litera farafahakeliny.",
+      "validateTitle": "Ankatoavy ny tatitra",
+      "waiting": "Famakafakana mandeha : {{done}} amin'ny {{total}} vita…",
+      "noteLabel": "Fanamarihana ho an'ny mpanamarina (tsy voatery)",
+      "notePlaceholder": "Ohatra : « Vao noforonina tamin'ny herinandro lasa ny kaonty namoaka ny sary. »",
+      "validate": "Ankatoavy ary alefa any amin'ny mpanamarina",
+      "validateHint": "Lasa porofo ao amin'ny raki-tahiry ny tatitra (azo tanisaina P1, P2…) ; ampandrenesina ny mpanamarina."
+    },
+    "toVerify": {
+      "title": "Famakafakana hamarinina",
+      "checker": "Vakio ny tatitra famakafakana ({{label}}) ao amin'ny tabilao « Famakafakana » sy ny porofo, dia alefaso any amin'ny lehiben'ny mpanoratra miaraka amin'ny didinao sy ny fanamarihanao, na avereno any amin'ny mpanao gazety.",
+      "waiting": "Miandry ny fanamarinan'ny mpanamarina ny tatitra famakafakana.",
+      "redo": "Averina",
+      "redoHint": "Antony alefa any amin'ny mpanao gazety (tsy maintsy) : izay tsy ampy na tokony hojerena indray.",
+      "redoPlaceholder": "Ohatra : « Tsy natao ny fikarohana mivadika ; ampio ny loharanon'ny famoahana voalohany. »",
+      "sendBack": "Avereno any amin'ny mpanao gazety",
+      "sentBack": "Naverina tany amin'ny mpanao gazety miaraka amin'ny antony nomenao.",
+      "proposeHint": "Ny fanamarinanao no fanamarihana ho an'ny lehiben'ny mpanoratra sy fototry ny tatitra ho an'ny besinimaro."
+    },
+    "suggest": {
+      "summary": "« {{claim}} » : {{verdict}}.",
+      "clues": "Izay asehon'ny fitaovana famakafakana :",
+      "method": "Famakafakana mandeha ho azy ny porofo ({{tools}}), nankatoavin'ny mpanao gazety ; fanamarinana ataon'ny mpanamarina ; famakiana sy famoahana ataon'ny lehiben'ny mpanoratra.",
+      "notice": "Tatitra natolotra ho azy avy amin'ny didy sy ny fanamarihan'ny mpanamarina ary ny tatitra famakafakana nankatoavina. Vakio, ovay, dia tehirizo.",
+      "apply": "Tolo-kevitra mandeha ho azy",
+      "blank": "Tatitra vaovao foana",
+      "reviewNotice": "Mbola tsy misy tatitra : ity no atolotry ny MASO (didy, fanamarihan'ny mpanamarina, famakafakana nankatoavina). Ampiasao toy izao na ovay alohan'ny hamoahana.",
+      "use": "Ampiasao ity tatitra ity",
+      "edit": "Ovay",
+      "saved": "Voatahiry ny tatitra natolotra : azonao avoaka na ovaina."
+    }
   },
   "profil": {
     "language": "Fiteny",
@@ -1207,7 +1267,8 @@
       "validated": "Raki-tahiry nankatoavin'i {{name}}",
       "published": "Tatitra navoakan'i {{name}}",
       "mentioned": "{{name}} dia nanonona anao",
-      "public_report": "Tatitra vaovao avy amin'ny besinimaro"
+      "public_report": "Tatitra vaovao avy amin'ny besinimaro",
+      "analysis_submitted": "Famakafakana hamarinina (nalefan'i {{name}})"
     }
   },
   "bibliotheque": {
@@ -1295,7 +1356,9 @@
     "correctionAdded": "Navoaka ny fanitsiana.",
     "editorOnly": "Ny lehiben'ny mpanoratra ihany no manapa-kevitra amin'ny famoahana.",
     "notInReview": "Tsy am-pandinihana ity raki-tahiry ity. Ho tonga eo izy rehefa manolotra didy ny mpanamarina.",
-    "openEvidence": "Sokafy"
+    "openEvidence": "Sokafy",
+    "checkerNote": "Fanamarihan'ny mpanamarina",
+    "analysisReport": "Tatitra famakafakana nankatoavin'ny mpanao gazety ({{label}})"
   },
   "portail": {
     "home": "Fandraisana eo amin'ny vavahady",
@@ -1360,7 +1423,8 @@
       "authenticity": "Fahamarinana",
       "qrLabel": "Kaody QR hanamarinana ny tatitra {{id}}",
       "qrHint": "Skanao ity kaody QR ity hanamarinana fa tena izy ity tatitra ity ary tsy novaina.",
-      "verifyNow": "Hanamarina izao"
+      "verifyNow": "Hanamarina izao",
+      "editorSigned": "Navoaka sy nosoniavin'i {{name}}, lehiben'ny mpanoratra"
     },
     "share": {
       "title": "Voamarina : {{verdict}} — {{title}}",
@@ -1680,7 +1744,8 @@
       "videoKeyframes": "Sary fototra {{count}} nalaina : manaova fikarohana mivadika aminy hahitana ny horonantsary tany am-boalohany.",
       "aiQuota": "Tsy azo ampiasaina ny mpamantatra sary IA : lany ny trosa amin'ny mpamatsy (mifindra any amin'ny Sightengine, maimaim-poana).",
       "aiUnreachable": "Tsy tratra avy amin'ity tranonkala ity ny mpitsikilo sary IA : tsy mamaly na mandà ny adiresin'ny tranonkala ny serivisy famakafakana (fandrindrana ALLOWED_ORIGINS ao amin'ny Render).",
-      "aiModelFailed": "Tsy afaka namakafaka ity sary ity ny mpitsikilo sary IA (be loatra ny asan'ny mpizara) : andramo indray afaka kelikely."
+      "aiModelFailed": "Tsy afaka namakafaka ity sary ity ny mpitsikilo sary IA (be loatra ny asan'ny mpizara) : andramo indray afaka kelikely.",
+      "aiLowDeclared": "Ambany ny isa omen'ny mpitsikilo sary IA ({{percent}} %), saingy milaza ho sary noforonin'ny IA ny taratasy C2PA : io taratasy io no manan-danja eto."
     }
   }
 }

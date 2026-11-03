@@ -1,4 +1,4 @@
-import { AtSign, Bell, CheckCheck, CircleCheck, FilePen, Gavel, Megaphone, RotateCcw, Search, UserPlus, XCircle, type LucideIcon } from 'lucide-react'
+import { AtSign, Bell, CheckCheck, CircleCheck, FilePen, Gavel, Megaphone, RotateCcw, Search, UserPlus, ScanSearch, XCircle, type LucideIcon } from 'lucide-react'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
@@ -9,6 +9,7 @@ import type { AppNotification, NotificationKind } from './notifications'
 
 const ICONS: Record<NotificationKind, LucideIcon> = {
   assigned: UserPlus,
+  analysis_submitted: ScanSearch,
   review_requested: Gavel,
   correction_requested: FilePen,
   verification_requested: Search,

@@ -8,9 +8,10 @@ import { analyseApi, ServiceError, stateForServiceError, type FactCheckClaim, ty
 import { linkFindings } from '@/lib/analysis/synthesis'
 import { normalizeUrl } from '@/lib/analysis/url'
 import type { StepResult } from '@/lib/analysis/types'
+import { cn } from '@/lib/cn'
 import type { ClueLevel } from '@/types/domain'
 import { AttachToCase } from './AttachToCase'
-import { BackToHub } from './ImageAnalysisPage'
+import { BackToHub, type AnalysisOutcome } from './ImageAnalysisPage'
 import { setPendingMedia } from './pendingMedia'
 import { FactList, StepCard } from './StepCard'
 import { SynthesisCard } from './SynthesisCard'
@@ -45,16 +46,57 @@ interface Existing {
 
 /** M5 — Analyse d'un lien : domaine, HTTPS, hébergeur, annuaire des médias, vérifications existantes, archive. */
 export function LinkAnalysisPage() {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
   const [params, setParams] = useSearchParams()
   const [input, setInput] = useState(params.get('url') ?? '')
+  const [invalid, setInvalid] = useState(false)
   const url = normalizeUrl(params.get('url') ?? '')
+
+  const submit = (event: React.FormEvent) => {
+    event.preventDefault()
+    const normalized = normalizeUrl(input)
+    setInvalid(!normalized)
+    if (normalized) setParams({ url: normalized })
+  }
+
+  return (
+    <div className="space-y-4">
+      <BackToHub />
+      <Card className="p-4">
+        <form onSubmit={submit} className="space-y-2">
+          <label htmlFor="link-url" className="font-display text-sm font-bold text-navy dark:text-ink">
+            {t('verifier.link.label')}
+          </label>
+          <div className="flex flex-col gap-2 sm:flex-row">
+            <Input id="link-url" inputMode="url" value={input} onChange={(event) => setInput(event.target.value)} placeholder="https://…" />
+            <Button type="submit" className="shrink-0">
+              <Search className="size-4" aria-hidden />
+              {t('verifier.link.analyse')}
+            </Button>
+          </div>
+          {invalid && <FormMessage tone="error">{t('verifier.link.invalid')}</FormMessage>}
+        </form>
+      </Card>
+      {url && <LinkAnalysisView key={url} url={url} />}
+    </div>
+  )
+}
+
+interface LinkAnalysisViewProps {
+  url: string
+  /** Intégrée au dossier : pas de bouton « Ajouter à un dossier », résultat remonté à la fin. */
+  embedded?: boolean
+  onDone?: (outcome: AnalysisOutcome) => void
+}
+
+/** Rapport d'analyse d'un lien (page Vérifier, ou rapport d'analyse d'un dossier). */
+export function LinkAnalysisView({ url, embedded = false, onDone }: LinkAnalysisViewProps) {
+  const { t, i18n } = useTranslation()
   const [server, setServer] = useState<StepResult<LinkResult>>({ state: 'pending' })
   const [rejection, setRejection] = useState<Rejection | null>(null)
   const [source, setSource] = useState<StepResult<{ source: SourceRecord | null; reason?: 'no_database' }>>({ state: 'pending' })
   const [existing, setExisting] = useState<StepResult<Existing>>({ state: 'pending' })
   const [archive, setArchive] = useState<{ busy: boolean; url?: string; error?: boolean }>({ busy: false })
-  const [invalid, setInvalid] = useState(false)
   const [page, setPage] = useState<StepResult<PageResult>>({ state: 'pending' })
   const [mediaBusy, setMediaBusy] = useState(false)
   const [mediaError, setMediaError] = useState(false)
@@ -153,15 +195,8 @@ export function LinkAnalysisPage() {
   }
 
   useEffect(() => {
-    if (url) void run(url)
+    void run(url)
   }, [url, run])
-
-  const submit = (event: React.FormEvent) => {
-    event.preventDefault()
-    const normalized = normalizeUrl(input)
-    setInvalid(!normalized)
-    if (normalized) setParams({ url: normalized })
-  }
 
   const requestArchive = async () => {
     if (!url) return
@@ -191,46 +226,51 @@ export function LinkAnalysisPage() {
     link && !link[part].ok ? t('verifier.link.partUnavailable') : undefined
   const archiveUrl = archive.url ?? (latest?.archived ? latest.archive_url : undefined)
   const knownSource = source.data?.source
+  const running = [server.state, source.state, existing.state, page.state].some((state) => state === 'running' || state === 'pending')
+  const findings = linkFindings({
+    domain: domainInfo?.domain,
+    ageDays: domainInfo?.available ? domainInfo.age_days : null,
+    https: https ? https.https : null,
+    source: knownSource ? { name: knownSource.name, score: knownSource.score } : null,
+    sourceChecked: source.state === 'done' && source.data?.reason !== 'no_database',
+    page: page.data
+      ? { title: page.data.title, site: page.data.site_name, publishedAt: page.data.published_at && formatDate(page.data.published_at), social: page.data.social, blocked: page.data.blocked }
+      : null,
+    archived: latest?.archived ? { timestamp: waybackDate(latest.timestamp) } : null,
+    cases: existing.data?.cases.map((item) => ({ title: item.title })),
+  })
+  // Fin de l'analyse : le résultat remonte au dossier, une fois.
+  const reported = useRef(false)
+  useEffect(() => {
+    if (running || reported.current || !onDone) return
+    reported.current = true
+    onDone({
+      findings,
+      claims: existing.data?.claims ?? [],
+      record: {
+        version: 1,
+        kind: 'link',
+        url,
+        analysed_at: new Date().toISOString(),
+        server: server.data ?? null,
+        page: page.data ?? null,
+        directory: knownSource ? { id: knownSource.id, name: knownSource.name, score: knownSource.score } : null,
+        existing: existing.data ?? null,
+      },
+    })
+  }, [running, findings, existing.data, server.data, page.data, knownSource, url, onDone])
 
   return (
     <div className="space-y-4">
-      <BackToHub />
-      <Card className="p-4">
-        <form onSubmit={submit} className="space-y-2">
-          <label htmlFor="link-url" className="font-display text-sm font-bold text-navy dark:text-ink">
-            {t('verifier.link.label')}
-          </label>
-          <div className="flex flex-col gap-2 sm:flex-row">
-            <Input id="link-url" inputMode="url" value={input} onChange={(event) => setInput(event.target.value)} placeholder="https://…" />
-            <Button type="submit" className="shrink-0">
-              <Search className="size-4" aria-hidden />
-              {t('verifier.link.analyse')}
-            </Button>
-          </div>
-          {invalid && <FormMessage tone="error">{t('verifier.link.invalid')}</FormMessage>}
-        </form>
-      </Card>
-
-      {url && (
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-start">
+      {(
+        <div className={cn('grid grid-cols-1 gap-4', !embedded && 'lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-start')}>
           <div className="min-w-0 space-y-3">
           <SynthesisCard
-            running={[server.state, source.state, existing.state, page.state].some((state) => state === 'running' || state === 'pending')}
+            running={running}
             claims={existing.data?.claims}
             factcheckAvailable={existing.data ? existing.data.factcheckAvailable : true}
             unreadable={Boolean(page.data?.blocked)}
-            findings={linkFindings({
-              domain: domainInfo?.domain,
-              ageDays: domainInfo?.available ? domainInfo.age_days : null,
-              https: https ? https.https : null,
-              source: knownSource ? { name: knownSource.name, score: knownSource.score } : null,
-              sourceChecked: source.state === 'done' && source.data?.reason !== 'no_database',
-              page: page.data
-                ? { title: page.data.title, site: page.data.site_name, publishedAt: page.data.published_at && formatDate(page.data.published_at), social: page.data.social, blocked: page.data.blocked }
-                : null,
-              archived: latest?.archived ? { timestamp: waybackDate(latest.timestamp) } : null,
-              cases: existing.data?.cases.map((item) => ({ title: item.title })),
-            })}
+            findings={findings}
           />
           <ol className="space-y-3">
             <li>
@@ -453,7 +493,7 @@ export function LinkAnalysisPage() {
                 </Link>
               </Card>
             )}
-            <AttachToCase
+            {!embedded && <AttachToCase
               evidence={(origin) => ({
 type: 'link',
                   url,
@@ -468,7 +508,7 @@ type: 'link',
                     existing: existing.data ?? null,
                   },
                 })}
-            />
+            />}
           </div>
         </div>
       )}

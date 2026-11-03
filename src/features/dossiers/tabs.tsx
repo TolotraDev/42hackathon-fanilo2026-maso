@@ -1,4 +1,4 @@
-import { AtSign, Columns2, ExternalLink, FileText, Image as ImageIcon, Link2, Plus, Save, Scale, Search, Trash2, Video } from 'lucide-react'
+import { AtSign, Columns2, ExternalLink, FilePlus, FileText, Image as ImageIcon, Link2, Plus, Save, Scale, Search, Sparkles, Trash2, Video } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
@@ -15,6 +15,7 @@ import { cn } from '@/lib/cn'
 import { loadWithPack } from '@/lib/offlineCache'
 import { matchesQuery } from '@/lib/text'
 import { CHECKLIST_BLOCKS, CHECKLIST_STATES, LANGUAGES, type ChecklistState, type Language } from '@/types/domain'
+import { suggestReport } from './analysisReport'
 import { useCaseAction } from './CasePage'
 import { useCaseStore } from './CaseStoreProvider'
 import type { CaseDetail, CasePatch, ChecklistItem, EvidenceRecord, ReportClaim } from './model'
@@ -514,14 +515,18 @@ export function ReportTab({ detail }: { detail: CaseDetail }) {
   const { t, i18n } = useTranslation()
   const { run, feedback } = useCaseAction()
   const current = detail.report
-  const [form, setForm] = useState({
-    language: current?.language ?? ((i18n.resolvedLanguage ?? 'fr') as Language),
-    summary: current?.summary ?? '',
-    explanation: current?.explanation ?? '',
-    method: current?.method ?? '',
-    claims: current?.claims ?? [],
-    publicEvidenceIds: current?.publicEvidenceIds ?? [],
-  })
+  const language = (i18n.resolvedLanguage ?? 'fr') as Language
+  const empty = { language, summary: '', explanation: '', method: '', claims: [] as ReportClaim[], publicEvidenceIds: [] as string[] }
+  // Pas encore de rapport mais un verdict vérifié : le rapport est proposé automatiquement (modifiable).
+  const suggested = !current && Boolean(detail.case.verdict)
+  const [form, setForm] = useState(() =>
+    current
+      ? { language: current.language, summary: current.summary, explanation: current.explanation, method: current.method, claims: current.claims, publicEvidenceIds: current.publicEvidenceIds }
+      : suggested
+        ? suggestReport(detail, t, language)
+        : empty,
+  )
+  const [fromSuggestion, setFromSuggestion] = useState(suggested)
   const editable = !current || current.status === 'draft' || current.status === 'submitted'
   const label = (id: string) => `P${detail.evidences.findIndex((evidence) => evidence.id === id) + 1}`
   const setClaim = (index: number, claim: ReportClaim) => setForm({ ...form, claims: form.claims.map((item, i) => (i === index ? claim : item)) })
@@ -551,6 +556,21 @@ export function ReportTab({ detail }: { detail: CaseDetail }) {
           </p>
         )}
         <p className="text-xs text-ink-muted">{t('dossiers.report.hint')}</p>
+        {fromSuggestion && (
+          <p className="rounded-xl bg-cobalt/10 px-3 py-2 text-sm text-ink" role="status">{t('dossiers.suggest.notice')}</p>
+        )}
+        {editable && detail.case.verdict && (
+          <div className="flex flex-wrap gap-2">
+            <Button type="button" variant="secondary" className="min-h-10 text-xs" onClick={() => { setForm(suggestReport(detail, t, form.language)); setFromSuggestion(true) }}>
+              <Sparkles className="size-4" aria-hidden />
+              {t('dossiers.suggest.apply')}
+            </Button>
+            <Button type="button" variant="ghost" className="min-h-10 text-xs" onClick={() => { setForm({ ...empty, language: form.language }); setFromSuggestion(false) }}>
+              <FilePlus className="size-4" aria-hidden />
+              {t('dossiers.suggest.blank')}
+            </Button>
+          </div>
+        )}
         <div className="space-y-1.5">
           <label htmlFor="report-language" className="text-sm font-semibold text-ink">{t('profil.language')}</label>
           <select id="report-language" className={SELECT} disabled={!editable} value={form.language} onChange={(event) => setForm({ ...form, language: event.target.value as Language })}>
