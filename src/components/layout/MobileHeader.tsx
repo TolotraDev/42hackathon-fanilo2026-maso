@@ -2,6 +2,7 @@ import { Menu, Search, Settings, X } from 'lucide-react'
 import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
+import { NotificationBell } from '@/features/notifications/NotificationBell'
 import { NetworkStatus } from './NetworkStatus'
 
 interface MobileHeaderProps {
@@ -30,6 +31,7 @@ export function MobileHeader({ title, query, searchOpen, onQueryChange, onSearch
         </button>
         <NetworkStatus className="text-white/75" />
         <div className="flex">
+          <NotificationBell tone="dark" />
           <button
             type="button"
             onClick={onSearchToggle}

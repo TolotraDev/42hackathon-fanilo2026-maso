@@ -39,9 +39,25 @@ Avancement par module : voir [docs/MODULES.md](docs/MODULES.md#avancement).
   - **Ajouter au dossier** : original stocké intact avec son empreinte et l'analyse complète
   - **Partage depuis le téléphone** : MASO apparaît dans le menu « Partager » (Facebook, WhatsApp, galerie)
   - Hors ligne : empreintes, métadonnées et recompression continuent ; les étapes serveur affichent « en attente de réseau »
-- [ ] MOD-04 — Ressources : annuaire, statistiques et données de démo
-- [ ] MOD-05 — Dossiers, checklist, verdict et hors connexion
-- [ ] MOD-06 — Revue éditoriale, publication et portail public
+- [x] MOD-04 — Ressources : annuaire, statistiques et données de démo
+  - **Annuaire des personnes-ressources** : recherche par nom, domaine, région, langue, organisation ; boutons Appeler / WhatsApp / E-mail ; favoris et notes privées ; demandes de confirmation suivies par dossier
+  - Coordonnées protégées selon la visibilité consentie (publique, équipe, privée), propositions validées par le rédacteur en chef, revalidation tous les 6 mois, **droit de retrait** (coordonnées effacées, y compris du journal d'audit), import CSV
+  - **Statistiques officielles** sourcées et datées avec graphiques, alerte « donnée ancienne », **Comparer à une affirmation** (écart en %) avec ajout au dossier, import Banque mondiale, saisie manuelle et CSV
+  - **Annuaire des médias et sources** (scores de fiabilité, import CSV)
+  - Données de démonstration : personnes et sources fictives, statistiques réelles (Banque mondiale), 3 cas de démonstration ; consultables hors ligne
+- [x] MOD-05 — Dossiers, checklist, verdict et hors connexion
+  - **Mes dossiers** (liste filtrable) et **file de vérification en colonnes** par statut ; état de synchronisation visible par dossier
+  - **Dossier** en 8 onglets : résumé, preuves (comparaison côte à côte), sources, contacts (experts suggérés), chiffres cités, **checklist guidée** (17 questions du cahier des charges), rapport (brouillon), historique et commentaires
+  - **Verdict** proposé par le fact-checker : bloqué (côté interface **et** serveur) sans affirmation, sans source, sans preuve citée ou avec une checklist non justifiée ; validation par un autre rédacteur en chef
+  - **Hors connexion** : base locale (IndexedDB), créer, modifier, ajouter une preuve (avec son fichier) et exporter **sans réseau** ; synchronisation automatique au retour du réseau, dans l'ordre, sans doublon ; refus du serveur signalés, jamais perdus
+  - **Export PDF** et **copie en texte**, sur l'appareil
+- [x] MOD-06 — Revue éditoriale, publication et portail public
+  - **Rapport** : affirmations liées aux preuves (une affirmation sans preuve bloque la publication), preuves publiables choisies, versions conservées à chaque modification
+  - **Revue éditoriale** (rédacteur en chef) : affirmations non étayées en évidence, comparaison de versions mot à mot, décisions *Valider et publier*, *Demander une correction*, *Demander une vérification complémentaire*, *Rejeter*, commentaire obligatoire ; seul le rédacteur en chef publie, et jamais un verdict qu'il a proposé (vérifié par le serveur)
+  - **Signature numérique** du rapport par le serveur (HMAC-SHA-256, clé générée dans la base), numéro public `MASO-AAAA-NNNN`, corrections publiques datées et signées à nouveau
+  - **Portail public sans compte** : derniers rapports, recherche (mot-clé, verdict, thème, région), page rapport (affirmation, verdict, explication, preuves, méthode, corrections), partage WhatsApp / Facebook avec aperçu, PDF, **QR de vérification** (contenu modifié détecté)
+  - **Signaler sans compte** : image, lien ou texte ; « **Déjà vérifié** » si le fichier, une image très proche ou le lien est connu, sinon indices simples et « Non vérifié à ce stade » (jamais de verdict automatique) ; **code de suivi** ; anti-abus (10 envois par heure et par adresse, 5 Mo, formats image, doublons regroupés, champ piège)
+  - **Tableau de bord par rôle**, **bibliothèque des rapports** (filtres, PDF, lien), **notifications** (attribution, relecture, correction, publication, mention @, signalement du public), prise en charge d'un signalement en un clic
 - [ ] MOD-07 — IA « zéro invention » : texte, assistant éditorial, veille
 - [ ] MOD-08 — Profil, badge QR, paramètres, audit, tests et livraison
 
@@ -49,8 +65,8 @@ Avancement par module : voir [docs/MODULES.md](docs/MODULES.md#avancement).
 
 React · TypeScript · Vite · Tailwind CSS · vite-plugin-pwa · react-i18next (FR / MG / EN) · React Router · lucide-react
 Supabase : PostgreSQL, Auth, RLS, Storage, Edge Functions (Deno) · tests pgTAP
-Analyses : exifr, Web Crypto, Canvas (navigateur) · service Python FastAPI : c2pa-python, PyAV (FFmpeg), RDAP, Wayback Machine, Google Fact Check
-Prévu par les modules suivants : Dexie (IndexedDB) · Recharts · jsPDF.
+Analyses : exifr, Web Crypto, Canvas (navigateur) · Recharts · API Banque mondiale · service Python FastAPI : c2pa-python, PyAV (FFmpeg), RDAP, Wayback Machine, Google Fact Check
+Hors connexion : Dexie (IndexedDB), service worker Workbox · Export : jsPDF.
 
 ## Installation & lancement
 
@@ -106,7 +122,7 @@ npx supabase functions serve invite-user   # invitation des membres (écran Admi
 ```
 
 Les e-mails (lien magique, mot de passe oublié, invitation) arrivent dans la boîte de test Supabase : http://localhost:54324.
-Les mêmes comptes de démonstration existent en base (mot de passe `Maso2026!demo`).
+Les mêmes comptes de démonstration existent en base (mot de passe `Maso2026!demo`), ainsi que les données de démonstration (`supabase/demo/donnees_demo.sql`).
 
 ## Démo
 
@@ -114,14 +130,20 @@ Liens, captures (`screenshots/`) et vidéo : à compléter en MOD-08.
 
 ## Limites connues & pistes
 
-- Les écrans métier (veille, dossiers, ressources) affichent encore des **données de démonstration fictives** (`src/data/demo/`), remplacées module par module.
+- L'écran **Veille** affiche encore des **données de démonstration fictives** (`src/data/demo/alerts.ts`) : il sera branché sur les signalements et les flux avec MOD-07.
 - Les détails des sources confidentielles sont isolés et accessibles uniquement par fonction journalisée, mais **pas encore chiffrés** en base (prévu avec Supabase Vault).
 - Le lien magique et l'invitation par e-mail dépendent d'un serveur d'envoi d'e-mails (SMTP) configuré dans Supabase.
 - **Indice IA** et **Google Fact Check** nécessitent des clés (`HF_TOKEN`, `GOOGLE_FACTCHECK_API_KEY`) : sans elles, ces étapes sont signalées « non configurées ».
 - L'archivage Wayback Machine est soumis aux limites d'archive.org (refus temporaires signalés comme tels).
 - L'empreinte perceptuelle est calculée dans le navigateur (et non avec `imagehash` côté serveur comme prévu au cahier des charges) pour fonctionner hors ligne.
-- Une analyse faite hors ligne ne peut pas encore être ajoutée au dossier : la file de synchronisation arrive avec MOD-05.
+- Synchronisation : en cas de modifications concurrentes, la dernière enregistrée l'emporte ; un refus du serveur est signalé et conservé.
 - L'entrée « Texte » du hub arrive avec MOD-07.
+- Signature des rapports : HMAC calculé par la base (clé secrète en base). Elle prouve que le contenu n'a pas été modifié depuis la publication, mais se vérifie en ligne via le portail (pas de clé publique hors ligne).
+- Aperçu de partage : la page affiche l'aperçu et les boutons, mais Facebook et WhatsApp lisent les balises d'une page générée côté serveur ; sans rendu serveur, leur vignette reste générique.
+- Anti-abus du signalement public : limite par adresse IP, taille, formats, doublons et champ piège ; pas de CAPTCHA externe (aucun service tiers ajouté).
+- Notifications : actualisées toutes les minutes et à chaque modification (pas de notification push quand l'application est fermée).
+- Les traductions malgaches doivent être relues par un locuteur natif.
+- Données de démonstration : personnes et sources fictives (numéros `+261 00…` inexistants, e-mails `@example.org`) ; statistiques réelles de la Banque mondiale (WDI).
 - Feuille de route après le hackathon : voir [docs/CAHIER_DES_CHARGES.md](docs/CAHIER_DES_CHARGES.md#19-feuille-de-route).
 
 ## Équipe & outils IA utilisés
@@ -142,6 +164,9 @@ Outils d'IA utilisés pour le développement : Claude Code (Anthropic) — gén�
 - [Guide Git](docs/GUIDE_GIT.md)
 - [Configurer Supabase](docs/CONFIGURATION_SUPABASE.md)
 - [Tester le MOD-03 pas à pas](docs/GUIDE_TEST_MOD03.md) (fichiers d'exemple dans `docs/exemples/`)
+- [Tester le MOD-04 pas à pas](docs/GUIDE_TEST_MOD04.md)
+- [Tester le MOD-05 pas à pas](docs/GUIDE_TEST_MOD05.md)
+- [Tester le MOD-06 pas à pas](docs/GUIDE_TEST_MOD06.md)
 - [Conventions](docs/CONVENTIONS.md)
 - [Charte graphique](docs/DESIGN.md)
 

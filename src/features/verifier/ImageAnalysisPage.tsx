@@ -9,21 +9,10 @@ import { FileDrop } from './FileDrop'
 import { takePendingMedia } from './pendingMedia'
 import { FactList, StepCard } from './StepCard'
 import { useImageAnalysis, type ImageSteps } from './useImageAnalysis'
-import { addEvidence } from './verificationApi'
 import { emptyVisualChecklist, VisualChecklist } from './VisualChecklist'
 
 const formatBytes = (bytes: number) =>
   bytes > 1024 * 1024 ? `${(bytes / 1024 / 1024).toFixed(1)} Mo` : `${Math.max(1, Math.round(bytes / 1024))} Ko`
-
-const EXTENSIONS: Record<string, string> = {
-  'image/jpeg': 'jpg',
-  'image/png': 'png',
-  'image/webp': 'webp',
-  'image/gif': 'gif',
-  'image/heic': 'heic',
-  'image/heif': 'heif',
-  'image/avif': 'avif',
-}
 
 /** Résumé d'une étape qui n'a pas pu s'exécuter. */
 function useStateSummary() {
@@ -328,12 +317,9 @@ export function ImageAnalysisPage() {
             <>
               <VisualChecklist value={visual} onChange={setVisual} />
               <AttachToCase
-                onAttach={async (caseId, origin) => {
-                  await addEvidence({
-                    caseId,
-                    type: 'image',
+                evidence={(origin) => ({
+type: 'image',
                     file,
-                    fileExtension: EXTENSIONS[reception?.mime ?? ''] ?? 'bin',
                     sha256: reception?.sha256,
                     phash: reception?.phash,
                     url: media?.sourceUrl ?? undefined,
@@ -342,8 +328,7 @@ export function ImageAnalysisPage() {
                       visual_checklist: visual,
                       found_links: foundLinks.split('\n').map((line) => line.trim()).filter(Boolean),
                     }),
-                  })
-                }}
+                  })}
               />
             </>
           )}

@@ -1,6 +1,7 @@
 import { Moon, Search, Sun } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useTheme } from '@/hooks/useTheme'
+import { NotificationBell } from '@/features/notifications/NotificationBell'
 import { LanguageSwitcher } from './LanguageSwitcher'
 
 interface TopbarProps {
@@ -28,6 +29,7 @@ export function Topbar({ title, query, onQueryChange }: TopbarProps) {
           className="min-h-10 w-full rounded-xl border border-line bg-canvas pl-9 pr-3 text-sm text-ink placeholder:text-ink-muted focus:border-cobalt focus:outline-none"
         />
       </label>
+      <NotificationBell />
       <LanguageSwitcher />
       <button
         type="button"

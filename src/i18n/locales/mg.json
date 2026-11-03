@@ -16,7 +16,9 @@
     "search": "Hikaroka",
     "closeSearch": "Hidio ny fikarohana",
     "settings": "Fikirana",
-    "admin": "Fitantanana"
+    "admin": "Fitantanana",
+    "accueil": "Fandraisana",
+    "portail": "Vavahady ho an'ny besinimaro"
   },
   "page": {
     "veille": "Vaovao farany",
@@ -25,12 +27,16 @@
     "rediger": "Fanoratana lahatsoratra",
     "dossiers": "Tabilao fanaraha-maso",
     "profil": "Momba ahy sy fikirana",
-    "admin": "Fitantanana"
+    "admin": "Fitantanana",
+    "accueil": "Fandraisana",
+    "portail": "Vavahady ho an'ny besinimaro"
   },
   "network": {
     "online": "Mifandray",
     "offline": "Tsy mifandray",
-    "offlineBanner": "Tsy mifandray ianao : mandeha ihany ny fampiharana amin'ny angona voatahiry amin'ity fitaovana ity."
+    "offlineBanner": "Tsy mifandray ianao : mandeha ihany ny fampiharana amin'ny angona voatahiry amin'ity fitaovana ity.",
+    "pending_one": "{{count}} miandry",
+    "pending_other": "{{count}} miandry"
   },
   "common": {
     "searchPlaceholder": "Hikaroka…",
@@ -271,8 +277,9 @@
       "originPlaceholder": "Ohatra : pejy Facebook « … », vondrona WhatsApp",
       "submit": "Hampiditra ao amin'ny rakitra",
       "done": "Tafiditra ao amin'ny rakitra « {{title}} » ny porofo.",
-      "needsDatabase": "Mila ny tahirin'ny MASO (Supabase) ny fampidirana ao amin'ny rakitra. Mbola azo ampiasaina ny famakafakana.",
-      "offline": "Mila fifandraisana ny fampidirana ao amin'ny rakitra."
+      "staffOnly": "Ho an'ny ekipa mpanoratra ihany.",
+      "queued": "Tsy mifandray : halefa rehefa miverina ny tambajotra izy.",
+      "offlineHint": "Tsy mifandray : hotehirizina eto amin'ny fitaovana ny porofo ary halefa ho azy avy eo."
     },
     "visual": {
       "title": "Lisitra fanamarinana amin'ny maso",
@@ -394,10 +401,171 @@
     "mediaDirectoryHint": "Taratasy sy naoty fahatokisana",
     "reportLibrary": "Tahirin'ny tatitra",
     "reportLibraryHint": "Fanamarinana efa navoaka",
-    "categories": "Sokajy",
     "people": "Olona loharanom-baovao",
     "peopleCount_one": "{{count}} olona",
-    "peopleCount_other": "{{count}} olona"
+    "peopleCount_other": "{{count}} olona",
+    "offlinePack": "Dika voatahiry tamin'ity fitaovana ity tamin'ny {{date}} (tsy mifandray).",
+    "manage": "Hitantana ny lisitra",
+    "addPerson": "Hanampy olona",
+    "proposePerson": "Hanolotra olona",
+    "searchPeople": "Hitady anarana, fikambanana, sehatra…",
+    "filter": {
+      "domain": "Sehatra",
+      "region": "Faritra",
+      "language": "Fiteny",
+      "organization": "Fikambanana"
+    },
+    "favoritesOnly": "Ireo tiako ihany",
+    "favorite": "Tiana",
+    "status": {
+      "pending": "Hankatoavina",
+      "revalidate": "Hankatoavina indray",
+      "withdrawn": "Nesorina",
+      "valid": "Nekena"
+    },
+    "guestHint": "Fidirana vahiny : ireo olona nanaiky ho hita ampahibemaso ihany no aseho, tsy misy ny fifandraisana aminy.",
+    "back": "Hiverina amin'ny loharano",
+    "person": {
+      "notFound": "Tsy (na tsy) ao amin'ny lisitra intsony io olona io.",
+      "languages": "Fiteny",
+      "visibility": "Fahitana",
+      "lastValidated": "Fankatoavana farany",
+      "neverValidated": "mbola tsy nekena mihitsy",
+      "daysAgo_one": "{{count}} andro lasa izay",
+      "daysAgo_other": "{{count}} andro lasa izay",
+      "call": "Hiantso",
+      "email": "Mailaka",
+      "contactsHidden": "Tsy aseho ny fifandraisana : nisafidy fahitana manokana io olona io. Angataho amin'ny lehiben'ny fanoratana.",
+      "requests": "Fangatahana fanamafisana",
+      "requestsHint": "Tazony ny fangatahana rehetra natao tamin'io olona io ho an'ny rakitra iray, sy ny valiny.",
+      "requestSaved": "Voatahiry ny fangatahana fanamafisana.",
+      "case": "Rakitra voakasika",
+      "channel": "Fomba",
+      "newRequest": "Fangatahana vaovao",
+      "status": "Toe-javatra",
+      "response": "Valiny azo",
+      "privateNote": "Fanamarihana manokana",
+      "privateNoteHint": "Ianao irery no mahita.",
+      "saveNote": "Hitahiry",
+      "noteSaved": "Voatahiry.",
+      "edit": "Hanova ny taratasy",
+      "validate": "Hankatoa",
+      "revalidate": "Hankatoa indray (voamarina ny fifandraisana)",
+      "validated": "Nekena ny taratasy.",
+      "withdraw": "Zo hiala",
+      "withdrawConfirm": "Hanala an'i {{name}} ao amin'ny lisitra sy hamafa ny fifandraisana aminy ? Tsy azo averina io.",
+      "withdrawn": "Nesorina tao amin'ny lisitra ilay olona, voafafa ny fifandraisana aminy.",
+      "updateRequest": "Havaozina ny fangatahana"
+    },
+    "visibility": {
+      "public": "Ampahibemaso",
+      "team": "Ekipa",
+      "private": "Manokana"
+    },
+    "visibilityHint": {
+      "public": "Hitan'ny besinimaro koa ny anarana, ny asa ary ny sehatra (tsy ny fifandraisana mihitsy).",
+      "team": "Hitan'ny ekipa mpanoratra rehetra ny fifandraisana.",
+      "private": "Ny lehiben'ny fanoratana sy ny mpitantana ihany no mahita ny fifandraisana."
+    },
+    "channel": {
+      "phone": "Telefaonina",
+      "whatsapp": "WhatsApp",
+      "email": "Mailaka",
+      "in_person": "Mivantana"
+    },
+    "confirmation": {
+      "to_contact": "Hifandraisana",
+      "sent": "Nalefa ny fangatahana",
+      "answered": "Voaray ny valiny",
+      "reminder_needed": "Mila fampahatsiahivana",
+      "no_answer": "Tsy misy valiny"
+    },
+    "form": {
+      "fullName": "Anarana feno",
+      "position": "Asa",
+      "organization": "Fikambanana",
+      "region": "Faritra",
+      "phone": "Telefaonina",
+      "whatsapp": "WhatsApp",
+      "email": "Mailaka",
+      "domains": "Sehatra fahaizana (sarahana faingo)",
+      "domainsPlaceholder": "Ohatra : toetr'andro, tondra-drano",
+      "contacts": "Fifandraisana sy fahitana",
+      "consent": "Nanaiky ho ao amin'ny lisitry ny MASO io olona io, miaraka amin'ny fahitana voafidy. Afaka miala amin'ny fotoana rehetra izy.",
+      "consentRequired": "Tsy maintsy misy ny fanekena avy amin'ilay olona.",
+      "proposalHint": "Ho hitan'ny ekipa ny tolo-kevitrao rehefa nekena ny lehiben'ny fanoratana.",
+      "sendProposal": "Handefa ny tolo-kevitra",
+      "proposalSent": "Nalefa ny tolo-kevitra : hiseho ao amin'ny lisitra izy rehefa nekena."
+    },
+    "admin": {
+      "title": "Ny taratasy rehetra",
+      "hint": "Ekeo ny tolo-kevitra ary ekeo indray ny taratasy mihoatra ny {{days}} andro : mbola marina ve ny fifandraisana ?",
+      "import": "Hampiditra olona (CSV)"
+    },
+    "csv": {
+      "hint": "Tsanganana andrasana (mpanasaraka ; na ,) : {{columns}}.",
+      "template": "Haka ny modely",
+      "choose": "Hifidy rakitra CSV",
+      "preview": "Andalana {{valid}} mety, {{rejected}} nolavina.",
+      "confirm_one": "Hampiditra andalana {{count}}",
+      "confirm_other": "Hampiditra andalana {{count}}",
+      "lineError": "Andalana {{line}} : {{reason}}",
+      "imported_one": "Singa {{count}} nampiana.",
+      "imported_other": "Singa {{count}} nampiana.",
+      "missing": "foana ny tsanganana « {{column}} »",
+      "invalidType": "diso ny karazany (andrasana : {{types}})"
+    },
+    "sources": {
+      "noScore": "Tsy notombanana",
+      "import": "Hampiditra loharano (CSV)"
+    },
+    "theme": {
+      "demography": "Mponina",
+      "health": "Fahasalamana",
+      "education": "Fanabeazana",
+      "economy": "Toekarena",
+      "climate": "Toetr'andro sy loza voajanahary",
+      "elections": "Fifidianana"
+    },
+    "stats": {
+      "stale": "Angona efa antitra",
+      "staleHint": "Angona mihoatra ny {{years}} taona : mitadiava loharano vaovao kokoa alohan'ny hanononana azy.",
+      "year": "Taona {{year}}",
+      "chart": "Fivoarana : {{name}}",
+      "source": "Loharano",
+      "updated": "Nohavaozina ny {{date}} ny loharano",
+      "notValidated": "Tsy nekena",
+      "compareTitle": "Hampitaha amin'ny filazana iray",
+      "compareHint": "Ampidiro ny isa voalaza ao amin'ny votoaty mampiahiahy : kajian'ny MASO ny elanelany amin'ny angona ofisialy.",
+      "indicator": "Tondro ofisialy",
+      "claimedValue": "Isa voalaza (ohatra 40 000 000)",
+      "compare": {
+        "higher": "Ambony {{percent}} % noho ny angona ofisialy ny isa voalaza ({{claimed}}) : {{official}} {{unit}} ({{source}}, {{year}}).",
+        "lower": "Ambany {{percent}} % noho ny angona ofisialy ny isa voalaza ({{claimed}}) : {{official}} {{unit}} ({{source}}, {{year}}).",
+        "equal": "Mifanaraka amin'ny angona ofisialy ny isa voalaza ({{claimed}}) : {{official}} {{unit}} ({{source}}, {{year}})."
+      },
+      "worldBankTitle": "Hampiditra avy amin'ny Banky Iraisam-pirenena",
+      "worldBankHint": "Angona ofisialy momba an'i Madagasikara, miaraka amin'ny daty nanavaozana azy. Tsy averina indroa ireo taona efa misy.",
+      "allIndicators": "Tondro rehetra ({{count}})",
+      "import": "Hampiditra",
+      "manualTitle": "Fampidirana tanana",
+      "manualHint": "Tsy maintsy misy loharano sy daty : tsy misy isa tsy misy loharano sy daty.",
+      "theme": "Lohahevitra",
+      "field": {
+        "name": "Anaran'ny tondro",
+        "value": "Sanda",
+        "unit": "Refy (tsy voatery)",
+        "year": "Taonan'ny angona",
+        "source": "Loharano (ohatra INSTAT, OMS, minisitera)",
+        "sourceUrl": "Rohy mankany amin'ny loharano (tsy voatery)",
+        "sourceUpdatedAt": "Daty nanavaozana ny loharano"
+      },
+      "save": "Hitahiry ny tondro",
+      "saved": "Voatahiry.",
+      "invalidNumber": "Diso ny sanda na ny taona.",
+      "sourceRequired": "Tsy maintsy misy loharano sy daty fanavaozana (TTTT-VV-AA).",
+      "csvTitle": "Hampiditra antontan'isa (CSV)"
+    }
   },
   "rediger": {
     "format": "Endrika",
@@ -429,7 +597,288 @@
     "due": "Fe-potoana : {{date}}",
     "countInProgress": "Mandeha",
     "countToReview": "Hojerena",
-    "countPublished": "Navoaka"
+    "countPublished": "Navoaka",
+    "sync": {
+      "synced": "Vaovao",
+      "pending": "Miandry handefasana",
+      "error": "Olana amin'ny fampifanarahana",
+      "errorHint": "Nolavin'ny mpizara ny fanovana iray tamin'ity rakitra ity. Voatahiry eto amin'ny fitaovana izy :",
+      "retry": "Andramo indray",
+      "discard": "Hanary ireo fanovana miandry",
+      "discardConfirm": "Hanary ireo fanovana tsy mbola nalefa amin'ity rakitra ity ? Ho very izy ireo."
+    },
+    "error": {
+      "reason_required": "Tsy maintsy misy antony.",
+      "transition_not_allowed": "Tsy azonao atao amin'ny andraikitrao io fiovana io.",
+      "verdict_required": "Tsy maintsy manolotra didy aloha.",
+      "self_validation_forbidden": "Tsy azonao ekena ny didy natolotrao.",
+      "title_required": "Tsy maintsy misy lohateny.",
+      "case_not_found": "Tsy hita ny rakitra.",
+      "case_locked": "Nekena na nakatona ity rakitra ity : tsy azo ovaina intsony.",
+      "checklist_evidence_required": "Tsy maintsy mifandray amin'ny porofo iray farafahakeliny ny teboka « vita ».",
+      "role_not_allowed": "Tsy azonao atao amin'ny andraikitrao.",
+      "justification_required": "Tsy maintsy misy fanazavana.",
+      "submission_blocked": "Tsy azo alefa :",
+      "report_locked": "Tsy azo ovaina intsony ny tatitra.",
+      "comment_empty": "Foana ny hevitra.",
+      "missing_file": "Tsy eto amin'ny fitaovana intsony ny rakitry ny porofo.",
+      "unknown": "Olana tsy fantatra.",
+      "publication_blocked": "Tsy azo avoaka :",
+      "comment_required": "Tsy maintsy asiana fanamarihana.",
+      "not_in_review": "Tsy am-pandinihana ity raki-tahiry ity.",
+      "online_required": "Mila tambajotra ity fanapahan-kevitra ity : ny mpizara no manao sonia ny tatitra.",
+      "sync_first": "Mbola misy fanovana miandry halefa amin'ity raki-tahiry ity. Andraso ny fampifanarahana.",
+      "publish_via_review": "Mandalo amin'ny fandinihan'ny lehiben'ny mpanoratra (sonia) ny famoahana.",
+      "not_published": "Tsy mbola navoaka ity tatitra ity."
+    },
+    "blocker": {
+      "claim_missing": "tsy misy filazana",
+      "source_missing": "tsy misy loharano mifandray",
+      "evidence_missing": "tsy misy porofo voatonona",
+      "checklist_unjustified": "lisitra tsy feno sady tsy nohazavaina",
+      "verdict_missing": "tsy misy didy natolotra ;",
+      "report_missing": "tsy mbola voasoratra ny tatitra ;",
+      "summary_missing": "foana ny fintina ;",
+      "explanation_missing": "foana ny fanazavana ;",
+      "claims_missing": "tsy misy filazana voatanisa ;",
+      "unsupported_claim": "misy filazana tsy mifandray amin'ny porofo ;",
+      "self_validation": "ianao no nanolotra ity didy ity : lehiben'ny mpanoratra hafa no tsy maintsy mankato azy."
+    },
+    "condition": {
+      "claim_missing": "Voasoratra ny filazana hamarinina",
+      "source_missing": "Misy loharano iray farafahakeliny mifandray amin'ny rakitra",
+      "evidence_missing": "Misy porofo iray farafahakeliny voatonona ao amin'ny fanazavana",
+      "checklist_unjustified": "Voahazava ny teboka rehetra tsy mbola vita"
+    },
+    "mutation": {
+      "create_case": "Famoronana rakitra",
+      "update_case": "Fanovana",
+      "set_checklist": "Lisitra fanamarinana",
+      "change_status": "Fiovan'ny toe-javatra",
+      "propose_verdict": "Didy natolotra",
+      "add_evidence": "Fampidirana porofo",
+      "link_source": "Fampifandraisana loharano",
+      "unlink_source": "Fanesorana loharano",
+      "save_report": "Tatitra",
+      "add_comment": "Hevitra"
+    },
+    "priority": {
+      "1": "Laharam-pahamehana ambony",
+      "2": "Laharam-pahamehana mahazatra",
+      "3": "Laharam-pahamehana ambany"
+    },
+    "offlineList": "Lisitra voatahiry eto amin'ny fitaovana (tsy mifandray).",
+    "pendingChanges_one": "Fanovana {{count}} miandry handefasana.",
+    "pendingChanges_other": "Fanovana {{count}} miandry handefasana.",
+    "new": "Rakitra vaovao",
+    "create": "Hamorona ny rakitra",
+    "view": "Fampisehoana",
+    "views": {
+      "list": "Lisitra",
+      "board": "Tsanganana"
+    },
+    "mine": "Ny rakitro",
+    "offlineCreate": "Tsy mifandray : hoforonina eto amin'ny fitaovana ny rakitra ary halefa rehefa miverina ny tambajotra.",
+    "field": {
+      "claim": "Filazana hamarinina",
+      "claimPlaceholder": "Izay lazain'ny votoaty mampiahiahy, araka ny teny raha azo atao.",
+      "category": "Sokajy",
+      "categoryPlaceholder": "Ohatra : toetr'andro, fahasalamana, fifidianana",
+      "region": "Faritra",
+      "priority": "Laharam-pahamehana",
+      "dueDate": "Fe-potoana",
+      "status": "Toe-javatra",
+      "assignee": "Nankinina tamin'i"
+    },
+    "back": "Hiverina amin'ny rakitra",
+    "notFound": "Tsy misy ity rakitra ity na tsy mahazo miditra aminy ianao.",
+    "member": "Mpikambana ao amin'ny ekipa",
+    "tabs": "Tapany amin'ny rakitra",
+    "tab": {
+      "summary": "Famintinana",
+      "evidences": "Porofo",
+      "sources": "Loharano",
+      "contacts": "Fifandraisana",
+      "figures": "Isa voatonona",
+      "checklist": "Lisitra fanamarinana",
+      "report": "Tatitra",
+      "history": "Tantara"
+    },
+    "export": {
+      "pdf": "Haondrana PDF",
+      "pdfDone": "Voasintona ny PDF.",
+      "copy": "Handika ho soratra",
+      "copied": "Voadika ny rakitra : azonao apetaka amin'ny hafatra.",
+      "footer": "Navoaka avy amin'ny MASO tamin'ny {{date}} — toe-javatra : {{status}}. Antontan-taratasy fiasana : ny tatitra nekena sy navoaka ihany no mamatotra ny fanoratana.",
+      "comments": "Hevitry ny ekipa"
+    },
+    "offlineCase": "Tsy mifandray : dika voatahiry eto amin'ny fitaovana. Halefa rehefa miverina ny tambajotra ny fanovanao.",
+    "offlineIncomplete": "Mbola tsy voasintona tamin'ity fitaovana ity ity rakitra ity : sokafy indray mandeha misy tambajotra mba hahafahana mijery azy tsy mifandray.",
+    "verdict": {
+      "title": "Didy",
+      "confidence": "Haavon'ny fahatokisana",
+      "cites": "Porofo voatonona",
+      "proposedBy": "natolotr'i {{name}}",
+      "none": "Mbola tsy misy didy natolotra.",
+      "selfValidation": "Ianao no nanolotra ity didy ity : lehiben'ny fanoratana hafa no tokony hanaiky azy.",
+      "propose": "Hanolotra didy",
+      "label": "Didy",
+      "justification": "Fanazavana",
+      "justificationHint": "Fehezanteny 3 ka hatramin'ny 5, samy manondro porofo (ohatra « Navoaka tamin'ny 2024 io sary io [P1]. »).",
+      "conditions": "Fepetra handefasana",
+      "submit": "Halefa any amin'ny lehiben'ny fanoratana",
+      "proposed": "Didy natolotra : nalefa tany amin'ny lehiben'ny fanoratana ny rakitra."
+    },
+    "status": {
+      "title": "Hampandroso ny rakitra",
+      "to": {
+        "in_analysis": "Hanomboka famakafakana",
+        "awaiting_response": "Miandry valiny",
+        "correction_requested": "Hangataka fanitsiana",
+        "validated": "Hanaiky",
+        "closed": "Hikatona",
+        "to_review": "Halefa",
+        "new": "Vaovao",
+        "published": "Havoaka"
+      },
+      "reason": "Antony (tsy maintsy atao)",
+      "confirm": "Hamafiso : {{status}}",
+      "changed": "Voavao ny toe-javatra."
+    },
+    "lockedHint": "Rakitra nekena na nakatona : tsy azo ovaina intsony.",
+    "saved": "Voatahiry.",
+    "save": "Hitahiry",
+    "unassigned": "Tsy nankinina",
+    "submitToFactChecker": "Raha handefa ny rakitra any amin'ny mpanamarina, ankino aminy izy.",
+    "evidences": {
+      "add": "Hanampy porofo",
+      "addHint": "Famakafakao ao amin'ny Hamarino ny votoaty ary tsindrio « Hampiditra ao amin'ny rakitra », na ampidiro mivantana ny rohy.",
+      "analyse": {
+        "image": "Hamakafaka sary",
+        "video": "Hamakafaka horonan-tsary",
+        "lien": "Hamakafaka rohy"
+      },
+      "linkUrl": "Adiresin'ny rohy",
+      "addLink": "Hampiditra ny rohy",
+      "added": "Tafiditra ny porofo.",
+      "none": "Mbola tsy misy porofo.",
+      "comparison": "Fampitahana mifanila",
+      "compare": "Hampitaha"
+    },
+    "evidenceType": {
+      "image": "Sary",
+      "video": "Horonan-tsary",
+      "link": "Rohy",
+      "screenshot": "Sary efijery",
+      "document": "Antontan-taratasy",
+      "text": "Soratra",
+      "analysis": "Famakafakana"
+    },
+    "analysisKind": {
+      "image": "Famakafakana sary",
+      "video": "Famakafakana horonan-tsary",
+      "link": "Famakafakana rohy",
+      "statistic_comparison": "Fampitahana amin'ny antontan'isa ofisialy"
+    },
+    "sources": {
+      "required": "Tsy maintsy misy loharano iray mifandray alohan'ny handefasana didy.",
+      "unlink": "Hanala ny loharano",
+      "link": "Hampifandray loharano",
+      "search": "Hitady loharano ao amin'ny lisitra",
+      "add": "Hampifandray",
+      "createHint": "Tsy ao amin'ny lisitra ny loharano ?"
+    },
+    "contacts": {
+      "none": "Tsy misy fangatahana fanamafisana ho an'ity rakitra ity.",
+      "suggested": "Manam-pahaizana atolotra",
+      "suggestedHint": "Araka ny sokajy sy ny faritry ny rakitra. Sokafy ny taratasy iray mba hanombohana fangatahana fanamafisana."
+    },
+    "figures": {
+      "compare": "Hampitaha isa",
+      "none": "Tsy misy isa nampitahaina ho an'ity rakitra ity.",
+      "line": "Isa voalaza : {{claimed}} — angona ofisialy : {{official}} {{unit}} ({{year}}) — elanelana : {{percent}} %."
+    },
+    "checklist": {
+      "explanation": "Fanazavana (tsy maintsy atao raha tsy vita ny teboka)",
+      "hint": "Tsy maintsy mifandray amin'ny porofo ny teboka « vita » ; tsy maintsy hazavaina ny teboka tsy vita alohan'ny handefasana didy."
+    },
+    "checklistState": {
+      "todo": "Hatao",
+      "in_progress": "Am-panaovana",
+      "done": "Vita",
+      "not_applicable": "Tsy mihatra"
+    },
+    "block": {
+      "origin": "Fiaviana",
+      "context": "Toe-javatra manodidina",
+      "content": "Votoaty",
+      "sources": "Loharano",
+      "adversarial": "Zo hamaly",
+      "conclusion": "Famaranana"
+    },
+    "question": {
+      "origin": {
+        "first_publisher": "Iza no namoaka voalohany ?",
+        "first_date": "Inona no daty voalohany hita ?",
+        "account_credible": "Fantatra sy azo itokisana ve ny kaonty niaviany ?",
+        "reposted": "Naverina navoaka tany an-kafa ve ny votoaty ?"
+      },
+      "context": {
+        "place_date_confirmed": "Voamarina ve ny toerana sy ny daty voalaza (toerana, toetr'andro, zavatra hita) ?",
+        "older_version": "Misy dika taloha kokoa ve ?",
+        "matches_event": "Mifanaraka amin'ny zava-nitranga ve ny votoaty ?"
+      },
+      "content": {
+        "technical_analysis": "Vita ve ny famakafakana ara-teknika ?",
+        "reverse_search": "Vita ve ny fikarohana mivadika ?",
+        "figures_compared": "Nampitahaina tamin'ny loharano ofisialy ve ny isa ?"
+      },
+      "sources": {
+        "two_independent": "Loharano roa tsy miankina farafahakeliny ?",
+        "direct_knowledge": "Mahalala mivantana ny zava-nitranga ve ny loharano ?",
+        "conflicts_examined": "Nodinihina ve ny fifandonan-tombontsoa ?",
+        "statements_crosschecked": "Nohamafisina tamin'ny loharano hafa ve ny fanambarana ?"
+      },
+      "adversarial": {
+        "party_contacted": "Nifandraisana ve ilay olona na andrim-panjakana voakasika ?",
+        "response_kept": "Voatahiry ve ny valiny nomeny ?",
+        "counter_evidence": "Nodinihina ve ireo singa mifanohitra ?"
+      }
+    },
+    "report": {
+      "hint": "Drafitry ny tatitra : ho tonga miaraka amin'ny MOD-06 ny fandinihana, ny sonia ary ny famoahana. Mandeha na tsy mifandray aza ny fanondranana PDF (eo ambony).",
+      "summary": "Famintinana",
+      "summaryHint": "Amin'ny fehezanteny 2 : ny filazana sy ny famaranana.",
+      "explanation": "Fanazavana",
+      "explanationHint": "Izay asehon'ny porofo, miaraka amin'ny fanondroana [P1], [P2]…",
+      "method": "Fomba fiasa",
+      "methodHint": "Fitaovana sy dingana nampiasaina.",
+      "save": "Hitahiry ny drafitra",
+      "saved": "Voatahiry ny drafitra.",
+      "claims": "Ireo filazana ao amin'ny tatitra",
+      "claimsHint": "Fehezanteny iray isaky ny filazana voamarina, mifandray amin'ny porofo iray farafahakeliny. Manakana ny famoahana ny filazana tsy misy porofo.",
+      "claimN": "Filazana {{n}}",
+      "claimPlaceholder": "Ohatra : navoaka voalohany tamin'ny volana martsa 2024 ilay sary.",
+      "claimEvidence": "Porofon'ny filazana {{n}}",
+      "removeClaim": "Hanala ny filazana {{n}}",
+      "addClaim": "Hanampy filazana",
+      "unsupported": "Filazana tsy misy porofo : mariho porofo iray farafahakeliny.",
+      "publicEvidences": "Porofo aseho ny besinimaro",
+      "publicEvidencesHint": "Mariho fotsiny izay azo avoaka (tsy misy loharano miafina na angon-drakitra manokana).",
+      "publishedAs": "Tatitra navoaka : {{id}}.",
+      "openPublic": "Hijery ny pejy ho an'ny besinimaro"
+    },
+    "history": {
+      "none": "Mbola tsy misy fiovana.",
+      "comment": "Hanampy hevitra ho an'ny ekipa…",
+      "addComment": "Hanome hevitra",
+      "commented": "Tafiditra ny hevitra.",
+      "commentBy": "Hevitr'i {{name}}",
+      "mention": "Hanonona :"
+    },
+    "fromAlert": "Tatitra avy amin'ny besinimaro {{code}}",
+    "fromAlertHint_one": "Avy amin'ny tatitra {{code}} (tatitra {{count}}). Hampidirina ho porofo ny rakitra sy ny rohy voaray.",
+    "fromAlertHint_other": "Avy amin'ny tatitra {{code}} (tatitra {{count}}). Hampidirina ho porofo ny rakitra sy ny rohy voaray."
   },
   "profil": {
     "language": "Fiteny",
@@ -509,7 +958,8 @@
       "profile_missing": "Tsy manana mombamomba MASO ity kaonty ity. Angataho amin'ny mpitantana ny hamorona azy.",
       "configuration": "Diso ny fandrindrana ny Supabase (lakile, migrations na mailaka). Jereo ny rakitra .env sy ny fandrindrana.",
       "no_account": "Tsy misy kaonty MASO mifandray amin'io adiresy io. Jereo ny adiresy na mangataha fanasana amin'ny mpitantana."
-    }
+    },
+    "portal": "Hijery ny vavahady ho an'ny besinimaro (tsy mila kaonty)"
   },
   "onboarding": {
     "skip": "Dingana",
@@ -548,5 +998,316 @@
     "none": "Tsy misy famantarana",
     "weak": "Famantarana malemy",
     "to_examine": "Famantarana tokony hojerena"
+  },
+  "confidence": {
+    "high": "Ambony",
+    "medium": "Antonony",
+    "low": "Ambany"
+  },
+  "accueil": {
+    "hello": "Manao ahoana {{name}}",
+    "intro": {
+      "journalist": "Ny raki-tahirinao, ny fanitsiana nangatahina ary ny tatitra avy amin'ny besinimaro tokony ho raisina an-tanana.",
+      "fact_checker": "Ny raki-tahiry nomena anao sy izay miandry didy.",
+      "editor_in_chief": "Ny tatitra tokony hodinihina, hankatoavina ary havoaka."
+    },
+    "indicators": "Tondro",
+    "indicator": {
+      "myOpen": "Ny raki-tahiriko mbola misokatra",
+      "corrections": "Fanitsiana nangatahina",
+      "late": "Tara",
+      "published": "Tatitra navoaka",
+      "assigned": "Nomena ahy",
+      "inAnalysis": "Am-pandinihana",
+      "toReview": "Hodinihina",
+      "toPublish": "Nankatoavina, havoaka",
+      "open": "Raki-tahiry misokatra"
+    },
+    "queue": "Asa miandry",
+    "queueEmpty": "Tsy misy asa miandry amin'izao.",
+    "late": "Tara",
+    "publicAlerts": "Tatitra avy amin'ny besinimaro",
+    "alertsUnavailable": "Tsy azo jerena raha tsy misy tambajotra ireo tatitra.",
+    "noAlerts": "Tsy misy tatitra voaray.",
+    "occurrences_one": "Tatitra {{count}}",
+    "occurrences_other": "Tatitra {{count}}",
+    "withFile": "Misy rakitra",
+    "fileOnly": "Rakitra tsy misy soratra",
+    "takeAlert": "Raisina an-tanana : hamorona raki-tahiry",
+    "recent": "Hetsika farany",
+    "seeAll": "Hijery ny rehetra",
+    "shortcuts": "Hitsin-dàlana",
+    "shortcut": {
+      "newCase": "Raki-tahiry vaovao",
+      "checkImage": "Hanamarina sary",
+      "library": "Tahiry",
+      "portal": "Vavahady"
+    }
+  },
+  "notifications": {
+    "title": "Fampandrenesana",
+    "unread_one": "Fampandrenesana {{count}} mbola tsy voavaky",
+    "unread_other": "Fampandrenesana {{count}} mbola tsy voavaky",
+    "allRead": "Voavaky avokoa.",
+    "markAll": "Marihina ho voavaky avokoa",
+    "none": "Tsy misy fampandrenesana.",
+    "new": "vaovao",
+    "someone": "Olona iray",
+    "kind": {
+      "assigned": "{{name}} dia nanome raki-tahiry ho anao",
+      "review_requested": "Tatitra hodinihina (natolotr'i {{name}})",
+      "correction_requested": "Fanitsiana nangatahin'i {{name}}",
+      "verification_requested": "Fanamarinana fanampiny nangatahin'i {{name}}",
+      "rejected": "Raki-tahiry nolavin'i {{name}}",
+      "validated": "Raki-tahiry nankatoavin'i {{name}}",
+      "published": "Tatitra navoakan'i {{name}}",
+      "mentioned": "{{name}} dia nanonona anao",
+      "public_report": "Tatitra vaovao avy amin'ny besinimaro"
+    }
+  },
+  "bibliotheque": {
+    "title": "Tahirin'ny tatitra",
+    "from": "Navoaka nanomboka ny",
+    "to": "Navoaka hatramin'ny",
+    "reset": "Hamafa ny sivana",
+    "count_one": "Tatitra navoaka {{count}}",
+    "count_other": "Tatitra navoaka {{count}}",
+    "open": "Pejy ho an'ny besinimaro"
+  },
+  "revue": {
+    "title": "Fandinihan'ny lehiben'ny mpanoratra",
+    "backToCase": "Hiverina amin'ny raki-tahiry",
+    "open": "Hanokatra ny fandinihana",
+    "openPublic": "Hijery ny pejy ho an'ny besinimaro",
+    "panel": {
+      "editor": "Vakio ny tatitra, ampitahao ny dikan-teny, dia manapaha hevitra : hankato sy hamoaka, hangataka fanitsiana na fanamarinana, na handà.",
+      "team": "Am-pandinihan'ny lehiben'ny mpanoratra ny raki-tahiry.",
+      "published": "Navoaka sy voasonia ny tatitra."
+    },
+    "noReport": "Tsy mbola voasoratra ny tatitra (tabilao Tatitra ao amin'ny raki-tahiry).",
+    "unsupported": "Filazana tsy misy porofo",
+    "public": "Ho an'ny besinimaro",
+    "noExplanation": "tsy misy fanazavana",
+    "checklistComplete": "Voakarakara avokoa ny lisitra fanamarinana.",
+    "versions": {
+      "title": "Fampitahana dikan-teny",
+      "none": "Dikan-teny iray monja aloha no misy.",
+      "compare": "Dikan-teny teo aloha hampitahaina",
+      "option": "Dikan-teny {{version}} → dikan-teny ankehitriny ({{current}})",
+      "added": "nampiana",
+      "removed": "nesorina",
+      "unchanged": "tsy niova"
+    },
+    "decisions": "Fanapahan-kevitry ny lehiben'ny mpanoratra",
+    "noDecision": "Tsy mbola misy fanapahan-kevitra.",
+    "decide": "Fanapahan-kevitry ny lehiben'ny mpanoratra",
+    "decision": {
+      "validate_publish": "Hankato sy hamoaka",
+      "request_correction": "Hangataka fanitsiana",
+      "request_verification": "Hangataka fanamarinana fanampiny",
+      "reject": "Handà"
+    },
+    "decisionHint": {
+      "validate_publish": "Voasonia sy navoaka eo amin'ny vavahady ho an'ny besinimaro ny tatitra amin'ny tsindry iray.",
+      "request_correction": "Miverina any amin'ny mpanamarina ny raki-tahiry, izy no manitsy ny tatitra.",
+      "request_verification": "Miverina am-pandinihana ny raki-tahiry : misy singa tsy ampy.",
+      "reject": "Akatona ny raki-tahiry, tsy misy famoahana."
+    },
+    "conditions": "Fepetra amin'ny famoahana",
+    "condition": {
+      "verdict_missing": "Misy didy natolotra",
+      "report_missing": "Voasoratra ny tatitra",
+      "summary_missing": "Feno ny fintina",
+      "explanation_missing": "Feno ny fanazavana",
+      "claims_missing": "Misy filazana iray farafahakeliny",
+      "unsupported_claim": "Mifandray amin'ny porofo ny filazana tsirairay",
+      "self_validation": "Olona hafa no nanolotra ny didy"
+    },
+    "blocker": {
+      "claims_missing": "Tsy misy filazana voatanisa : voasakana ny famoahana."
+    },
+    "comment": "Fanamarihana (tsy maintsy)",
+    "commentHint": "Voatahiry miaraka amin'ny fanapahan-kevitra ary alefa amin'ny ekipa ity fanamarihana ity.",
+    "onlineRequired": "Tsy misy tambajotra : ho azo atao rehefa miverina ny tambajotra ny fanapahan-kevitra (sonian'ny mpizara).",
+    "sending": "Alefa…",
+    "submit": {
+      "validate_publish": "Hankato, hanao sonia ary hamoaka",
+      "request_correction": "Hangataka ny fanitsiana",
+      "request_verification": "Hangataka ny fanamarinana",
+      "reject": "Handà ny raki-tahiry"
+    },
+    "done": {
+      "validate_publish": "Voasonia sy navoaka ny tatitra.",
+      "request_correction": "Nangatahina ny fanitsiana : nampandrenesina ny mpanamarina.",
+      "request_verification": "Nangatahina ny fanamarinana fanampiny.",
+      "reject": "Nolavina sy nakatona ny raki-tahiry."
+    },
+    "published": "Navoaka : {{id}}",
+    "signature": "Sonia",
+    "correction": "Hanampy fanitsiana ho an'ny besinimaro",
+    "correctionHint": "Miseho misy daty eo amin'ny pejy ho an'ny besinimaro izy ; asiana sonia indray ny tatitra.",
+    "addCorrection": "Hamoaka ny fanitsiana",
+    "correctionAdded": "Navoaka ny fanitsiana.",
+    "editorOnly": "Ny lehiben'ny mpanoratra ihany no manapa-kevitra amin'ny famoahana.",
+    "notInReview": "Tsy am-pandinihana ity raki-tahiry ity. Ho tonga eo izy rehefa manolotra didy ny mpanamarina.",
+    "openEvidence": "Sokafy"
+  },
+  "portail": {
+    "home": "Fandraisana eo amin'ny vavahady",
+    "nav": "Vavahady ho an'ny besinimaro",
+    "link": {
+      "reports": "Tatitra",
+      "submit": "Hitatitra",
+      "track": "Hanaraka",
+      "verify": "Hanamarina tatitra"
+    },
+    "staffLogin": "Toerana ho an'ny mpanoratra",
+    "backToApp": "Hiverina amin'ny rindranasa",
+    "footer": "MASO — fanamarinana nataon'ny mpanao gazety ary nankatoavin'izy ireo. Tsy misy didy avoakan'ny milina.",
+    "title": "Fanamarinana navoaka",
+    "subtitle": "Tsaho, sary ary tarehimarika nohamarinin'ny tranom-pifandraisana malagasy. Nahita zavatra mampiahiahy ianao ? Tatitrao, tsy mila kaonty.",
+    "cta": {
+      "submit": "Hitatitra votoaty",
+      "alreadyChecked": "Efa voamarina ve ? Andramo amin'ny sary na rohy"
+    },
+    "filter": {
+      "query": "Teny fanalahidy",
+      "queryPlaceholder": "Ohatra : tondra-drano, vary, MASO-2026-0001",
+      "verdict": "Didy",
+      "theme": "Lohahevitra",
+      "themePlaceholder": "Ohatra : Toetrandro",
+      "region": "Faritra",
+      "all": "Rehetra",
+      "search": "Hikaroka"
+    },
+    "latest": "Tatitra farany",
+    "results": "Valiny",
+    "noReports": "Tsy misy tatitra navoaka mifanaraka.",
+    "more": "Hijery bebe kokoa",
+    "corrected": "Voahitsy",
+    "reason": {
+      "same_file": "Rakitra mitovy",
+      "similar_image": "Sary tena mitovitovy",
+      "same_link": "Rohy mitovy"
+    },
+    "humanNotice": "Mpanao gazety no mamoaka ny didy tsirairay, ary lehiben'ny mpanoratra no mankato azy. Tsy milina no manapa-kevitra.",
+    "backToReports": "Ny tatitra rehetra",
+    "notFound": "Tsy misy na tsy navoaka ity tatitra ity.",
+    "report": {
+      "verdict": "Didy",
+      "claim": "Filazana nohamarinina",
+      "summary": "Raha fintinina",
+      "explanation": "Ny fanazavanay",
+      "claims": "Izay nohamarininay",
+      "evidences": "Porofo",
+      "noEvidence": "Tsy azo avoaka ny porofon'ity tatitra ity (loharano arovana).",
+      "notPublished": "tsy navoaka",
+      "privateEvidence": "Porofo tazonin'ny tranom-pifandraisana (loharano arovana)",
+      "method": "Fomba fiasa",
+      "corrections": "Fanitsiana",
+      "publishedBy": "Navoakan'ny {{newsroom}} ny {{date}}",
+      "validatedBy": "nankatoavin'i {{name}}",
+      "share": "Hizara",
+      "pdf": "Haka azy amin'ny PDF",
+      "authenticity": "Fahamarinana",
+      "qrLabel": "Kaody QR hanamarinana ny tatitra {{id}}",
+      "qrHint": "Skanao ity kaody QR ity hanamarinana fa tena izy ity tatitra ity ary tsy novaina.",
+      "verifyNow": "Hanamarina izao"
+    },
+    "share": {
+      "title": "Voamarina : {{verdict}} — {{title}}",
+      "preview": "Topimaso ny fizarana",
+      "copy": "Handika ny rohy",
+      "copied": "Voadika"
+    },
+    "platform": {
+      "facebook": "Facebook",
+      "whatsapp": "WhatsApp",
+      "tiktok": "TikTok",
+      "youtube": "YouTube",
+      "x": "X (Twitter)",
+      "radio": "Radio",
+      "other": "Hafa"
+    },
+    "submit": {
+      "title": "Hitatitra votoaty mampiahiahy",
+      "subtitle": "Sary, rohy na hafatra mivezivezy ? Alefaso : jerenay aloha raha efa voamarina izy.",
+      "file": "Sary (tsy voatery)",
+      "fileHint": "JPEG, PNG na WebP, 5 Mo farafahabetsany. Kajiana eo amin'ny findainao ny dian-tanany alohan'ny handefasana.",
+      "fileType": "Endrika tsy ekena : JPEG, PNG na WebP ihany.",
+      "fileSize": "Mavesatra loatra ny rakitra : 5 Mo farafahabetsany.",
+      "removeFile": "Esory",
+      "url": "Rohy (tsy voatery)",
+      "text": "Soratra na famaritana (tsy voatery)",
+      "textPlaceholder": "Adikao ny hafatra voarainao, na lazao izay hitanao.",
+      "platform": "Taiza no nahitanao azy ?",
+      "contact": "Fifandraisana (tsy voatery)",
+      "contactHint": "Finday na mailaka, raha manaiky ho antsoina indray ianao. Tsy havoaka mihitsy.",
+      "send": "Handefa ny tatitra",
+      "sending": "Alefa…",
+      "privacy": "Tsy mila kaonty. Izay alefanao ihany no tahirizinay.",
+      "alreadyChecked": "Efa voamarina",
+      "alreadyCheckedHint": "Mifanaraka amin'ny tatitra efa navoaka ity votoaty ity :",
+      "notVerified": "Tsy mbola voamarina amin'izao",
+      "forwarded": "Nampitaina amin'ny mpanao gazety ny tatitrao. Tsy didy izany : ny mpanao gazety ihany no mamarana, rehefa avy nanamarina.",
+      "clues": "Famantarana voalohany (tsy didy)",
+      "cluesHint": "Tsy milaza raha marina na diso ny votoaty ireo famantarana ireo.",
+      "link": {
+        "domain": "Tranonkala : {{domain}}.",
+        "not_https": "Tsy voaaro ny rohy (tsy misy HTTPS).",
+        "shortener": "Rohy nohafohezina : miafina ny tena toerana alehany.",
+        "social": "Lahatsoratra amin'ny tambajotra sosialy : mbola tsy fantatra ny mpanoratra."
+      },
+      "trackingCode": "Kaody fanarahana",
+      "copyCode": "Handika ny kaody",
+      "trackingHint": "Tahirizo ity kaody ity : ahafahanao manaraka ny tatitrao, tsy mila kaonty.",
+      "trackNow": "Hanaraka ny tatitro",
+      "duplicate": "Efa voatatitra taminay ity votoaty ity : nampiana tao ny tatitrao (kaody fanarahana mitovy).",
+      "another": "Hanao tatitra hafa"
+    },
+    "track": {
+      "title": "Hanaraka tatitra",
+      "check": "Hijery ny toerany",
+      "notFound": "Tsy misy tatitra mifanaraka amin'ity kaody ity.",
+      "received": "Voaray ny {{date}}",
+      "status": {
+        "new": "Voaray",
+        "in_progress": "Raisina an-tanana",
+        "verified": "Voamarina",
+        "debunked": "Voamarina : diso na mamitaka"
+      },
+      "explain": {
+        "new": "Tonga ny tatitrao. Hisy mpanao gazety handinika azy.",
+        "in_progress": "Misy tranom-pifandraisana manamarina ity votoaty ity.",
+        "verified": "Vita ny fanamarinana : jereo ny tatitra.",
+        "debunked": "Vita ny fanamarinana : jereo ny tatitra."
+      }
+    },
+    "verify": {
+      "title": "Hanamarina tatitra",
+      "subtitle": "Skanao ny kaody QR an'ny tatitra MASO, na soraty ny laharany, hanamarinana fa tena izy ary tsy novaina.",
+      "number": "Laharan'ny tatitra",
+      "check": "Hanamarina",
+      "authentic": "Tatitra tena izy",
+      "authenticHint": "Mifanaraka amin'ny votoaty navoaka ny sonia : tsy novaina hatramin'ny nanaovana sonia azy.",
+      "altered": "Sonia tsy manan-kery",
+      "alteredHint": "Tsy mifanaraka amin'ny sonia intsony ny votoaty : aza matoky ity tatitra ity.",
+      "unknown": "Tatitra tsy fantatra",
+      "unknownHint": "Tsy misy tatitra MASO navoaka mitondra io laharana io. Mitandrema amin'ny antontan-taratasy milaza izany.",
+      "published": "navoaka ny {{date}}",
+      "signed": "nasiana sonia ny {{date}}",
+      "hash": "Dian-tanan'ny votoaty",
+      "open": "Hamaky ny tatitra"
+    },
+    "error": {
+      "unknown": "Nisy olana. Andramo indray.",
+      "network": "Tsy misy tambajotra. Andramo indray rehefa miverina ny tambajotra.",
+      "content_required": "Asio sary, rohy na soratra.",
+      "too_long": "Lava loatra ny iray amin'ireo saha.",
+      "invalid_url": "Tsy maintsy manomboka amin'ny http:// na https:// ny rohy.",
+      "invalid_file": "Rakitra tsy ekena (JPEG, PNG na WebP, 5 Mo farafahabetsany).",
+      "rate_limited": "Be loatra ny tatitra nalefa avy amin'ity fifandraisana ity. Andramo indray afaka adiny iray.",
+      "upload_failed": "Voatahiry ny tatitra, saingy tsy lasa ny sary."
+    }
   }
 }

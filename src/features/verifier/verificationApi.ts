@@ -42,58 +42,7 @@ export async function listOpenCases(): Promise<CaseSummary[]> {
   ) as CaseSummary[]
 }
 
-export async function createCase(title: string, claim: string): Promise<CaseSummary> {
-  return check(
-    await client().from('cases').insert({ title: title.trim(), claim: claim.trim() }).select('id, title, status').single(),
-  ) as CaseSummary
-}
-
 // ─── Preuves ────────────────────────────────────────────────────────────────
-
-export interface EvidenceInput {
-  caseId: string
-  type: 'image' | 'video' | 'link'
-  file?: Blob
-  fileExtension?: string
-  url?: string
-  archiveUrl?: string | null
-  sha256?: string | null
-  phash?: string | null
-  origin?: string | null
-  analysis: unknown
-}
-
-/** Ajoute une preuve : l'original est stocké intact (jamais modifié), avec son empreinte et l'analyse. */
-export async function addEvidence(input: EvidenceInput): Promise<{ id: string }> {
-  const db = client()
-  let storagePath: string | null = null
-  if (input.file) {
-    storagePath = `${input.caseId}/${input.sha256 ?? crypto.randomUUID()}.${input.fileExtension ?? 'bin'}`
-    const { error } = await db.storage.from('evidences').upload(storagePath, input.file, {
-      contentType: input.file.type || undefined,
-      upsert: false,
-    })
-    // Le même fichier déjà présent dans ce dossier : on réutilise l'original stocké.
-    if (error && !/exists|duplicate/i.test(error.message)) throw toAuthFailure(error)
-  }
-  return check(
-    await db
-      .from('evidences')
-      .insert({
-        case_id: input.caseId,
-        type: input.type,
-        storage_path: storagePath,
-        url: input.url ?? null,
-        archive_url: input.archiveUrl ?? null,
-        sha256: input.sha256 ?? null,
-        phash: input.phash ?? null,
-        origin: input.origin ?? null,
-        analysis: input.analysis,
-      })
-      .select('id')
-      .single(),
-  ) as { id: string }
-}
 
 export interface SimilarImage {
   evidence_id: string

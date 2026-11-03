@@ -1,7 +1,7 @@
 import { BadgeCheck, Eye, Lock, Save } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { Badge, Button, Card, CaseStatusBadge, Input, SectionTitle, Textarea } from '@/components/ui'
 import { useAuth } from '@/features/auth/AuthProvider'
 import { FormMessage } from '@/features/auth/FormMessage'
@@ -9,6 +9,7 @@ import { useAuthErrorMessage } from '@/features/auth/useAuthError'
 import { computeSourceScore, missingJustifications, SOURCE_CRITERIA, type CriterionScore, type SourceCriteria } from '@/lib/analysis/sourceScore'
 import { domainOf, normalizeUrl } from '@/lib/analysis/url'
 import { cn } from '@/lib/cn'
+import { BackToResources } from '@/features/ressources/PersonPage'
 import { BackToHub } from './ImageAnalysisPage'
 import {
   casesLinkedToSource,
@@ -31,13 +32,17 @@ type Feedback = { tone: 'error' | 'success'; text: string } | null
 
 /** M7 — Fiche source : score de fiabilité explicable, critère par critère, renseigné par un humain. */
 export function SourcePage() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const { id } = useParams()
   const [params] = useSearchParams()
   const navigate = useNavigate()
   const { role } = useAuth()
   const errorMessage = useAuthErrorMessage()
   const isNew = id === 'nouvelle'
+  // La fiche est ouverte depuis Vérifier (analyse de lien) ou depuis Ressources (annuaire des sources).
+  const fromResources = useLocation().pathname.startsWith('/ressources')
+  const base = fromResources ? '/ressources/sources' : '/verifier/sources'
+  const Back = fromResources ? BackToResources : BackToHub
 
   const [record, setRecord] = useState<SourceRecord | null>(null)
   const [form, setForm] = useState<SourceInput>(() => {
@@ -63,7 +68,7 @@ export function SourcePage() {
   if (!isPersistenceAvailable()) {
     return (
       <div className="space-y-4">
-        <BackToHub />
+        <Back />
         <Card className="p-4 text-sm text-ink-muted">{t('verifier.summary.needsDatabase')}</Card>
       </div>
     )
@@ -105,13 +110,13 @@ export function SourcePage() {
     void act(async () => {
       const saved = await saveSource({ ...form, url: form.url ? normalizeUrl(form.url) : null }, isNew ? undefined : id)
       setRecord(saved)
-      if (isNew) navigate(`/verifier/sources/${saved.id}`, { replace: true })
+      if (isNew) navigate(`${base}/${saved.id}`, { replace: true })
     }, t('verifier.source.saved'))
   }
 
   return (
     <div className="space-y-4">
-      <BackToHub />
+      <Back />
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start">
         <form onSubmit={save} className="space-y-4">
           <Card className="space-y-3 p-4">
@@ -207,7 +212,7 @@ export function SourcePage() {
         <div className="space-y-4">
           <Card className="p-4 text-center">
             <p className="text-xs font-semibold uppercase tracking-wide text-ink-muted">{t('verifier.source.score')}</p>
-            <p className="font-display text-4xl font-extrabold text-navy dark:text-ink">{score === null ? '—' : `${score}/10`}</p>
+            <p className="font-display text-4xl font-extrabold text-navy dark:text-ink">{score === null ? '—' : `${new Intl.NumberFormat(i18n.resolvedLanguage, { maximumFractionDigits: 1 }).format(score)}/10`}</p>
             <p className="mt-2 text-xs text-ink-muted">{t('verifier.source.scoreHint')}</p>
             {!isNew && role === 'editor_in_chief' && record && (
               <Button

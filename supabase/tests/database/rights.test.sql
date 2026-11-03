@@ -3,7 +3,7 @@ begin;
 create extension if not exists pgtap with schema extensions;
 set search_path = public, extensions;
 
-select plan(35);
+select plan(36);
 
 -- ─── Outils : exécuter une requête en tant qu'utilisateur (null = public anonyme) ──
 
@@ -78,6 +78,15 @@ select is(pg_temp.run_as('a0000000-0000-4000-8000-000000000005',
 
 create temp table t_case as select id from public.cases where title = 'Cas test';
 
+-- Conditions de soumission d'un verdict (MOD-05) : une source liée, une preuve, une checklist justifiée.
+insert into public.sources (id, type, name, created_by)
+values ('b1000000-0000-4000-8000-000000000001', 'site', 'Source du cas test', 'a0000000-0000-4000-8000-000000000001');
+insert into public.case_sources (case_id, source_id) values ((select id from t_case), 'b1000000-0000-4000-8000-000000000001');
+insert into public.evidences (case_id, type, url, added_by)
+values ((select id from t_case), 'link', 'https://example.org/photo', 'a0000000-0000-4000-8000-000000000001');
+update public.checklist_items set explanation = 'Examiné pendant le test' where case_id = (select id from t_case);
+create temp table t_evidence as select array_agg(id) as ids from public.evidences where case_id = (select id from t_case);
+
 -- ─── Workflow : statuts ─────────────────────────────────────────────────────
 
 select is(pg_temp.run_as('a0000000-0000-4000-8000-000000000001',
@@ -89,15 +98,15 @@ select matches(pg_temp.run_as('a0000000-0000-4000-8000-000000000001',
   'permission denied', 'le statut ne se modifie jamais directement');
 
 select matches(pg_temp.run_as('a0000000-0000-4000-8000-000000000001',
-  format($$select public.propose_verdict(%L, 'out_of_context', 'high', 'Photo de 2024')$$, (select id from t_case))),
+  format($$select public.propose_verdict(%L, 'out_of_context', 'high', 'Photo de 2024', %L)$$, (select id from t_case), (select ids from t_evidence))),
   'role_not_allowed', 'un journaliste ne propose pas de verdict');
 
 select matches(pg_temp.run_as('a0000000-0000-4000-8000-000000000002',
-  format($$select public.propose_verdict(%L, 'out_of_context', 'high', '  ')$$, (select id from t_case))),
+  format($$select public.propose_verdict(%L, 'out_of_context', 'high', '  ', %L)$$, (select id from t_case), (select ids from t_evidence))),
   'justification_required', 'un verdict sans justification est refusé');
 
 select is(pg_temp.run_as('a0000000-0000-4000-8000-000000000002',
-  format($$select public.propose_verdict(%L, 'out_of_context', 'high', 'Photo publiée en 2024 [P1]')$$, (select id from t_case))),
+  format($$select public.propose_verdict(%L, 'out_of_context', 'high', 'Photo publiée en 2024 [P1]', %L)$$, (select id from t_case), (select ids from t_evidence))),
   null, 'le fact-checker propose un verdict');
 
 select is((select status from public.cases where id = (select id from t_case)),
@@ -116,7 +125,7 @@ select is(pg_temp.run_as('a0000000-0000-4000-8000-000000000003',
   null, 'le rédacteur en chef demande une correction');
 
 select is(pg_temp.run_as('a0000000-0000-4000-8000-000000000003',
-  format($$select public.propose_verdict(%L, 'out_of_context', 'high', 'Photo publiée en 2024 [P1] [P2]')$$, (select id from t_case))),
+  format($$select public.propose_verdict(%L, 'out_of_context', 'high', 'Photo publiée en 2024 [P1] [P2]', %L)$$, (select id from t_case), (select ids from t_evidence))),
   null, 'le rédacteur en chef peut aussi proposer un verdict');
 
 select matches(pg_temp.run_as('a0000000-0000-4000-8000-000000000003',
@@ -131,8 +140,17 @@ select matches(pg_temp.run_as('a0000000-0000-4000-8000-000000000001',
   format($$select public.change_case_status(%L, 'published', 'Je publie')$$, (select id from t_case))),
   'transition_not_allowed', 'un journaliste ne peut pas publier');
 
-select is(pg_temp.run_as('a0000000-0000-4000-8000-000000000003',
+select matches(pg_temp.run_as('a0000000-0000-4000-8000-000000000003',
   format($$select public.change_case_status(%L, 'published', 'Publication')$$, (select id from t_case))),
+  'publish_via_review', 'la publication passe obligatoirement par la revue (signature)');
+
+insert into public.reports (case_id, content, claim_evidence_links)
+select id, '{"summary":"Photo ancienne.","explanation":"La photo date de 2024."}',
+  jsonb_build_array(jsonb_build_object('text', 'La photo date de 2024', 'evidence_ids', to_jsonb((select ids from t_evidence))))
+from t_case;
+
+select is(pg_temp.run_as('a0000000-0000-4000-8000-000000000003',
+  format($$select public.editorial_decision(%L, 'validate_publish', 'Publication')$$, (select id from t_case))),
   null, 'le rédacteur en chef publie');
 
 select isnt((select published_at from public.cases where id = (select id from t_case)), null,
@@ -153,10 +171,11 @@ select is(pg_temp.count_as('a0000000-0000-4000-8000-000000000005', 'select * fro
   'l''administrateur ne voit pas les dossiers');
 select is(pg_temp.count_as('a0000000-0000-4000-8000-000000000006', 'select * from public.cases'), 0::bigint,
   'un compte suspendu ne voit plus rien');
-select is(pg_temp.count_as(null, 'select * from public.statistic_indicators'), 0::bigint,
-  'le public peut lire les statistiques');
+select is(pg_temp.count_as(null, 'select * from public.statistic_indicators'),
+  (select count(*) from public.statistic_indicators),
+  'le public peut lire toutes les statistiques');
 select is(pg_temp.run_as(null,
-  $$insert into public.alerts (text, platform) values ('Rumeur vue sur Facebook', 'facebook')$$),
+  $$select public.portal_submit_alert(p_text => 'Rumeur vue sur Facebook', p_platform => 'facebook')$$),
   null, 'le public peut signaler une rumeur sans compte');
 select matches(pg_temp.run_as(null, 'select * from public.alerts'),
   'permission denied', 'le public ne lit pas les signalements');

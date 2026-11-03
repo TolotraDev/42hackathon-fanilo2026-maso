@@ -34,7 +34,7 @@ export function AppShell() {
   const setQuery = (next: string) => setSearch({ path: pathname, query: next })
 
   const section = sectionFromPath(pathname)
-  const title = section ? t(`page.${section.id}`) : t('app.name')
+  const title = section ? t(`page.${section.id}`) : pathname.startsWith('/notifications') ? t('notifications.title') : t('app.name')
 
   return (
     <div className="min-h-dvh lg:pl-64">
