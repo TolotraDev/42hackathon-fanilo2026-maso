@@ -110,7 +110,9 @@ export function imageFindings(facts: ImageFacts): Finding[] {
     const level: FindingLevel = facts.ai.score >= 0.85 ? 'alert' : facts.ai.score >= 0.6 ? 'caution' : 'ok'
     out.push({ level, key: level === 'ok' ? 'aiLow' : 'aiHigh', params: { percent }, source: { name: facts.ai.model ?? 'IA' } })
   } else if (facts.ai && !facts.ai.available) {
-    out.push({ level: 'info', key: facts.ai.error === 'quota_exceeded' ? 'aiQuota' : 'aiUnavailable' })
+    const error = facts.ai.error
+    const key = error === 'quota_exceeded' ? 'aiQuota' : error === 'service_unreachable' ? 'aiUnreachable' : error?.startsWith('model_') && error !== 'model_not_prepared' ? 'aiModelFailed' : 'aiUnavailable'
+    out.push({ level: 'info', key })
   }
   out.push({ level: 'info', key: facts.sourceUrl ? 'reverseReady' : 'reverseTodo', source: { name: 'Google Lens, TinEye, Yandex, Bing' } })
   return out

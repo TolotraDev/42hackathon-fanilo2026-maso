@@ -1659,7 +1659,7 @@
       "elaWeak": "Fahasamihafana kely amin'ny famatrarana, mahazatra rehefa nozaraina imbetsaka.",
       "aiHigh": "Mihevitra ny mpamantatra sary IA fa {{percent}} % ny mety ho sary noforonina (fitaovana mety diso).",
       "aiLow": "Tsy mahita famoronana IA ny mpamantatra sary IA ({{percent}} %) ; tsy manome antoka izany.",
-      "aiUnavailable": "Tsy voalamina ny mpamantatra sary IA (fanalahidy Sightengine na HF_TOKEN an'ny serivisy fandinihana).",
+      "aiUnavailable": "Tsy voarindra ao amin'ny serivisy famakafakana ny mpitsikilo sary IA.",
       "reverseReady": "Vonona ny fikarohana mivadika : sokafy Google Lens na TinEye hahitana ny famoahana voalohany ny sary.",
       "reverseTodo": "Manaova fikarohana mivadika (Google Lens, TinEye) hahitana ny famoahana voalohany ny sary.",
       "linkCaseVerdict": "Efa ao amin'ny raki-tahiry MASO « {{title}} » ity rohy ity, didy {{verdict}}.",
@@ -1678,7 +1678,9 @@
       "claimsToCheck": "Filazana mazava {{count}} tokony hohamarinina (tarehimarika, daty, toerana, olona).",
       "videoEdited": "Fiovan-tsary {{count}} : voaboatra ny horonantsary ; hamarino ny ampahany tsirairay.",
       "videoKeyframes": "Sary fototra {{count}} nalaina : manaova fikarohana mivadika aminy hahitana ny horonantsary tany am-boalohany.",
-      "aiQuota": "Tsy azo ampiasaina ny mpamantatra sary IA : lany ny trosa amin'ny mpamatsy (mifindra any amin'ny Sightengine, maimaim-poana)."
+      "aiQuota": "Tsy azo ampiasaina ny mpamantatra sary IA : lany ny trosa amin'ny mpamatsy (mifindra any amin'ny Sightengine, maimaim-poana).",
+      "aiUnreachable": "Tsy tratra avy amin'ity tranonkala ity ny mpitsikilo sary IA : tsy mamaly na mandà ny adiresin'ny tranonkala ny serivisy famakafakana (fandrindrana ALLOWED_ORIGINS ao amin'ny Render).",
+      "aiModelFailed": "Tsy afaka namakafaka ity sary ity ny mpitsikilo sary IA (be loatra ny asan'ny mpizara) : andramo indray afaka kelikely."
     }
   }
 }

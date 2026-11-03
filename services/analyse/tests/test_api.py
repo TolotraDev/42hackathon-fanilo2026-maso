@@ -49,3 +49,9 @@ def test_factcheck_sans_cle(monkeypatch):
     monkeypatch.setattr(main, "settings", replace(main.settings, factcheck_api_key=""))
     body = client.get("/factcheck", params={"query": "inondation Antananarivo"}).json()
     assert body["available"] is False
+
+
+def test_adresses_du_site_tolerantes_aux_erreurs_de_saisie():
+    from app.config import _origins
+
+    assert _origins([' "https://Maso.vercel.app/" ', "http://localhost:5173/"]) == ["https://maso.vercel.app", "http://localhost:5173"]

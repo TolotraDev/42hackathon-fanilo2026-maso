@@ -1659,7 +1659,7 @@
       "elaWeak": "Slight recompression differences, common after several shares.",
       "aiHigh": "The AI image detector estimates a {{percent}}% probability of a generated image (fallible tool).",
       "aiLow": "The AI image detector finds no AI generation ({{percent}}%); this guarantees nothing.",
-      "aiUnavailable": "AI image detector not configured (Sightengine keys or HF_TOKEN of the analysis service).",
+      "aiUnavailable": "AI image detector not configured on the analysis service.",
       "reverseReady": "Reverse search ready: open Google Lens or TinEye to find the image's first publication.",
       "reverseTodo": "Run a reverse search (Google Lens, TinEye) to find the image's first publication.",
       "linkCaseVerdict": "This link is already in the MASO case \"{{title}}\", verdict {{verdict}}.",
@@ -1678,7 +1678,9 @@
       "claimsToCheck": "{{count}} precise claim(s) to check (figures, dates, places, people).",
       "videoEdited": "{{count}} shot change(s): the video is edited; check each sequence.",
       "videoKeyframes": "{{count}} keyframe(s) extracted: reverse-search them to find the original video.",
-      "aiQuota": "AI image detector unavailable: no credit left with the provider (switch to Sightengine, free)."
+      "aiQuota": "AI image detector unavailable: no credit left with the provider (switch to Sightengine, free).",
+      "aiUnreachable": "AI image detector unreachable from this site: the analysis service is not responding or refuses the site address (ALLOWED_ORIGINS setting on Render).",
+      "aiModelFailed": "The AI image detector could not analyse this image (server overloaded): try again in a moment."
     }
   }
 }

@@ -117,7 +117,7 @@ export function ImageAnalysisPage() {
                 : undefined,
               provenance: provenance?.available ? provenance : undefined,
               elaClue: steps.recompression.clue,
-              ai: steps.ai_clue.state === 'done' ? steps.ai_clue.data : steps.ai_clue.state === 'unavailable' ? { available: false, error: steps.ai_clue.data?.error } : undefined,
+              ai: steps.ai_clue.state === 'done' ? steps.ai_clue.data : steps.ai_clue.state === 'unavailable' ? { available: false, error: steps.ai_clue.data?.error ?? 'service_unreachable' } : undefined,
               sourceUrl,
             })}
           />

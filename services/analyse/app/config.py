@@ -30,11 +30,18 @@ def _list(name: str, default: str) -> list[str]:
     return [item.strip() for item in os.getenv(name, default).split(",") if item.strip()]
 
 
+def _origins(items: list[str]) -> list[str]:
+    """Adresses de site tolérantes aux erreurs de saisie courantes : guillemets, « / » final, majuscules."""
+    return [item.strip("'\" ").rstrip("/").lower() for item in items]
+
+
 @dataclass(frozen=True)
 class Settings:
     allowed_origins: list[str] = field(
-        default_factory=lambda: _list("ALLOWED_ORIGINS", "http://localhost:5173,http://localhost:4173")
+        default_factory=lambda: _origins(_list("ALLOWED_ORIGINS", "http://localhost:5173,http://localhost:4173"))
     )
+    # Adresses acceptées en plus, par motif (ex. toutes les adresses de prévisualisation Vercel du projet).
+    allowed_origin_regex: str | None = os.getenv("ALLOWED_ORIGIN_REGEX") or None
     factcheck_api_key: str = os.getenv("GOOGLE_FACTCHECK_API_KEY", "")
     hf_token: str = os.getenv("HF_TOKEN", "")
     # Détecteur d'images IA : Sightengine s'il est configuré (offre gratuite), sinon Hugging Face.
