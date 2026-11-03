@@ -300,7 +300,15 @@
       "analyseImage": "Analyse this page's image",
       "fetchingImage": "Downloading the image…",
       "analyseText": "Analyse this page's text",
-      "imageFailed": "The page image could not be retrieved."
+      "imageFailed": "The page image could not be retrieved.",
+      "blocked": {
+        "title": "Bring the content yourself, the analysis continues on it:",
+        "textLabel": "Post text (copy it from Facebook)",
+        "textPlaceholder": "Paste the post text here…",
+        "analyseText": "Analyse this text",
+        "fileLabel": "Screenshot, image or video of the post",
+        "pickFile": "Choose the file"
+      }
     },
     "attach": {
       "title": "Add to case",

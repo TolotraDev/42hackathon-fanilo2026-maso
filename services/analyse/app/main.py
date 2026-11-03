@@ -10,6 +10,7 @@ import httpx
 from fastapi import Depends, FastAPI, File, HTTPException, Query, Request, Response, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
+from starlette.concurrency import run_in_threadpool
 
 from . import __version__
 from .assistant import FORMATS, FUNCTIONS, LANGUAGES, run_assistant
@@ -123,7 +124,8 @@ async def image_ai_clue(file: UploadFile = File(...), client: httpx.Client = Dep
         if settings.sightengine_user and settings.sightengine_secret:
             return ai_clue_sightengine(client, settings.sightengine_user, settings.sightengine_secret, data)
         if settings.ai_local_enabled and local_detector.is_ready():
-            return local_detector.ai_clue_local(data)
+            # Analyse longue (quelques secondes) : hors de la boucle principale pour ne pas bloquer les autres requêtes.
+            return await run_in_threadpool(local_detector.ai_clue_local, data)
         return ai_clue(client, settings.hf_token, settings.ai_model, data)
     except (httpx.HTTPError, ValueError, OSError):
         return {"available": False, "model": settings.ai_model, "error": "model_unreachable"}

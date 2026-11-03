@@ -1,12 +1,12 @@
 import { Archive, ExternalLink, FileSearch, FileText, ImageUp, Search } from 'lucide-react'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
-import { Badge, Button, Card, CaseStatusBadge, Input } from '@/components/ui'
+import { Badge, Button, Card, CaseStatusBadge, Input, Textarea } from '@/components/ui'
 import { FormMessage } from '@/features/auth/FormMessage'
 import { analyseApi, ServiceError, stateForServiceError, type FactCheckClaim, type LinkResult, type PageResult } from '@/lib/analyseApi'
 import { linkFindings } from '@/lib/analysis/synthesis'
-import { domainOf, normalizeUrl } from '@/lib/analysis/url'
+import { normalizeUrl } from '@/lib/analysis/url'
 import type { StepResult } from '@/lib/analysis/types'
 import type { ClueLevel } from '@/types/domain'
 import { AttachToCase } from './AttachToCase'
@@ -14,7 +14,7 @@ import { BackToHub } from './ImageAnalysisPage'
 import { setPendingMedia } from './pendingMedia'
 import { FactList, StepCard } from './StepCard'
 import { SynthesisCard } from './SynthesisCard'
-import { findCasesWithUrl, findSourceByDomain, isPersistenceAvailable, type CaseSummary, type SourceRecord } from './verificationApi'
+import { findCasesWithUrl, findSourceForUrl, isPersistenceAvailable, type CaseSummary, type SourceRecord } from './verificationApi'
 
 /** Un domaine très récent est un signal classique de site opportuniste (section 7, M5). */
 export function qualifyDomainAge(ageDays: number | null | undefined): ClueLevel | undefined {
@@ -69,7 +69,6 @@ export function LinkAnalysisPage() {
     stamp ? formatDate(`${stamp.slice(0, 4)}-${stamp.slice(4, 6)}-${stamp.slice(6, 8)}T00:00:00Z`) : ''
 
   const run = useCallback(async (target: string) => {
-    const domain = domainOf(target)
     setArchive({ busy: false })
     setRejection(null)
     const started = performance.now()
@@ -96,7 +95,7 @@ export function LinkAnalysisPage() {
       if (!isPersistenceAvailable()) return setSource({ state: 'not_applicable', data: { source: null, reason: 'no_database' } })
       if (!navigator.onLine) return setSource({ state: 'waiting_network' })
       try {
-        const found = await findSourceByDomain(domain)
+        const found = await findSourceForUrl(target)
         setSource({ state: 'done', clue: found ? qualifySourceScore(found.score) : undefined, data: { source: found }, tool: 'Annuaire MASO' })
       } catch {
         setSource({ state: 'unavailable' })
@@ -270,7 +269,7 @@ export function LinkAnalysisPage() {
                     />
                   </div>
                 )}
-                {page.data?.blocked && <p className="whitespace-pre-line text-xs text-ink">{t('verifier.link.socialHelp')}</p>}
+                {page.data?.blocked && url && <BlockedPostHelp origin={url} />}
               </StepCard>
               {page.data && !page.data.blocked && (page.data.image || page.data.title || page.data.description) && (
                 <div className="mt-2 flex flex-wrap gap-2">
@@ -473,6 +472,46 @@ type: 'link',
           </div>
         </div>
       )}
+    </div>
+  )
+}
+
+/**
+ * Publication cachée par le réseau social (connexion exigée) : le journaliste apporte lui-même le contenu
+ * — texte copié, capture d'écran, image ou vidéo enregistrée — et l'analyse continue sur ce contenu réel.
+ */
+function BlockedPostHelp({ origin }: { origin: string }) {
+  const { t } = useTranslation()
+  const navigate = useNavigate()
+  const fileRef = useRef<HTMLInputElement>(null)
+  const [text, setText] = useState('')
+
+  const pick = (file: File | undefined) => {
+    if (!file) return
+    setPendingMedia({ file, origin })
+    navigate(file.type.startsWith('video/') ? '/verifier/video' : '/verifier/image')
+  }
+
+  return (
+    <div className="space-y-3 rounded-xl bg-canvas p-3">
+      <p className="text-sm font-semibold text-ink">{t('verifier.link.blocked.title')}</p>
+      <div className="space-y-2">
+        <label htmlFor="blocked-text" className="text-xs font-bold text-ink">{t('verifier.link.blocked.textLabel')}</label>
+        <Textarea id="blocked-text" rows={4} value={text} onChange={(event) => setText(event.target.value)} placeholder={t('verifier.link.blocked.textPlaceholder')} />
+        <Button className="min-h-10 text-xs" disabled={text.trim().length < 10} onClick={() => navigate(`/verifier/texte?texte=${encodeURIComponent(text.trim().slice(0, 4000))}`)}>
+          <FileText className="size-4" aria-hidden />
+          {t('verifier.link.blocked.analyseText')}
+        </Button>
+      </div>
+      <div className="space-y-2">
+        <p className="text-xs font-bold text-ink">{t('verifier.link.blocked.fileLabel')}</p>
+        <input ref={fileRef} type="file" accept="image/*,video/*" className="sr-only" aria-label={t('verifier.link.blocked.fileLabel')} onChange={(event) => pick(event.target.files?.[0])} />
+        <Button variant="secondary" className="min-h-10 text-xs" onClick={() => fileRef.current?.click()}>
+          <ImageUp className="size-4" aria-hidden />
+          {t('verifier.link.blocked.pickFile')}
+        </Button>
+      </div>
+      <p className="whitespace-pre-line text-xs text-ink-muted">{t('verifier.link.socialHelp')}</p>
     </div>
   )
 }

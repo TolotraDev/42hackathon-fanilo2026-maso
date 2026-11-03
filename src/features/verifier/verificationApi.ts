@@ -2,6 +2,7 @@
 // lèvent NotConfigured : les analyses restent utilisables, seul l'enregistrement est indisponible.
 import { supabase } from '@/lib/supabase'
 import type { SourceCriteria } from '@/lib/analysis/sourceScore'
+import { platformHosts, sameSource, sourceKeyOf } from '@/lib/analysis/url'
 import type { CaseStatus, Verdict } from '@/types/domain'
 import { toAuthFailure } from '@/features/auth/supabaseErrors'
 
@@ -120,9 +121,16 @@ export async function getSource(id: string): Promise<SourceRecord> {
   return check(await client().from('sources').select(SOURCE_COLUMNS).eq('id', id).single()) as SourceRecord
 }
 
-export async function findSourceByDomain(domain: string): Promise<SourceRecord | null> {
-  const rows = check(await client().from('sources').select(SOURCE_COLUMNS).eq('domain', domain).limit(1)) as SourceRecord[]
-  return rows[0] ?? null
+/**
+ * Fiche source correspondant à un lien. Sur un réseau social, on compare le compte (la page, le profil),
+ * jamais le seul domaine : sinon toute publication Facebook tomberait sur la première page Facebook connue.
+ */
+export async function findSourceForUrl(url: string): Promise<SourceRecord | null> {
+  const key = sourceKeyOf(url)
+  if (key.accountUnknown) return null
+  const domains = platformHosts(key.domain)
+  const rows = check(await client().from('sources').select(SOURCE_COLUMNS).in('domain', domains).limit(200)) as SourceRecord[]
+  return rows.find((row) => row.url && sameSource(row.url.includes('://') ? row.url : `https://${row.url}`, url)) ?? null
 }
 
 export async function saveSource(input: SourceInput, id?: string): Promise<SourceRecord> {

@@ -300,7 +300,15 @@
       "analyseImage": "Handinika ny sarin'ity pejy ity",
       "fetchingImage": "Maka ny sary…",
       "analyseText": "Handinika ny soratr'ity pejy ity",
-      "imageFailed": "Tsy azo nalaina ny sarin'ny pejy."
+      "imageFailed": "Tsy azo nalaina ny sarin'ny pejy.",
+      "blocked": {
+        "title": "Ampidiro ianao ny votoatiny, mitohy amin'izany ny famakafakana :",
+        "textLabel": "Soratry ny lahatsoratra (adikao avy amin'ny Facebook)",
+        "textPlaceholder": "Apetaho eto ny soratry ny lahatsoratra…",
+        "analyseText": "Hamakafaka ity soratra ity",
+        "fileLabel": "Sarin'ny efijery, sary na horonantsary amin'ny lahatsoratra",
+        "pickFile": "Hisafidy rakitra"
+      }
     },
     "attach": {
       "title": "Hampiditra ao amin'ny rakitra",

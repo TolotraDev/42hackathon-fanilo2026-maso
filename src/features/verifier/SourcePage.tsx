@@ -7,7 +7,7 @@ import { useAuth } from '@/features/auth/AuthProvider'
 import { FormMessage } from '@/features/auth/FormMessage'
 import { useAuthErrorMessage } from '@/features/auth/useAuthError'
 import { computeSourceScore, missingJustifications, SOURCE_CRITERIA, type CriterionScore, type SourceCriteria } from '@/lib/analysis/sourceScore'
-import { domainOf, normalizeUrl } from '@/lib/analysis/url'
+import { domainOf, normalizeUrl, sourceKeyOf } from '@/lib/analysis/url'
 import { cn } from '@/lib/cn'
 import { BackToResources } from '@/features/ressources/PersonPage'
 import { BackToHub } from './ImageAnalysisPage'
@@ -47,7 +47,12 @@ export function SourcePage() {
   const [record, setRecord] = useState<SourceRecord | null>(null)
   const [form, setForm] = useState<SourceInput>(() => {
     const url = normalizeUrl(params.get('url') ?? '')
-    return { type: 'site', name: url ? domainOf(url) : '', url: url ? new URL(url).origin : null, created_on: null, criteria: {} }
+    if (!url) return { type: 'site', name: '', url: null, created_on: null, criteria: {} }
+    // Réseau social : la fiche décrit le compte (la page), pas toute la plateforme.
+    const key = sourceKeyOf(url)
+    if (key.account) return { type: 'page', name: key.account, url: key.account.startsWith('id:') ? `https://${key.domain}/profile.php?id=${key.account.slice(3)}` : `https://${key.domain}/${key.account}`, created_on: null, criteria: {} }
+    if (key.accountUnknown) return { type: 'page', name: '', url: null, created_on: null, criteria: {} }
+    return { type: 'site', name: domainOf(url), url: new URL(url).origin, created_on: null, criteria: {} }
   })
   const [linked, setLinked] = useState<CaseSummary[]>([])
   const [confidential, setConfidential] = useState<{ text: string; revealed: boolean }>({ text: '', revealed: false })

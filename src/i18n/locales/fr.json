@@ -300,7 +300,15 @@
       "analyseImage": "Analyser l'image de cette page",
       "fetchingImage": "Téléchargement de l'image…",
       "analyseText": "Analyser le texte de cette page",
-      "imageFailed": "L'image de la page n'a pas pu être récupérée."
+      "imageFailed": "L'image de la page n'a pas pu être récupérée.",
+      "blocked": {
+        "title": "Apportez le contenu vous-même, l'analyse continue dessus :",
+        "textLabel": "Texte de la publication (copiez-le depuis Facebook)",
+        "textPlaceholder": "Collez ici le texte de la publication…",
+        "analyseText": "Analyser ce texte",
+        "fileLabel": "Capture d'écran, image ou vidéo de la publication",
+        "pickFile": "Choisir le fichier"
+      }
     },
     "attach": {
       "title": "Ajouter au dossier",

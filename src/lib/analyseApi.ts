@@ -176,7 +176,8 @@ export const analyseApi = {
       pendingHealth = null
     })),
   provenance: (file: Blob) => call<ProvenanceResult>('/image/provenance', upload(file)),
-  aiClue: (file: Blob) => call<AiClueResult>('/image/ai-clue', upload(file), 45000),
+  // Le détecteur local charge son modèle à chaque analyse (10 à 40 s sur un petit serveur).
+  aiClue: (file: Blob) => call<AiClueResult>('/image/ai-clue', upload(file), 100000),
   video: (file: Blob) => call<VideoResult>('/video/analyse', upload(file), 120000),
   link: (url: string) =>
     call<LinkResult>('/link/analyse', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ url }) }),

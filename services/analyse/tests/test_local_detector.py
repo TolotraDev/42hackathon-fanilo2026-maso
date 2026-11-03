@@ -75,3 +75,13 @@ def test_le_service_utilise_le_modele_local_sans_cle(monkeypatch, jpeg_bytes):
     monkeypatch.setattr(main.local_detector, "ai_clue_local", lambda data: {"available": True, "model": "local", "score": 0.42})
     response = TestClient(main.app).post("/image/ai-clue", files={"file": ("p.jpg", jpeg_bytes, "image/jpeg")})
     assert response.json() == {"available": True, "model": "local", "score": 0.42}
+
+
+def test_manque_de_memoire_sans_faire_tomber_le_service(model_dir, monkeypatch):
+    import subprocess
+
+    tiny_model(model_dir / "model.fp32.onnx")
+    local_detector.prepare()
+    killed = subprocess.CompletedProcess(args=[], returncode=-9, stdout=b"", stderr=b"Killed")
+    monkeypatch.setattr(local_detector.subprocess, "run", lambda *args, **kwargs: killed)
+    assert local_detector.ai_clue_local(jpeg((230, 20, 20)))["error"] == "model_out_of_memory"
