@@ -68,3 +68,74 @@ body {
 :focus-visible {
   @apply outline-2 outline-offset-2 outline-cobalt;
 }
+
+/* Apparition en cascade — utilise l'index via --i */
+@keyframes dashboard-rise {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes dashboard-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.dashboard-rise {
+  animation: dashboard-rise 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(var(--i, 0) * 60ms);
+}
+
+.dashboard-fade {
+  animation: dashboard-fade 0.35s ease-out both;
+  animation-delay: calc(var(--i, 0) * 40ms);
+}
+
+/* Barre de ton des indicateurs : léger "pop" au survol de la carte */
+.indicator-card .tone-bar {
+  transform-origin: left center;
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.indicator-card:hover .tone-bar {
+  transform: scaleX(1.6);
+}
+
+/* Ligne de file / récente : glissement discret de la flèche */
+.row-link .row-arrow {
+  transition: transform 0.2s ease-out, opacity 0.2s ease-out;
+  opacity: 0.6;
+}
+.row-link:hover .row-arrow {
+  transform: translateX(3px);
+  opacity: 1;
+}
+
+/* Pastille de notification non lue : pulsation douce */
+@keyframes dot-pulse {
+  0%, 100% { transform: scale(1);   opacity: 1; }
+  50%      { transform: scale(1.25); opacity: 0.7; }
+}
+.notif-dot-unread {
+  animation: dot-pulse 2.2s ease-in-out infinite;
+}
+
+/* Raccourcis : icône qui se soulève */
+.shortcut-link .shortcut-icon {
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.shortcut-link:hover .shortcut-icon {
+  transform: translateY(-2px);
+}
+
+/* Respect des préférences d'accessibilité */
+@media (prefers-reduced-motion: reduce) {
+  .dashboard-rise,
+  .dashboard-fade,
+  .notif-dot-unread {
+    animation: none !important;
+  }
+  .indicator-card .tone-bar,
+  .row-link .row-arrow,
+  .shortcut-link .shortcut-icon {
+    transition: none !important;
+  }
+}
