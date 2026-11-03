@@ -76,7 +76,7 @@ export interface ImageFacts {
   metadata?: { finding: string; software?: string | null; takenAt?: string | null; device?: string | null }
   provenance?: { present?: boolean; ai_generated?: boolean; valid?: boolean; issuer?: string | null }
   elaClue?: 'none' | 'weak' | 'to_examine'
-  ai?: { available: boolean; score?: number; model?: string }
+  ai?: { available: boolean; score?: number; model?: string; error?: string }
   sourceUrl?: string | null
 }
 
@@ -110,7 +110,7 @@ export function imageFindings(facts: ImageFacts): Finding[] {
     const level: FindingLevel = facts.ai.score >= 0.85 ? 'alert' : facts.ai.score >= 0.6 ? 'caution' : 'ok'
     out.push({ level, key: level === 'ok' ? 'aiLow' : 'aiHigh', params: { percent }, source: { name: facts.ai.model ?? 'IA' } })
   } else if (facts.ai && !facts.ai.available) {
-    out.push({ level: 'info', key: 'aiUnavailable' })
+    out.push({ level: 'info', key: facts.ai.error === 'quota_exceeded' ? 'aiQuota' : 'aiUnavailable' })
   }
   out.push({ level: 'info', key: facts.sourceUrl ? 'reverseReady' : 'reverseTodo', source: { name: 'Google Lens, TinEye, Yandex, Bing' } })
   return out

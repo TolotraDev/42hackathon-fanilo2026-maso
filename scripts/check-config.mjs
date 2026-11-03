@@ -1,6 +1,7 @@
 // Vérifie la configuration de MASO sans jamais afficher une clé : Supabase, service d'analyse,
 // et chaque service externe (Google Fact Check, Hugging Face, Groq / Gemini / Ollama).
-// Utilisation : npm run check:config
+// Utilisation : npm run check:config                          (configuration locale)
+//               npm run check:config -- https://maso-xxx.vercel.app   (site en ligne)
 import { existsSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 
@@ -19,13 +20,84 @@ const ok = (label, detail = '') => console.log(`  ✅ ${label}${detail ? ` — $
 const ko = (label, fix) => console.log(`  ❌ ${label}\n     → ${fix}`)
 const off = (label, fix) => console.log(`  ⚪ ${label} (facultatif)\n     → ${fix}`)
 
-async function probe(url, init = {}) {
+async function probe(url, init = {}, timeoutMs = 15000) {
   try {
-    const response = await fetch(url, { ...init, signal: AbortSignal.timeout(15000) })
-    return { status: response.status, body: await response.text() }
+    const response = await fetch(url, { ...init, signal: AbortSignal.timeout(timeoutMs) })
+    return { status: response.status, body: await response.text(), headers: response.headers }
   } catch (error) {
     return { status: 0, body: String(error?.message ?? error) }
   }
+}
+
+const siteArg = process.argv.slice(2).find((arg) => /^https?:\/\//.test(arg))
+if (siteArg) {
+  await checkOnline(siteArg.replace(/\/$/, ''))
+  process.exit(0)
+}
+
+/** Site en ligne : variables intégrées à la construction, service d'analyse joignable et autorisé (CORS). */
+async function checkOnline(site) {
+  console.log(`\nMASO — vérification du site en ligne ${site}\n`)
+  const page = await probe(`${site}/connexion`)
+  if (page.status !== 200) return ko(`Site injoignable (code ${page.status})`, 'vérifier l’adresse Vercel et que le déploiement est « Ready »')
+  ok('Site en ligne')
+  const main = page.body.match(/\/assets\/index-[^"']+\.js/)?.[0]
+  if (!main) return ko('Code de l’application introuvable', 'le déploiement est peut-être incomplet : redéployer')
+  const first = await probe(`${site}${main}`)
+  const chunks = [...new Set(first.body.match(/assets\/[\w.-]+\.js/g) ?? [])]
+  let code = first.body
+  for (const chunk of chunks) code += (await probe(`${site}/${chunk}`)).body
+  const commit = code.match(/commit (\w{7})/)?.[1]
+  if (commit) ok('Version déployée', `commit ${commit}`)
+
+  console.log('\nVariables intégrées au site (Vercel → Settings → Environment Variables)')
+  const supabaseUrl = code.match(/https:\/\/[a-z0-9]{20}\.supabase\.co/)?.[0]
+  // Clé publique Supabase : nouveau format (sb_publishable_…) ou ancien (JWT dont le rôle est « anon »).
+  const anon =
+    code.match(/sb_publishable_[\w-]+/)?.[0] ??
+    (code.match(/eyJhbGciOi[\w-]+\.[\w-]+\.[\w-]+/g) ?? []).find((jwt) => {
+      try {
+        return JSON.parse(Buffer.from(jwt.split('.')[1], 'base64url').toString()).role === 'anon'
+      } catch {
+        return false
+      }
+    })
+  if (!supabaseUrl || !anon) {
+    ko('Supabase absent du site : il tourne en MODE DÉMONSTRATION', 'ajouter VITE_SUPABASE_URL et VITE_SUPABASE_ANON_KEY (case Production cochée), puis Deployments → ⋯ → Redeploy')
+  } else {
+    const health = await probe(`${supabaseUrl}/auth/v1/health`, { headers: { apikey: anon } })
+    if (health.status === 200) ok('Supabase intégré et joignable', supabaseUrl)
+    else ko(`Supabase intégré mais refuse la clé (code ${health.status})`, 'VITE_SUPABASE_ANON_KEY doit être la clé « anon public » du même projet')
+  }
+  const analyse = code.match(/https:\/\/[a-z0-9.-]+\.onrender\.com/)?.[0]
+  if (!analyse) {
+    ko('Adresse du service d’analyse absente du site', 'ajouter VITE_ANALYSE_API_URL (adresse Render, sans / final), puis redéployer')
+  } else {
+    console.log('\nService d’analyse (Render) — peut mettre 1 minute à se réveiller…')
+    const health = await probe(`${analyse}/health`, { headers: { Origin: site } }, 90000)
+    if (health.status !== 200) return ko(`Service d’analyse injoignable (${analyse}, code ${health.status})`, 'Render → maso-analyse → Logs : le déploiement a-t-il réussi ?')
+    ok('Service d’analyse joignable', analyse)
+    if (health.headers?.get('access-control-allow-origin') === site) ok('Le service accepte les appels du site (ALLOWED_ORIGINS)')
+    else ko('Le service REFUSE les appels du site', `Render → Environment → ALLOWED_ORIGINS = ${site} (exactement, sans / final) → Save`)
+    const caps = JSON.parse(health.body).capabilities
+    const labels = { factcheck: 'Vérifications publiées (GOOGLE_FACTCHECK_API_KEY)', ai_clue: 'Détecteur d’images IA (SIGHTENGINE_… ou HF_TOKEN)', assistant: 'Assistant IA (LLM_API_KEY)' }
+    for (const [key, label] of Object.entries(labels)) caps[key] ? ok(label) : ko(`${label} : clé absente`, 'Render → Environment : ajouter la clé, puis Save')
+    const ai = await probe(`${analyse}/image/ai-clue`, { method: 'POST', body: (() => { const form = new FormData(); form.append('file', new Blob([readFileSync(join(root, 'docs', 'exemples', '1-photo-originale.jpg'))], { type: 'image/jpeg' }), 'photo.jpg'); return form })() }, 90000)
+    if (caps.ai_clue && ai.status === 200) {
+      const result = JSON.parse(ai.body)
+      if (result.available) ok('Détecteur d’images IA : appel réussi')
+      else if (result.error === 'model_not_prepared') ko('Détecteur d’images IA : modèle non préparé sur Render', 'Render → maso-analyse → Manual Deploy → Clear build cache & deploy, puis lire les Logs (ligne « Modèle prêt »)')
+      else if (result.error === 'quota_exceeded') ko('Détecteur d’images IA : plus de crédit', 'Render → Environment : ajouter SIGHTENGINE_API_USER et SIGHTENGINE_API_SECRET (gratuit) et vider HF_TOKEN')
+      else if (result.error === 'token_not_allowed') ko('HF_TOKEN sans la permission d’appeler les modèles', 'recréer le jeton : onglet « Fine-grained » → cocher « Make calls to Inference Providers »')
+      else ko(`Détecteur d’images IA : ${result.error ?? 'indisponible'}`, 'vérifier HF_TOKEN dans Render, puis réessayer dans quelques minutes')
+    }
+    if (caps.assistant) {
+      const assist = await probe(`${analyse}/ai/assist`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ function: 'headlines', format: 'post', language: 'fr', claim: 'Test de configuration.', excerpts: [{ id: 'P1', text: 'Le bulletin officiel du 12 mars 2024 annonce 3 routes coupées.' }] }) }, 90000)
+      if (assist.status === 200) ok('Assistant IA : appel réussi', JSON.parse(assist.body).model)
+      else ko(`Assistant IA en échec (code ${assist.status})`, 'vérifier LLM_API_KEY et GROQ_MODEL=openai/gpt-oss-120b dans Render')
+    }
+  }
+  console.log('\nÀ vérifier à la main : Supabase → Authentication → URL Configuration → Site URL = ' + site + '\n')
 }
 
 console.log(`\nMASO — vérification de la configuration (${existsSync(envPath) ? '.env trouvé' : 'aucun .env : mode démonstration'})\n`)
@@ -76,9 +148,37 @@ if (!factcheckKey) {
   else ko(`Google Fact Check : clé refusée (code ${test.status})`, 'vérifier que l’API « Fact Check Tools » est activée pour le projet de la clé')
 }
 
+const seUser = value('SIGHTENGINE_API_USER')
+const seSecret = value('SIGHTENGINE_API_SECRET')
+if (seUser && seSecret) {
+  // Sightengine est prioritaire sur Hugging Face pour le détecteur d'images IA.
+  const form = new FormData()
+  form.append('media', new Blob([readFileSync(join(root, 'docs', 'exemples', '1-photo-originale.jpg'))], { type: 'image/jpeg' }), 'photo.jpg')
+  form.append('models', 'genai')
+  form.append('api_user', seUser)
+  form.append('api_secret', seSecret)
+  const test = await probe('https://api.sightengine.com/1.0/check.json', { method: 'POST', body: form }, 30000)
+  let body = {}
+  try {
+    body = JSON.parse(test.body)
+  } catch {}
+  if ((valid.hf = body.status === 'success')) ok('Sightengine : clés valides, détecteur d’images IA joignable')
+  else ko(`Sightengine : ${body.error?.message ?? `code ${test.status}`}`, 'vérifier SIGHTENGINE_API_USER et SIGHTENGINE_API_SECRET (dashboard.sightengine.com → API keys)')
+} else if (seUser || seSecret) {
+  ko('Sightengine : il faut les deux valeurs', 'SIGHTENGINE_API_USER et SIGHTENGINE_API_SECRET')
+}
 const hfToken = value('HF_TOKEN')
-if (!hfToken) {
-  off('Détecteur d’images IA (Hugging Face) non configuré', 'huggingface.co → Settings → Access Tokens → Create new token → « Fine-grained » → cocher « Make calls to Inference Providers » → HF_TOKEN')
+const localModel = existsSync(join(root, 'services', 'analyse', 'models', 'sdxl-detector', 'model.int8.onnx'))
+if (localModel) {
+  ok('Détecteur d’images IA local : modèle prêt (sans clé ni crédit)')
+  valid.hf = true
+} else if (!seUser && !seSecret) {
+  off('Détecteur d’images IA local : modèle non téléchargé sur ce PC', 'en ligne, Render le prépare tout seul ; sur ce PC : « npm run service:model » (354 Mo à télécharger)')
+}
+if (seUser && seSecret) {
+  // Hugging Face n'est pas utilisé quand Sightengine est configuré.
+} else if (!hfToken) {
+  if (!localModel) off('Détecteur d’images IA non configuré', 'Sightengine (recommandé, gratuit) : sightengine.com → Sign up → API keys → SIGHTENGINE_API_USER et SIGHTENGINE_API_SECRET ; ou Hugging Face : HF_TOKEN')
 } else {
   // Un jeton valide ne suffit pas : il doit avoir la permission d'appeler les modèles (Inference Providers).
   const pixel = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGP4z8AAAAMBAQDJ/pLvAAAAAElFTkSuQmCC', 'base64')
@@ -87,6 +187,8 @@ if (!hfToken) {
   if ((valid.hf = test.status === 200)) ok('Hugging Face : jeton valide, détecteur d’images IA joignable', model)
   else if (test.status === 401 || test.status === 403)
     ko(`Hugging Face : jeton sans la permission d’appeler les modèles (code ${test.status})`, 'huggingface.co → Settings → Access Tokens → Create new token → onglet « Fine-grained » → cocher « Make calls to Inference Providers » → copier dans HF_TOKEN')
+  else if (test.status === 402)
+    ko('Hugging Face : aucun crédit sur ce compte (code 402) — le service est devenu payant (PRO ou crédits prépayés)', 'utiliser Sightengine, gratuit : SIGHTENGINE_API_USER et SIGHTENGINE_API_SECRET (docs/DEPLOIEMENT.md, étape 1.3) ; un autre compte Hugging Face ne change rien')
   else ko(`Hugging Face : détecteur injoignable (code ${test.status})`, 'réessayer dans quelques minutes (le modèle démarre parfois lentement)')
 }
 
@@ -124,7 +226,7 @@ if (!provider) {
 if (capabilities) {
   const restart = [
     valid.factcheck && !capabilities.factcheck && 'Google Fact Check',
-    valid.hf && !capabilities.ai_clue && 'Hugging Face',
+    valid.hf && !capabilities.ai_clue && 'détecteur d’images IA',
     valid.llm && !capabilities.assistant && 'assistant IA',
   ].filter(Boolean)
   if (restart.length) console.log(`\n⚠️  Clés présentes mais pas encore prises en compte (${restart.join(', ')}) : redémarrez « npm run service:dev ».`)

@@ -15,7 +15,8 @@ from . import __version__
 from .assistant import FORMATS, FUNCTIONS, LANGUAGES, run_assistant
 from .config import settings
 from .factcheck import search_claims, search_image
-from .image import ai_clue, read_provenance
+from .image import ai_clue, ai_clue_sightengine, read_provenance
+from . import local_detector
 from .link import analyse_link, normalize_url, request_archive
 from .llm import LLMError, configured_provider, provider_ready
 from .netguard import UnsafeUrlError, check_url, new_client
@@ -96,7 +97,7 @@ def health() -> dict:
         "version": __version__,
         "capabilities": {
             "provenance": c2pa_ready,
-            "ai_clue": bool(settings.hf_token),
+            "ai_clue": bool(settings.hf_token or (settings.sightengine_user and settings.sightengine_secret) or (settings.ai_local_enabled and local_detector.is_ready())),
             "factcheck": bool(settings.factcheck_api_key),
             "video": True,
             "link": True,
@@ -118,8 +119,13 @@ async def image_provenance(file: UploadFile = File(...)) -> dict:
 async def image_ai_clue(file: UploadFile = File(...), client: httpx.Client = Depends(http_client)) -> dict:
     data, _ = await read_upload(file, settings.max_image_bytes, "image")
     try:
+        # Ordre : Sightengine (si configuré), modèle local (sans crédit), puis Hugging Face.
+        if settings.sightengine_user and settings.sightengine_secret:
+            return ai_clue_sightengine(client, settings.sightengine_user, settings.sightengine_secret, data)
+        if settings.ai_local_enabled and local_detector.is_ready():
+            return local_detector.ai_clue_local(data)
         return ai_clue(client, settings.hf_token, settings.ai_model, data)
-    except httpx.HTTPError:
+    except (httpx.HTTPError, ValueError, OSError):
         return {"available": False, "model": settings.ai_model, "error": "model_unreachable"}
 
 

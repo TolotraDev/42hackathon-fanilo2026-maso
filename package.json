@@ -16,6 +16,7 @@
     "service:install": "node scripts/service.mjs install",
     "service:dev": "node scripts/service.mjs dev",
     "service:test": "node scripts/service.mjs test",
+    "service:model": "node scripts/service.mjs model",
     "check:config": "node scripts/check-config.mjs"
   },
   "dependencies": {

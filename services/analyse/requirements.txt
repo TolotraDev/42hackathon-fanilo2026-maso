@@ -7,3 +7,5 @@ av>=12.0          # FFmpeg embarqué : informations vidéo et images clés
 Pillow>=10.0
 c2pa-python>=0.5  # Content Credentials (C2PA)
 defusedxml>=0.7  # lecture sûre des flux RSS / Atom (veille)
+onnxruntime>=1.18  # détecteur d'images IA exécuté localement (sans API ni crédit)
+onnx>=1.16         # compression du modèle en 8 bits (préparation)

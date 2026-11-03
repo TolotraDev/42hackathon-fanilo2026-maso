@@ -127,3 +127,24 @@ def test_adresse_interne_refusee():
     for path in ("/link/page", "/media/fetch"):
         response = api.post(path, json={"url": "http://127.0.0.1/admin"})
         assert response.status_code == 422 and response.json()["detail"] == "private_address"
+
+
+def test_detecteur_ia_sightengine():
+    from app.image import ai_clue_sightengine
+
+    ok = lambda r: httpx.Response(200, json={"status": "success", "type": {"ai_generated": 0.97}})  # noqa: E731
+    with client_for(ok) as client:
+        assert ai_clue_sightengine(client, "u", "s", b"\xff\xd8\xff") == {"available": True, "model": "sightengine:genai", "score": 0.97}
+    quota = lambda r: httpx.Response(200, json={"status": "failure", "error": {"type": "usage_limit", "message": "Daily usage limit reached"}})  # noqa: E731
+    with client_for(quota) as client:
+        assert ai_clue_sightengine(client, "u", "s", b"x")["error"] == "quota_exceeded"
+    bad = lambda r: httpx.Response(401, json={"status": "failure", "error": {"type": "credentials_error", "message": "Incorrect API user or secret"}})  # noqa: E731
+    with client_for(bad) as client:
+        assert ai_clue_sightengine(client, "u", "s", b"x")["error"] == "token_not_allowed"
+
+
+def test_detecteur_ia_quota_hugging_face():
+    from app.image import ai_clue
+
+    with client_for(lambda r: httpx.Response(402, json={"error": "You have no remaining credits."})) as client:
+        assert ai_clue(client, "hf_x", "modele", b"x")["error"] == "quota_exceeded"

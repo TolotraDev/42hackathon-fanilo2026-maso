@@ -27,9 +27,11 @@ if (task === 'install') {
   process.exit(1)
 } else if (task === 'dev') {
   run(venvPython, ['-m', 'uvicorn', 'app.main:app', '--reload', '--port', '8000'])
+} else if (task === 'model') {
+  run(venvPython, ['-m', 'app.local_detector', 'prepare'])
 } else if (task === 'test') {
   run(venvPython, ['-m', 'pytest', '-q'])
 } else {
-  console.error('Usage : node scripts/service.mjs install | dev | test')
+  console.error('Usage : node scripts/service.mjs install | dev | test | model')
   process.exit(1)
 }

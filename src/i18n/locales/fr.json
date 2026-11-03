@@ -1651,7 +1651,7 @@
       "elaWeak": "Légères différences de recompression, fréquentes après plusieurs partages.",
       "aiHigh": "Le détecteur d'images IA estime à {{percent}} % la probabilité d'une image générée (outil faillible).",
       "aiLow": "Le détecteur d'images IA ne repère pas de génération par IA ({{percent}} %) ; cela ne garantit rien.",
-      "aiUnavailable": "Détecteur d'images IA non configuré (clé HF_TOKEN du service d'analyse).",
+      "aiUnavailable": "Détecteur d'images IA non configuré (clés Sightengine ou HF_TOKEN du service d'analyse).",
       "reverseReady": "Recherche inversée prête : ouvrez Google Lens ou TinEye pour retrouver la première publication de l'image.",
       "reverseTodo": "Faites une recherche inversée (Google Lens, TinEye) pour retrouver la première publication de l'image.",
       "linkCaseVerdict": "Ce lien est déjà dans le dossier MASO « {{title}} », verdict {{verdict}}.",
@@ -1669,7 +1669,8 @@
       "figureGap": "Chiffre annoncé {{raw}} contre {{official}} pour « {{indicator}} » ({{year}}) : écart de {{percent}} %.",
       "claimsToCheck": "{{count}} affirmation(s) précise(s) à vérifier (chiffres, dates, lieux, personnes).",
       "videoEdited": "{{count}} changement(s) de plan : la vidéo est montée ; vérifiez chaque séquence.",
-      "videoKeyframes": "{{count}} image(s) clé(s) extraite(s) : faites leur recherche inversée pour retrouver la vidéo d'origine."
+      "videoKeyframes": "{{count}} image(s) clé(s) extraite(s) : faites leur recherche inversée pour retrouver la vidéo d'origine.",
+      "aiQuota": "Détecteur d'images IA indisponible : plus de crédit chez le fournisseur (passer à Sightengine, gratuit)."
     }
   }
 }

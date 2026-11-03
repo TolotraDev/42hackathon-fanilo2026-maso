@@ -1,5 +1,6 @@
 # Service d'analyse MASO sur Render (offre gratuite). Render → New → Blueprint → choisir ce dépôt.
 # Les clés sont saisies dans le tableau de bord Render (jamais dans ce fichier).
+# Le détecteur d'images IA local est préparé pendant la construction (Dockerfile) : aucune clé nécessaire.
 services:
   - type: web
     name: maso-analyse
@@ -12,6 +13,10 @@ services:
       - key: ALLOWED_ORIGINS
         sync: false # adresse de l'application, ex. https://maso.vercel.app
       - key: GOOGLE_FACTCHECK_API_KEY
+        sync: false
+      - key: SIGHTENGINE_API_USER
+        sync: false
+      - key: SIGHTENGINE_API_SECRET
         sync: false
       - key: HF_TOKEN
         sync: false

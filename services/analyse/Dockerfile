@@ -8,6 +8,10 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY app ./app
 
+# Détecteur d'images IA local : téléchargé et compressé une fois, à la construction de l'image.
+# En cas d'échec du téléchargement, le service démarre quand même (détecteur signalé indisponible).
+RUN python -m app.local_detector prepare || echo "Détecteur IA local non préparé"
+
 # Utilisateur sans privilèges
 RUN useradd --create-home maso
 USER maso

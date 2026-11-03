@@ -61,6 +61,9 @@ def ai_clue(client: httpx.Client, token: str, model: str, data: bytes) -> dict:
     if response.status_code in (401, 403):
         # Jeton refusé : il doit avoir la permission « Make calls to Inference Providers ».
         return {"available": False, "model": model, "error": "token_not_allowed"}
+    if response.status_code == 402:
+        # Crédits gratuits du mois épuisés sur le compte Hugging Face (renouvelés chaque mois).
+        return {"available": False, "model": model, "error": "quota_exceeded"}
     response.raise_for_status()
     labels = response.json()
     score = max(
@@ -68,3 +71,28 @@ def ai_clue(client: httpx.Client, token: str, model: str, data: bytes) -> dict:
         default=0.0,
     )
     return {"available": True, "model": model, "score": round(float(score), 3), "labels": labels}
+
+
+SIGHTENGINE_ENDPOINT = "https://api.sightengine.com/1.0/check.json"
+
+
+def ai_clue_sightengine(client: httpx.Client, api_user: str, api_secret: str, data: bytes) -> dict:
+    """Même indice via Sightengine (modèle « genai »), offre gratuite mensuelle. Jamais une conclusion."""
+    model = "sightengine:genai"
+    response = client.post(
+        SIGHTENGINE_ENDPOINT,
+        data={"models": "genai", "api_user": api_user, "api_secret": api_secret},
+        files={"media": ("image", data)},
+        timeout=30,
+    )
+    body = response.json() if response.headers.get("content-type", "").startswith("application/json") else {}
+    if body.get("status") != "success":
+        error = body.get("error") or {}
+        message = f"{error.get('type', '')} {error.get('message', '')}".lower()
+        if response.status_code in (401, 403) or "credential" in message or "auth" in message:
+            return {"available": False, "model": model, "error": "token_not_allowed"}
+        if "limit" in message or "quota" in message or response.status_code == 429:
+            return {"available": False, "model": model, "error": "quota_exceeded"}
+        return {"available": False, "model": model, "error": "model_unreachable"}
+    score = float((body.get("type") or {}).get("ai_generated", 0.0))
+    return {"available": True, "model": model, "score": round(score, 3)}

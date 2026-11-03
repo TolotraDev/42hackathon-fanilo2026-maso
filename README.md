@@ -172,7 +172,7 @@ Liens, captures (`screenshots/`) et vidéo : à compléter en MOD-08.
 
 Outils d'IA utilisés pour le développement : Claude Code (Anthropic) — génération et relecture de code, documentation.
 
-IA dans l'application : assistant éditorial via Groq, Gemini ou Ollama (au choix, contrôle « zéro invention » côté serveur) ; indice de génération d'image via Hugging Face (facultatif). Aucune IA ne propose de verdict.
+IA dans l'application : assistant éditorial via Groq, Gemini ou Ollama (au choix, contrôle « zéro invention » côté serveur) ; indice de génération d'image par le modèle [Organika/sdxl-detector](https://huggingface.co/Organika/sdxl-detector) (licence CC BY-NC 3.0, usage non commercial) exécuté dans le service, ou Sightengine. Aucune IA ne propose de verdict.
 
 ## Documentation
 

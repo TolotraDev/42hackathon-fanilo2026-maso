@@ -74,6 +74,8 @@ export interface AiClueResult {
   available: boolean
   model: string
   score?: number
+  /** token_not_allowed : jeton sans permission ; quota_exceeded : crédits du mois épuisés. */
+  error?: string
 }
 
 export interface VideoResult {

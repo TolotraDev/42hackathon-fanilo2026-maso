@@ -37,6 +37,11 @@ class Settings:
     )
     factcheck_api_key: str = os.getenv("GOOGLE_FACTCHECK_API_KEY", "")
     hf_token: str = os.getenv("HF_TOKEN", "")
+    # Détecteur d'images IA : Sightengine s'il est configuré (offre gratuite), sinon Hugging Face.
+    sightengine_user: str = os.getenv("SIGHTENGINE_API_USER", "")
+    sightengine_secret: str = os.getenv("SIGHTENGINE_API_SECRET", "")
+    # Détecteur exécuté dans le service (modèle préparé par « python -m app.local_detector prepare ») ; « off » pour le couper.
+    ai_local_enabled: bool = os.getenv("AI_LOCAL_DETECTOR", "on").lower() != "off"
     ai_model: str = os.getenv("AI_IMAGE_MODEL", "umm-maybe/AI-image-detector")
     max_image_bytes: int = int(os.getenv("MAX_IMAGE_MB", "20")) * 1024 * 1024
     max_video_bytes: int = int(os.getenv("MAX_VIDEO_MB", "100")) * 1024 * 1024
