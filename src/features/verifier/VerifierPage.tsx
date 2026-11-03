@@ -1,4 +1,4 @@
-import { FileText, Image, Link2, LoaderCircle, Search, Server, Video, type LucideIcon } from 'lucide-react'
+import { FileText, Image, Link2, LoaderCircle, Search, Server, Video, ArrowRight, type LucideIcon } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -67,114 +67,214 @@ export function VerifierPage() {
 
   const resultCount = results ? results.library.length + results.claims.length : 0
 
+  const healthTone = health.state === 'ok' ? 'success' : health.state === 'off' ? 'warning' : 'neutral'
+
   return (
-    <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:items-start">
-      <div className="space-y-4">
-        <Card className="p-4">
-          <form onSubmit={(event) => void search(event)} className="space-y-3">
-            <label htmlFor="claim" className="block font-display text-sm font-bold text-navy dark:text-ink">
+    <div className="grid grid-cols-1 gap-4 lg:grid-cols-[1fr_360px] lg:items-start">
+      {/* Colonne principale */}
+      <div className="min-w-0 space-y-4">
+        {/* Recherche */}
+        <Card className="dashboard-rise overflow-hidden" style={{ ['--i' as string]: 0 }}>
+          <div className="border-b border-line px-4 py-3">
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-ink-muted">
+              {t('verifier.searchExisting')}
+            </p>
+            <h2 className="mt-0.5 font-display text-base font-bold text-navy dark:text-ink">
               {t('verifier.claimLabel')}
-            </label>
-            <Input id="claim" value={query} onChange={(event) => setQuery(event.target.value)} placeholder={t('verifier.claimPlaceholder')} />
+            </h2>
+          </div>
+          <form onSubmit={(event) => void search(event)} className="space-y-3 p-4">
+            <Input
+              id="claim"
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              placeholder={t('verifier.claimPlaceholder')}
+            />
             <Button type="submit" block disabled={query.trim().length < 3 || searching || !online}>
-              {searching ? <LoaderCircle className="size-4 animate-spin" aria-hidden /> : <Search className="size-4" aria-hidden />}
+              {searching ? (
+                <LoaderCircle className="size-4 animate-spin" aria-hidden />
+              ) : (
+                <Search className="size-4" aria-hidden />
+              )}
               {t('verifier.searchExisting')}
             </Button>
             {!online && <p className="text-xs text-ink-muted">{t('verifier.summary.waitingNetwork')}</p>}
           </form>
 
           {results && (
-            <div className="mt-4 space-y-2" aria-live="polite">
-              <p className="text-sm font-semibold text-ink">{t('verifier.existingResults', { count: resultCount })}</p>
-              <ul className="space-y-1.5 text-xs">
-                {results.library.map((hit) => (
-                  <li key={hit.id} className="flex flex-wrap items-center gap-2 rounded-xl bg-canvas px-3 py-2">
-                    <span className="min-w-0 flex-1 font-semibold text-ink">{hit.title}</span>
-                    <CaseStatusBadge status={hit.status} />
-                    {hit.verdict && <VerdictBadge verdict={hit.verdict} />}
-                  </li>
-                ))}
-                {results.claims.map((claim, index) => (
-                  <li key={`${claim.url}-${index}`} className="rounded-xl bg-canvas px-3 py-2">
-                    <a href={claim.url ?? '#'} target="_blank" rel="noreferrer" className="font-semibold text-cobalt hover:underline">
-                      {claim.publisher} : {claim.rating}
-                    </a>
-                    <p className="text-ink-muted">{claim.text}</p>
-                  </li>
-                ))}
-              </ul>
-              {resultCount === 0 && <p className="text-xs text-ink-muted">{t('verifier.noExisting')}</p>}
-              {!results.factcheckAvailable && <p className="text-xs text-ink-muted">{t('verifier.link.factcheckOff')}</p>}
+            <div className="border-t border-line px-4 py-3" aria-live="polite">
+              <p className="mb-2 text-[11px] font-semibold uppercase tracking-widest text-ink-muted">
+                {t('verifier.existingResults', { count: resultCount })}
+              </p>
+              {resultCount === 0 ? (
+                <p className="text-xs italic text-ink-muted">{t('verifier.noExisting')}</p>
+              ) : (
+                <ul className="divide-y divide-line">
+                  {results.library.map((hit, index) => (
+                    <li key={hit.id} className="dashboard-fade" style={{ ['--i' as string]: index }}>
+                      <div className="row-link flex min-h-11 items-center gap-2 py-2">
+                        <span className="min-w-0 flex-1 truncate text-sm font-semibold text-ink">{hit.title}</span>
+                        <CaseStatusBadge status={hit.status} />
+                        {hit.verdict && <VerdictBadge verdict={hit.verdict} />}
+                        <ArrowRight className="row-arrow size-4 shrink-0 text-ink-muted" aria-hidden />
+                      </div>
+                    </li>
+                  ))}
+                  {results.claims.map((claim, index) => (
+                    <li
+                      key={`${claim.url}-${index}`}
+                      className="dashboard-fade py-2"
+                      style={{ ['--i' as string]: results.library.length + index }}
+                    >
+                      <a
+                        href={claim.url ?? '#'}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="group/claim block"
+                      >
+                        <div className="flex items-center gap-2">
+                          <span className="text-[10px] font-bold uppercase tracking-widest text-ink-muted">
+                            {claim.publisher}
+                          </span>
+                          <span aria-hidden className="text-ink-muted">·</span>
+                          <span className="text-xs font-semibold text-cobalt group-hover/claim:underline">
+                            {claim.rating}
+                          </span>
+                        </div>
+                        <p className="mt-0.5 line-clamp-2 border-l-2 border-line pl-2 text-xs text-ink-muted">
+                          {claim.text}
+                        </p>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              )}
+              {!results.factcheckAvailable && (
+                <p className="mt-2 text-xs italic text-ink-muted">{t('verifier.link.factcheckOff')}</p>
+              )}
             </div>
           )}
         </Card>
 
-        <section>
+        {/* Import */}
+        <section className="dashboard-rise" style={{ ['--i' as string]: 1 }}>
           <SectionTitle>{t('verifier.importTitle')}</SectionTitle>
-          <div className="grid grid-cols-4 gap-2">
+          <div className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-4">
             {entries.map(({ id, icon: Icon, action }) => (
               <button
                 key={id}
                 type="button"
                 onClick={action}
                 disabled={!action}
-                className="flex min-h-24 flex-col items-center justify-center gap-1.5 rounded-2xl border border-line bg-surface px-1 py-3 text-xs font-semibold text-ink shadow-[0_1px_3px_rgb(10_47_79/0.06)] transition hover:border-cobalt disabled:cursor-not-allowed disabled:opacity-60"
+                className="shortcut-link flex min-h-24 flex-col items-center justify-center gap-2 rounded-2xl border border-line bg-surface px-2 py-3 text-xs font-semibold text-ink transition-colors hover:border-cobalt hover:text-cobalt disabled:cursor-not-allowed disabled:opacity-60"
               >
-                <span className="flex size-10 items-center justify-center rounded-xl bg-cobalt/10 text-cobalt">
+                <span className="shortcut-icon flex size-10 items-center justify-center rounded-xl bg-cobalt/10 text-cobalt">
                   <Icon className="size-5" aria-hidden />
                 </span>
                 {t(`verifier.input.${id}`)}
-                {!action && <span className="text-[10px] font-medium text-ink-muted">{t('verifier.soon')}</span>}
+                {!action && (
+                  <span className="text-[10px] font-medium text-ink-muted">{t('verifier.soon')}</span>
+                )}
               </button>
             ))}
           </div>
-          <input ref={imageInput} type="file" accept="image/*" className="sr-only" tabIndex={-1} aria-hidden onChange={(event) => openMedia(event.target.files, '/verifier/image')} />
-          <input ref={videoInput} type="file" accept="video/*" className="sr-only" tabIndex={-1} aria-hidden onChange={(event) => openMedia(event.target.files, '/verifier/video')} />
+          <input
+            ref={imageInput}
+            type="file"
+            accept="image/*"
+            className="sr-only"
+            tabIndex={-1}
+            aria-hidden
+            onChange={(event) => openMedia(event.target.files, '/verifier/image')}
+          />
+          <input
+            ref={videoInput}
+            type="file"
+            accept="video/*"
+            className="sr-only"
+            tabIndex={-1}
+            aria-hidden
+            onChange={(event) => openMedia(event.target.files, '/verifier/video')}
+          />
         </section>
 
-        <Card className="flex items-start gap-3 p-4">
-          <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-cobalt/10 text-cobalt">
-            <Server className="size-5" aria-hidden />
-          </span>
-          <div className="min-w-0 flex-1 space-y-1.5">
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <p className="text-sm font-semibold text-ink">{t('verifier.service.title')}</p>
-              <Badge tone={health.state === 'ok' ? 'success' : health.state === 'off' ? 'warning' : 'neutral'}>
-                {t(`verifier.service.${health.state}`)}
-              </Badge>
+        {/* Statut du service */}
+        <Card
+          className="indicator-card dashboard-rise relative overflow-hidden"
+          style={{ ['--i' as string]: 2 }}
+        >
+          <span
+            aria-hidden
+            className={`tone-bar absolute inset-y-0 left-0 w-1 ${
+              health.state === 'ok' ? 'bg-success' : health.state === 'off' ? 'bg-warning' : 'bg-line'
+            }`}
+          />
+          <div className="flex items-start gap-3 p-4">
+            <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-cobalt/10 text-cobalt">
+              <Server className="size-5" aria-hidden />
+            </span>
+            <div className="min-w-0 flex-1 space-y-1.5">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <p className="text-sm font-semibold text-ink">{t('verifier.service.title')}</p>
+                <Badge tone={healthTone}>
+                  <span className="flex items-center gap-1.5">
+                    {health.state === 'checking' && (
+                      <span className="notif-dot-unread size-1.5 rounded-full bg-current" aria-hidden />
+                    )}
+                    {t(`verifier.service.${health.state}`)}
+                  </span>
+                </Badge>
+              </div>
+              <p className="text-xs text-ink-muted">
+                {health.state === 'off' ? t('verifier.service.offHint') : t('verifier.service.localHint')}
+              </p>
+              {health.state === 'ok' && (
+                <ul className="flex flex-wrap gap-1.5 pt-1">
+                  {(['provenance', 'video', 'link', 'factcheck', 'ai_clue'] as const).map((capability) => (
+                    <li key={capability}>
+                      <Badge tone={health.capabilities[capability] ? 'info' : 'neutral'}>
+                        {t(`verifier.service.capability.${capability}`)} :{' '}
+                        {health.capabilities[capability]
+                          ? t('verifier.service.on')
+                          : t('verifier.service.notConfigured')}
+                      </Badge>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
-            <p className="text-xs text-ink-muted">
-              {health.state === 'off' ? t('verifier.service.offHint') : t('verifier.service.localHint')}
-            </p>
-            {health.state === 'ok' && (
-              <ul className="flex flex-wrap gap-1.5">
-                {(['provenance', 'video', 'link', 'factcheck', 'ai_clue'] as const).map((capability) => (
-                  <li key={capability}>
-                    <Badge tone={health.capabilities[capability] ? 'info' : 'neutral'}>
-                      {t(`verifier.service.capability.${capability}`)} : {health.capabilities[capability] ? t('verifier.service.on') : t('verifier.service.notConfigured')}
-                    </Badge>
-                  </li>
-                ))}
-              </ul>
-            )}
           </div>
         </Card>
       </div>
 
-      <Card className="p-4">
-        <SectionTitle>{t('verifier.verdictScale')}</SectionTitle>
-        <p className="mb-3 text-xs text-ink-muted">{t('verifier.verdictScaleHint')}</p>
-        <ul className="divide-y divide-line">
-          {VERDICTS.map((verdict) => (
-            <li key={verdict} className="flex flex-col gap-1 py-2.5 sm:flex-row sm:items-start sm:gap-3">
-              <span className="sm:w-36 sm:shrink-0">
+      {/* Option 1 : Grille 2x2 compacte */}
+      <aside className="lg:sticky lg:top-4">
+        <Card className="dashboard-rise p-4" style={{ ['--i' as string]: 0 }}>
+          <div className="mb-4">
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-ink-muted">
+              {t('verifier.verdictScale')}
+            </p>
+            <p className="mt-1 text-xs leading-relaxed text-ink-muted">
+              {t('verifier.verdictScaleHint')}
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-2 gap-3">
+            {VERDICTS.map((verdict, index) => (
+              <div
+                key={verdict}
+                className="dashboard-fade flex flex-col gap-2 rounded-xl border border-line bg-canvas/30 p-3 transition-colors hover:bg-canvas/60"
+                style={{ ['--i' as string]: index }}
+              >
                 <VerdictBadge verdict={verdict} />
-              </span>
-              <span className="text-sm text-ink">{t(`verdictDefinition.${verdict}`)}</span>
-            </li>
-          ))}
-        </ul>
-      </Card>
+                <p className="text-[11px] leading-snug text-ink-muted">
+                  {t(`verdictDefinition.${verdict}`)}
+                </p>
+              </div>
+            ))}
+          </div>
+        </Card>
+      </aside>
     </div>
   )
 }
