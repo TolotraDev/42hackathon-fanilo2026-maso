@@ -8,7 +8,7 @@ export function SideNav({ onNavigate }: { onNavigate?: () => void }) {
   const { t } = useTranslation()
   const sections = useNavSections()
   return (
-    <ul className="space-y-1">
+    <ul className="space-y-1.5">
       {sections.map(({ id, path, icon: Icon }) => (
         <li key={id}>
           <NavLink
@@ -17,7 +17,9 @@ export function SideNav({ onNavigate }: { onNavigate?: () => void }) {
             className={({ isActive }) =>
               cn(
                 'flex min-h-11 items-center gap-3 rounded-xl px-3 text-sm font-semibold transition',
-                isActive ? 'bg-cobalt text-white shadow-sm' : 'text-white/75 hover:bg-white/10 hover:text-white',
+                isActive
+                  ? 'bg-cobalt text-white shadow-[0_8px_16px_rgba(25,118,210,0.25)] dark:shadow-sm'
+                  : 'text-ink-muted hover:bg-canvas hover:text-navy dark:text-white/75 dark:hover:bg-white/10 dark:hover:text-white',
               )
             }
           >

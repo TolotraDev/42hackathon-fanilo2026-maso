@@ -1039,12 +1039,19 @@
       "configuration": "Supabase is misconfigured (key, migrations or email provider). Check the .env file and the setup.",
       "no_account": "No MASO account is linked to this address. Check the address or ask the administrator for an invitation.",
       "shortCredentials": "Email and password must be at least 8 characters long.",
-      "shortEmail": "Email must be at least 8 characters long."
+      "shortEmail": "Email must be at least 8 characters long.",
+      "function_missing": "The required server function is not deployed on Supabase. Ask the technical administrator to deploy it (supabase functions deploy).",
+      "weak_password": "Password too short: 8 characters minimum."
     },
     "portal": "Browse the public portal",
     "emailPlaceholder": "Email address",
     "showPassword": "Show password",
-    "hidePassword": "Hide password"
+    "hidePassword": "Hide password",
+    "signOutConfirm": {
+      "title": "Sign out?",
+      "text": "You will leave your space on this device. The PIN code and session stored here will be erased; your cases stay on the server.",
+      "cancel": "Cancel"
+    }
   },
   "onboarding": {
     "skip": "Skip",
@@ -1086,7 +1093,19 @@
       "revokedDone": "Badge revoked.",
       "expired": "Badge expired",
       "until": "Badge valid until {{date}}"
-    }
+    },
+    "addMode": "How to add",
+    "modeEmail": "Email invitation",
+    "modePassword": "Temporary password",
+    "modeEmailHint": "The person receives an email to choose a password (email server required).",
+    "modePasswordHint": "The account is created right away; hand over the temporary password in person.",
+    "tempPassword": "Temporary password",
+    "tempPasswordHint": "8 characters minimum. To be changed at first sign-in (Forgot password).",
+    "create": "Create account",
+    "created": "Account created for {{email}}.",
+    "allRoles": "All roles",
+    "allStatuses": "All statuses",
+    "status": "Status"
   },
   "clue": {
     "none": "No clue",

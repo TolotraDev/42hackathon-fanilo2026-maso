@@ -10,11 +10,11 @@ export function UserBadge({ onNavigate }: { onNavigate?: () => void }) {
   if (!role) return null
   const name = profile ? profile.fullName || profile.email : t('auth.guestMode')
   return (
-    <Link to="/profil" onClick={onNavigate} className="flex items-center gap-3 rounded-xl px-3 py-2 transition hover:bg-white/10">
+    <Link to="/profil" onClick={onNavigate} className="flex items-center gap-3 rounded-xl border border-line bg-canvas px-3 py-2.5 transition hover:border-cobalt/40 dark:border-transparent dark:bg-transparent dark:hover:bg-white/10">
       <Avatar name={name} className="bg-cobalt" />
       <span className="min-w-0">
-        <span className="block truncate text-sm font-semibold text-white">{name}</span>
-        <span className="block truncate text-xs text-white/65">{t(`role.${role}`)}</span>
+        <span className="block truncate text-sm font-semibold text-ink dark:text-white">{name}</span>
+        <span className="block truncate text-xs text-ink-muted dark:text-white/65">{t(`role.${role}`)}</span>
       </span>
     </Link>
   )

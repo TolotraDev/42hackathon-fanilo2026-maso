@@ -53,7 +53,7 @@ export function AppShell() {
       <MobileDrawer open={menuOpen} onClose={() => setMenuOpen(false)} />
       <Topbar title={title} query={query} onQueryChange={setQuery} />
       <OfflineBanner />
-      <main className="mx-auto w-full max-w-6xl px-4 pb-28 pt-4 lg:px-8 lg:pb-12 lg:pt-6">
+      <main className="app-content mx-auto w-full max-w-6xl px-4 pb-32 pt-5 sm:px-6 lg:px-10 lg:pb-14 lg:pt-8">
         <Outlet context={{ query } satisfies ShellContext} />
       </main>
       <BottomNav />

@@ -10,7 +10,7 @@ function NavItem({ section }: { section: NavSection }) {
   return (
     <NavLink
       to={section.path}
-      className="flex flex-1 flex-col items-center justify-end pb-1"
+      className="flex min-w-0 flex-1 flex-col items-center justify-end pb-1"
     >
       {({ isActive }) => (
         <>
@@ -26,7 +26,7 @@ function NavItem({ section }: { section: NavSection }) {
           </div>
           <span
             className={cn(
-              'mt-1 text-[11px] font-medium transition-colors duration-300',
+              'mt-1 max-w-full truncate px-0.5 text-[11px] font-medium transition-colors duration-300',
               isActive ? 'font-bold text-ink dark:text-white' : 'text-ink-muted dark:text-white/70',
             )}
           >

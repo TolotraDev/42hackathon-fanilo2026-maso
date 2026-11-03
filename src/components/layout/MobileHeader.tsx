@@ -2,6 +2,7 @@ import { Menu, Search, Settings, X } from 'lucide-react'
 import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
+import { SignOutButton } from '@/features/auth/SignOutButton'
 import { NotificationBell } from '@/features/notifications/NotificationBell'
 import { NetworkStatus } from './NetworkStatus'
 
@@ -44,6 +45,7 @@ export function MobileHeader({ title, query, searchOpen, onQueryChange, onSearch
           <Link to="/profil" aria-label={t('nav.settings')} className="flex size-11 items-center justify-center rounded-full hover:bg-white/10">
             <Settings className="size-5" aria-hidden />
           </Link>
+          <SignOutButton tone="dark" className="size-11 rounded-full" />
         </div>
       </div>
       {searchOpen ? (

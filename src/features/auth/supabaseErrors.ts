@@ -35,6 +35,11 @@ export function toAuthFailure(error: SupabaseLikeError): AuthFailure {
   // Lien magique demandé pour une adresse sans compte (la création de compte par e-mail est désactivée).
   if (/signups not allowed/i.test(message)) return new AuthFailure('no_account')
   if (error.code && CODES[error.code]) return new AuthFailure(CODES[error.code])
+  // Fonction serveur (Edge Function) introuvable : pas déployée sur le projet Supabase.
+  if (/function was not found/i.test(message) || (error.name === 'FunctionsFetchError' && (typeof navigator === 'undefined' || navigator.onLine !== false))) {
+    return new AuthFailure('function_missing')
+  }
+  if (/weak_password|password should be at least/i.test(message)) return new AuthFailure('weak_password')
   // Requête qui n'a pas abouti (coupure, page quittée pendant l'envoi) : à réessayer, ce n'est pas un refus.
   if (error.name === 'AuthRetryableFetchError' || error.name === 'AbortError' || /failed to fetch|network|abort|load failed/i.test(message)) return new AuthFailure('network')
   if (error.status === 429) return new AuthFailure('rate_limited')

@@ -90,7 +90,9 @@ export function createSupabaseAuth(client: SupabaseClient): AuthService {
     },
 
     async signOut() {
-      await client.auth.signOut()
+      // Déconnexion de cet appareil : elle n'attend pas le serveur (session expirée, hors ligne)
+      // et ne coupe pas les sessions ouvertes ailleurs.
+      await client.auth.signOut({ scope: 'local' })
     },
 
     admin: {
@@ -100,17 +102,22 @@ export function createSupabaseAuth(client: SupabaseClient): AuthService {
         return data.map(toProfile)
       },
 
-      async inviteUser({ email, fullName, role, language }) {
+      async inviteUser({ email, fullName, role, language, password }) {
         const { error } = await client.functions.invoke('invite-user', {
           body: {
             email,
             full_name: fullName,
             role,
             language,
+            password: password || undefined,
             redirect_to: `${window.location.origin}/nouveau-mot-de-passe`,
           },
         })
-        if (error) throw toFailure(error)
+        if (error) {
+          // La fonction renvoie un code précis ({ error: 'role_not_allowed' }…) : on le lit plutôt que le message générique.
+          const body = await (error as { context?: Response }).context?.json?.().catch(() => null)
+          throw toFailure(body?.error ? { message: String(body.error), code: String(body.error) } : error)
+        }
       },
 
       async setRole(userId, role) {
