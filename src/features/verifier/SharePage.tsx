@@ -43,6 +43,12 @@ export function SharePage() {
         navigate(`/verifier/lien?url=${encodeURIComponent(sharedUrl)}`, { replace: true })
         return
       }
+      // Message partagé sans lien ni fichier (WhatsApp, Facebook) : analyse du texte.
+      const sharedText = [params.get('title'), params.get('text')].filter(Boolean).join('\n').trim()
+      if (sharedText.length >= 10) {
+        navigate(`/verifier/texte?texte=${encodeURIComponent(sharedText.slice(0, 5000))}`, { replace: true })
+        return
+      }
       setEmpty(true)
     })()
   }, [params, navigate])

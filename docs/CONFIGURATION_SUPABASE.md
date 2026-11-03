@@ -36,6 +36,7 @@ Pour **chacun des fichiers ci-dessous, dans cet ordre** : ouvrir le fichier dans
 | 8 | `supabase/demo/donnees_demo.sql` | **Données de démonstration** (facultatif, relançable sans doublons) |
 | 9 | `supabase/migrations/202611021700_dossiers.sql` | Checklist guidée, règles de soumission du verdict, création hors ligne (MOD-05) |
 | 10 | `supabase/migrations/202611021800_publication.sql` | Revue éditoriale, signature et publication, portail public, signalements, notifications (MOD-06) |
+| 11 | `supabase/migrations/202611031000_parametres_badges.sql` | Paramètres (veille, modèles, mentions), badges QR des journalistes (MOD-07, MOD-08) |
 
 > Projet déjà configuré lors d'un module précédent : n'exécuter **que les nouveaux fichiers** (ex. le n° 6 pour MOD-03).
 > Ne **pas** exécuter `supabase/seed.sql` sur le projet en ligne : il sert uniquement à la base locale.

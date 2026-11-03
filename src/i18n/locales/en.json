@@ -216,7 +216,8 @@
       "hosting": "The host shows where the server is, not who publishes.",
       "directory": "The score only assesses the source, never the truth of a claim.",
       "existing": "Only finds fact-checks published online or stored in MASO.",
-      "archive": "The archive keeps the page as it was: useful if it is edited or deleted."
+      "archive": "The archive keeps the page as it was: useful if it is edited or deleted.",
+      "page": "Reads the page like a visitor without an account: a private or members-only post cannot be read, and the date shown is the one declared by the site."
     },
     "video": {
       "step": {
@@ -251,7 +252,8 @@
         "hosting": "Host",
         "directory": "Media and sources directory",
         "existing": "Existing fact-checks",
-        "archive": "Page archive"
+        "archive": "Page archive",
+        "page": "Page content"
       },
       "httpsYes": "The site accepts secure connections (HTTPS).",
       "httpsNo": "The site does not accept secure connections (HTTPS).",
@@ -285,7 +287,20 @@
         "invalid_host": "Address refused: invalid site name.",
         "host_not_found": "This domain does not exist or is misspelled.",
         "too_many_redirects": "Too many redirects: the page could not be analysed."
-      }
+      },
+      "pageBlocked": "The {{network}} post cannot be read without logging in.",
+      "pageEmpty": "Page read, but without title or description.",
+      "pageImage": "Main image of the page",
+      "pageTitle": "Title",
+      "pageDescription": "Description",
+      "pageSite": "Site",
+      "pagePublished": "Published on",
+      "pageAuthor": "Author",
+      "socialHelp": "Social networks often hide posts from robots. To check anyway:\n1. Image: long press → \"Save image\", then import it here (or take a screenshot).\n2. Video: save it or capture a keyframe.\n3. Text: copy the post text and paste it into \"Check\".\n4. Note the account name and publication date for the Sources tab of the case.",
+      "analyseImage": "Analyse this page's image",
+      "fetchingImage": "Downloading the image…",
+      "analyseText": "Analyse this page's text",
+      "imageFailed": "The page image could not be retrieved."
     },
     "attach": {
       "title": "Add to case",
@@ -385,6 +400,15 @@
       "saveConfidential": "Save confidential details",
       "linkedCases": "Linked cases",
       "noLinkedCase": "No linked case yet."
+    },
+    "paste": {
+      "title": "Paste or drop content",
+      "hint": "A link (Facebook post, article, video), an image address, a message you received… or a copied image (Ctrl+V). MASO picks the right analysis.",
+      "placeholder": "Paste a link, a text or an image here",
+      "analyse": "Analyse",
+      "fetching": "Downloading the media…",
+      "fetchFailed": "This media could not be retrieved from its address (private, protected or too large). Save it on the device, then import it.",
+      "unsupported": "Only images and videos can be dropped here."
     }
   },
   "verdict": {
@@ -1581,6 +1605,71 @@
         "title": "Alarmist tone",
         "text": "Capital letters or repeated exclamation marks."
       }
+    }
+  },
+  "synthesis": {
+    "title": "What the clues say",
+    "vigilance": {
+      "high": "High vigilance",
+      "medium": "Moderate vigilance",
+      "low": "No warning sign",
+      "running": "Analysis in progress",
+      "unreadable": "Content not readable"
+    },
+    "vigilanceHint": {
+      "high": "Serious elements call for caution: do not share before a complete check.",
+      "medium": "Some clues deserve a closer look before concluding.",
+      "low": "No warning clue so far. This does not prove the content is true: check where it comes from.",
+      "running": "Results are coming in: wait for the end of the analysis before concluding.",
+      "unreadable": "The content itself could not be read: nothing allows it to be considered reassuring. Retrieve its image or text to analyse it."
+    },
+    "alreadyChecked_one": "Already checked by {{count}} outlet",
+    "alreadyChecked_other": "Already checked by {{count}} outlets",
+    "readCheck": "Read the fact-check",
+    "factcheckOff": "Search in published fact-checks (Google Fact Check) is not configured on the analysis service.",
+    "source": "source",
+    "running": "Analysis in progress: the summary is being completed…",
+    "human": "These are clues and sources, not a verdict: only a journalist concludes, after checking.",
+    "level": {
+      "alert": "Alert",
+      "caution": "To examine",
+      "ok": "Reassuring",
+      "info": "Information"
+    },
+    "finding": {
+      "seenWithVerdict": "Image already checked in MASO: \"{{title}}\", verdict {{verdict}}.",
+      "seenInCase": "Image already in the MASO case \"{{title}}\".",
+      "metaGenerative": "The file declares an image generation tool: {{software}}.",
+      "metaEditing": "The file declares editing software: {{software}} (editing is not necessarily manipulation).",
+      "metaFutureDate": "The capture date is in the future: wrong clock or modified metadata.",
+      "metaStripped": "No metadata: normal for an image shared through Facebook or WhatsApp, it proves nothing.",
+      "metaPresent": "Declared capture: {{date}}, device: {{device}}.",
+      "c2paAi": "The origin certificate (C2PA) says the image was generated or edited by AI (issuer: {{issuer}}).",
+      "c2paInvalid": "The origin certificate (C2PA) is present but invalid: the file was changed after signing.",
+      "c2paValid": "Valid origin certificate (C2PA), issued by {{issuer}}.",
+      "elaStrong": "The recompression analysis shows very different areas: possible local editing to examine.",
+      "elaWeak": "Slight recompression differences, common after several shares.",
+      "aiHigh": "The AI image detector estimates a {{percent}}% probability of a generated image (fallible tool).",
+      "aiLow": "The AI image detector finds no AI generation ({{percent}}%); this guarantees nothing.",
+      "aiUnavailable": "AI image detector not configured (HF_TOKEN key of the analysis service).",
+      "reverseReady": "Reverse search ready: open Google Lens or TinEye to find the image's first publication.",
+      "reverseTodo": "Run a reverse search (Google Lens, TinEye) to find the image's first publication.",
+      "linkCaseVerdict": "This link is already in the MASO case \"{{title}}\", verdict {{verdict}}.",
+      "linkCase": "This link is already in the MASO case \"{{title}}\".",
+      "socialBlocked": "{{network}} post not readable without logging in: analyse its screenshot, image or text.",
+      "socialPost": "{{network}} post: the account owner still needs to be identified and assessed.",
+      "domainNew": "The domain {{domain}} was created only {{days}} days ago: a classic sign of an opportunistic site.",
+      "domainOld": "The domain {{domain}} has existed for {{days}} days: it was not created for the occasion.",
+      "noHttps": "The site does not use a secure connection (HTTPS).",
+      "sourceKnown": "Source known in the MASO directory: {{name}} (not rated yet).",
+      "sourceScore": "Source known in the MASO directory: {{name}}, reliability {{score}}/10.",
+      "sourceUnknown": "The site {{domain}} is not in the MASO media directory.",
+      "pageDate": "Page published on {{date}}: compare with the date claimed by the rumour.",
+      "archived": "Page already archived on {{date}} (Wayback Machine): useful to see its original version.",
+      "figureGap": "Claimed figure {{raw}} versus {{official}} for \"{{indicator}}\" ({{year}}): {{percent}}% gap.",
+      "claimsToCheck": "{{count}} precise claim(s) to check (figures, dates, places, people).",
+      "videoEdited": "{{count}} shot change(s): the video is edited; check each sequence.",
+      "videoKeyframes": "{{count}} keyframe(s) extracted: reverse-search them to find the original video."
     }
   }
 }

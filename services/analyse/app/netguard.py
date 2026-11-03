@@ -6,7 +6,7 @@ from urllib.parse import urljoin, urlsplit
 
 import httpx
 
-USER_AGENT = "MASO-analyse/0.1 (+verification journalistique)"
+USER_AGENT = "Mozilla/5.0 (compatible; MASO-analyse/0.2; +https://github.com/TolotraDev/42hackathon-fanilo2026-maso)"
 MAX_REDIRECTS = 5
 
 

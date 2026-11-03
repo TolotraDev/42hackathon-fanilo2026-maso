@@ -216,7 +216,8 @@
       "hosting": "Milaza ny toerana misy ny mpizara ny mpampiantrano, fa tsy hoe iza no mamoaka.",
       "directory": "Ny loharano ihany no tombanan'ny naoty, fa tsy ny maha-marina ny filazana mihitsy.",
       "existing": "Ireo fanamarinana navoaka an-tserasera na voatahiry ao amin'ny MASO ihany no hitany.",
-      "archive": "Mitahiry ny pejy toy ny taloha ny tahiry : ilaina raha ovaina na fafana izy."
+      "archive": "Mitahiry ny pejy toy ny taloha ny tahiry : ilaina raha ovaina na fafana izy.",
+      "page": "Mamaky ny pejy toy ny mpitsidika tsy manana kaonty : tsy azo vakiana ny lahatsoratra manokana na ho an'ny mpikambana, ary ny daty aseho dia ilay ambaran'ny tranonkala."
     },
     "video": {
       "step": {
@@ -251,7 +252,8 @@
         "hosting": "Mpampiantrano",
         "directory": "Lisitry ny haino aman-jery sy loharano",
         "existing": "Fanamarinana efa nisy",
-        "archive": "Tahirin'ny pejy"
+        "archive": "Tahirin'ny pejy",
+        "page": "Votoatin'ny pejy"
       },
       "httpsYes": "Manaiky fifandraisana voaaro (HTTPS) ny tranonkala.",
       "httpsNo": "Tsy manaiky fifandraisana voaaro (HTTPS) ny tranonkala.",
@@ -285,7 +287,20 @@
         "invalid_host": "Adiresy nolavina : diso ny anaran'ny tranonkala.",
         "host_not_found": "Tsy misy io anarana io na diso tsipelina.",
         "too_many_redirects": "Be loatra ny fandefasana : tsy voavakafaka ny pejy."
-      }
+      },
+      "pageBlocked": "Tsy azo vakiana raha tsy miditra ny lahatsoratra {{network}}.",
+      "pageEmpty": "Voavaky ny pejy, saingy tsy misy lohateny na famaritana.",
+      "pageImage": "Sary lehibe amin'ny pejy",
+      "pageTitle": "Lohateny",
+      "pageDescription": "Famaritana",
+      "pageSite": "Tranonkala",
+      "pagePublished": "Navoaka ny",
+      "pageAuthor": "Mpanoratra",
+      "socialHelp": "Matetika no afenin'ny tambajotra sosialy amin'ny robots ny lahatsoratra. Mba hanamarinana ihany :\n1. Sary : tsindrio ela → « Tahirizo ny sary », dia ampidiro eto (na makà sarin'ny efijery).\n2. Horonantsary : tahirizo na makà sarin'ny sary fototra iray.\n3. Soratra : adikao ny soratry ny lahatsoratra dia apetaho ao amin'ny « Hanamarina ».\n4. Soraty ny anaran'ny kaonty sy ny daty namoahana ho an'ny tabilao Loharano ao amin'ny raki-tahiry.",
+      "analyseImage": "Handinika ny sarin'ity pejy ity",
+      "fetchingImage": "Maka ny sary…",
+      "analyseText": "Handinika ny soratr'ity pejy ity",
+      "imageFailed": "Tsy azo nalaina ny sarin'ny pejy."
     },
     "attach": {
       "title": "Hampiditra ao amin'ny rakitra",
@@ -385,6 +400,15 @@
       "saveConfidential": "Hitahiry ny antsipiriany tsiambaratelo",
       "linkedCases": "Rakitra mifandray",
       "noLinkedCase": "Mbola tsy misy rakitra mifandray."
+    },
+    "paste": {
+      "title": "Apetaho na ataovy eto ny votoaty",
+      "hint": "Rohy (lahatsoratra Facebook, lahatsoratra, horonantsary), adiresin'ny sary, hafatra voaray… na sary nadika (Ctrl+V). MASO no misafidy ny fandinihana mety.",
+      "placeholder": "Apetaho eto ny rohy, soratra na sary",
+      "analyse": "Handinika",
+      "fetching": "Maka ny media…",
+      "fetchFailed": "Tsy azo nalaina avy amin'ny adiresiny ity media ity (manokana, voaaro na mavesatra loatra). Tahirizo ao amin'ny fitaovana dia ampidiro.",
+      "unsupported": "Sary sy horonantsary ihany no azo apetraka eto."
     }
   },
   "verdict": {
@@ -1581,6 +1605,71 @@
         "title": "Feo mampitahotra",
         "text": "Litera lehibe na teny fanentanana miverimberina."
       }
+    }
+  },
+  "synthesis": {
+    "title": "Izay lazain'ireo famantarana",
+    "vigilance": {
+      "high": "Fitandremana avo",
+      "medium": "Fitandremana antonony",
+      "low": "Tsy misy famantarana mampitandrina",
+      "running": "Am-pandinihana",
+      "unreadable": "Votoaty tsy azo vakiana"
+    },
+    "vigilanceHint": {
+      "high": "Misy singa matotra mila fitandremana : aza zaraina raha tsy voamarina tanteraka.",
+      "medium": "Misy famantarana sasany tokony hodinihina alohan'ny hamaranana.",
+      "low": "Tsy misy famantarana mampitandrina aloha. Tsy porofo izany fa marina ny votoaty : hamarino ny niaviany.",
+      "running": "Tonga tsikelikely ny valiny : andraso ho vita ny fandinihana alohan'ny hamaranana.",
+      "unreadable": "Tsy azo novakiana ny votoaty : tsy misy azo ilazana fa mampitony izy. Makà ny sary na ny soratra mba handinihana azy."
+    },
+    "alreadyChecked_one": "Efa nohamarinin'ny haino aman-jery {{count}}",
+    "alreadyChecked_other": "Efa nohamarinin'ny haino aman-jery {{count}}",
+    "readCheck": "Hamaky ny fanamarinana",
+    "factcheckOff": "Tsy voalamina amin'ny serivisy fandinihana ny fikarohana amin'ny fanamarinana navoakan'ny haino aman-jery (Google Fact Check).",
+    "source": "loharano",
+    "running": "Am-pandinihana : mbola mameno ny fintina…",
+    "human": "Famantarana sy loharano ireo, fa tsy didy : ny mpanao gazety ihany no mamarana, rehefa avy nanamarina.",
+    "level": {
+      "alert": "Fampitandremana",
+      "caution": "Hodinihina",
+      "ok": "Mampitony",
+      "info": "Fampahalalana"
+    },
+    "finding": {
+      "seenWithVerdict": "Sary efa nohamarinina tao amin'ny MASO : « {{title}} », didy {{verdict}}.",
+      "seenInCase": "Sary efa ao amin'ny raki-tahiry MASO « {{title}} ».",
+      "metaGenerative": "Milaza fitaovana mamorona sary ny rakitra : {{software}}.",
+      "metaEditing": "Milaza rindrankajy fanovana sary ny rakitra : {{software}} (tsy voatery ho fanodikodinana ny fanovana).",
+      "metaFutureDate": "Any amin'ny ho avy ny daty nakana ny sary : diso ny famantaranandro na novaina ny metadata.",
+      "metaStripped": "Tsy misy metadata : mahazatra amin'ny sary nandalo tamin'ny Facebook na WhatsApp, tsy manaporofo na inona na inona.",
+      "metaPresent": "Fakana voalaza : {{date}}, fitaovana : {{device}}.",
+      "c2paAi": "Milaza ny taratasy fanamarinana fiaviana (C2PA) fa sary noforonina na novain'ny IA (mpamoaka : {{issuer}}).",
+      "c2paInvalid": "Misy ny taratasy fanamarinana fiaviana (C2PA) saingy tsy manan-kery : novaina taorian'ny sonia ny rakitra.",
+      "c2paValid": "Taratasy fanamarinana fiaviana (C2PA) manan-kery, navoakan'i {{issuer}}.",
+      "elaStrong": "Mampiseho faritra tena samihafa ny fandinihana ny famerenana famatrarana : mety nisy fanovana an-toerana tokony hodinihina.",
+      "elaWeak": "Fahasamihafana kely amin'ny famatrarana, mahazatra rehefa nozaraina imbetsaka.",
+      "aiHigh": "Mihevitra ny mpamantatra sary IA fa {{percent}} % ny mety ho sary noforonina (fitaovana mety diso).",
+      "aiLow": "Tsy mahita famoronana IA ny mpamantatra sary IA ({{percent}} %) ; tsy manome antoka izany.",
+      "aiUnavailable": "Tsy voalamina ny mpamantatra sary IA (fanalahidy HF_TOKEN an'ny serivisy fandinihana).",
+      "reverseReady": "Vonona ny fikarohana mivadika : sokafy Google Lens na TinEye hahitana ny famoahana voalohany ny sary.",
+      "reverseTodo": "Manaova fikarohana mivadika (Google Lens, TinEye) hahitana ny famoahana voalohany ny sary.",
+      "linkCaseVerdict": "Efa ao amin'ny raki-tahiry MASO « {{title}} » ity rohy ity, didy {{verdict}}.",
+      "linkCase": "Efa ao amin'ny raki-tahiry MASO « {{title}} » ity rohy ity.",
+      "socialBlocked": "Tsy azo vakiana raha tsy miditra ny lahatsoratra {{network}} : dinihonao ny sarin'ny efijery, ny sary na ny soratra.",
+      "socialPost": "Lahatsoratra {{network}} : mbola tsy fantatra sy tsy voatombana ny tompon'ny kaonty.",
+      "domainNew": "Vao {{days}} andro lasa monja no namoronana ny anarana {{domain}} : famantarana mahazatra an'ny tranonkala mpanararaotra.",
+      "domainOld": "Efa {{days}} andro no nisian'ny anarana {{domain}} : tsy noforonina ho an'io fotoana io.",
+      "noHttps": "Tsy mampiasa fifandraisana voaaro (HTTPS) ny tranonkala.",
+      "sourceKnown": "Loharano fantatra ao amin'ny lisitra MASO : {{name}} (mbola tsy nomena naoty).",
+      "sourceScore": "Loharano fantatra ao amin'ny lisitra MASO : {{name}}, fahatokisana {{score}}/10.",
+      "sourceUnknown": "Tsy ao amin'ny lisitry ny haino aman-jery MASO ny tranonkala {{domain}}.",
+      "pageDate": "Navoaka ny {{date}} ny pejy : ampitahao amin'ny daty lazain'ny tsaho.",
+      "archived": "Efa voatahiry ny {{date}} ny pejy (Wayback Machine) : ilaina hahitana ny endriny tany am-boalohany.",
+      "figureGap": "Tarehimarika voalaza {{raw}} raha {{official}} ho an'ny « {{indicator}} » ({{year}}) : elanelana {{percent}} %.",
+      "claimsToCheck": "Filazana mazava {{count}} tokony hohamarinina (tarehimarika, daty, toerana, olona).",
+      "videoEdited": "Fiovan-tsary {{count}} : voaboatra ny horonantsary ; hamarino ny ampahany tsirairay.",
+      "videoKeyframes": "Sary fototra {{count}} nalaina : manaova fikarohana mivadika aminy hahitana ny horonantsary tany am-boalohany."
     }
   }
 }

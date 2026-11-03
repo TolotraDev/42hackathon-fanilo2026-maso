@@ -216,7 +216,8 @@
       "hosting": "L'hébergeur indique où se trouve le serveur, pas qui publie.",
       "directory": "Le score n'évalue que la source, jamais la vérité d'une affirmation.",
       "existing": "Ne trouve que les vérifications publiées en ligne ou enregistrées dans MASO.",
-      "archive": "L'archive conserve la page telle qu'elle était : utile si elle est modifiée ou supprimée."
+      "archive": "L'archive conserve la page telle qu'elle était : utile si elle est modifiée ou supprimée.",
+      "page": "Lit la page comme un visiteur sans compte : une publication privée ou réservée aux membres n'est pas lisible, et la date affichée est celle déclarée par le site."
     },
     "video": {
       "step": {
@@ -251,7 +252,8 @@
         "hosting": "Hébergeur",
         "directory": "Annuaire des médias et sources",
         "existing": "Vérifications existantes",
-        "archive": "Archive de la page"
+        "archive": "Archive de la page",
+        "page": "Contenu de la page"
       },
       "httpsYes": "Le site accepte les connexions sécurisées (HTTPS).",
       "httpsNo": "Le site n'accepte pas les connexions sécurisées (HTTPS).",
@@ -285,7 +287,20 @@
         "invalid_host": "Adresse refusée : nom de site invalide.",
         "host_not_found": "Ce domaine n'existe pas ou est mal orthographié.",
         "too_many_redirects": "Trop de redirections : la page n'a pas pu être analysée."
-      }
+      },
+      "pageBlocked": "La publication {{network}} n'est pas lisible sans connexion.",
+      "pageEmpty": "Page lue, mais sans titre ni description.",
+      "pageImage": "Image principale de la page",
+      "pageTitle": "Titre",
+      "pageDescription": "Description",
+      "pageSite": "Site",
+      "pagePublished": "Publiée le",
+      "pageAuthor": "Auteur",
+      "socialHelp": "Les réseaux sociaux cachent souvent les publications aux robots. Pour vérifier quand même :\n1. Image : appui long → « Enregistrer l'image », puis importez-la ici (ou faites une capture d'écran).\n2. Vidéo : enregistrez-la ou faites une capture d'une image clé.\n3. Texte : copiez le texte de la publication et collez-le dans « Vérifier ».\n4. Notez le nom du compte et la date de publication pour l'onglet Sources du dossier.",
+      "analyseImage": "Analyser l'image de cette page",
+      "fetchingImage": "Téléchargement de l'image…",
+      "analyseText": "Analyser le texte de cette page",
+      "imageFailed": "L'image de la page n'a pas pu être récupérée."
     },
     "attach": {
       "title": "Ajouter au dossier",
@@ -385,6 +400,15 @@
       "saveConfidential": "Enregistrer les détails confidentiels",
       "linkedCases": "Dossiers liés",
       "noLinkedCase": "Aucun dossier lié pour l'instant."
+    },
+    "paste": {
+      "title": "Collez ou déposez un contenu",
+      "hint": "Un lien (publication Facebook, article, vidéo), l'adresse d'une image, un message reçu… ou une image copiée (Ctrl+V). MASO choisit l'analyse adaptée.",
+      "placeholder": "Collez ici un lien, un texte ou une image",
+      "analyse": "Analyser",
+      "fetching": "Téléchargement du média…",
+      "fetchFailed": "Impossible de récupérer ce média depuis son adresse (privé, protégé ou trop lourd). Enregistrez-le sur l'appareil puis importez-le.",
+      "unsupported": "Seules les images et les vidéos peuvent être déposées ici."
     }
   },
   "verdict": {
@@ -1581,6 +1605,71 @@
         "title": "Ton alarmiste",
         "text": "Majuscules ou points d’exclamation répétés."
       }
+    }
+  },
+  "synthesis": {
+    "title": "Ce que disent les indices",
+    "vigilance": {
+      "high": "Vigilance élevée",
+      "medium": "Vigilance modérée",
+      "low": "Aucun signal d'alerte",
+      "running": "Analyse en cours",
+      "unreadable": "Contenu non lisible"
+    },
+    "vigilanceHint": {
+      "high": "Des éléments sérieux invitent à la méfiance : ne partagez pas avant vérification complète.",
+      "medium": "Certains indices méritent d'être examinés avant de conclure.",
+      "low": "Aucun indice d'alerte pour l'instant. Ce n'est pas une preuve que le contenu est vrai : vérifiez son origine.",
+      "running": "Les résultats arrivent : attendez la fin de l'analyse avant de conclure.",
+      "unreadable": "Le contenu lui-même n'a pas pu être lu : rien ne permet de le juger rassurant. Récupérez son image ou son texte pour l'analyser."
+    },
+    "alreadyChecked_one": "Déjà vérifié par {{count}} média",
+    "alreadyChecked_other": "Déjà vérifié par {{count}} médias",
+    "readCheck": "Lire la vérification",
+    "factcheckOff": "Recherche dans les vérifications des médias (Google Fact Check) non configurée sur le service d'analyse.",
+    "source": "source",
+    "running": "Analyse en cours : la synthèse se complète…",
+    "human": "Ces éléments sont des indices et des sources, pas un verdict : seul un journaliste conclut, après vérification.",
+    "level": {
+      "alert": "Alerte",
+      "caution": "À examiner",
+      "ok": "Rassurant",
+      "info": "Information"
+    },
+    "finding": {
+      "seenWithVerdict": "Image déjà vérifiée dans MASO : « {{title}} », verdict {{verdict}}.",
+      "seenInCase": "Image déjà présente dans le dossier MASO « {{title}} ».",
+      "metaGenerative": "Le fichier déclare un outil de génération d'images : {{software}}.",
+      "metaEditing": "Le fichier déclare un logiciel de retouche : {{software}} (une retouche n'est pas forcément une manipulation).",
+      "metaFutureDate": "La date de prise de vue est dans le futur : horloge mal réglée ou métadonnées modifiées.",
+      "metaStripped": "Aucune métadonnée : normal pour une image passée par Facebook ou WhatsApp, cela ne prouve rien.",
+      "metaPresent": "Prise de vue déclarée : {{date}}, appareil : {{device}}.",
+      "c2paAi": "Le certificat d'origine (C2PA) indique une image générée ou modifiée par IA (émetteur : {{issuer}}).",
+      "c2paInvalid": "Le certificat d'origine (C2PA) est présent mais invalide : le fichier a été modifié après signature.",
+      "c2paValid": "Certificat d'origine (C2PA) valide, émis par {{issuer}}.",
+      "elaStrong": "L'analyse de recompression montre des zones très différentes : possible retouche locale à examiner.",
+      "elaWeak": "Légères différences de recompression, fréquentes après plusieurs partages.",
+      "aiHigh": "Le détecteur d'images IA estime à {{percent}} % la probabilité d'une image générée (outil faillible).",
+      "aiLow": "Le détecteur d'images IA ne repère pas de génération par IA ({{percent}} %) ; cela ne garantit rien.",
+      "aiUnavailable": "Détecteur d'images IA non configuré (clé HF_TOKEN du service d'analyse).",
+      "reverseReady": "Recherche inversée prête : ouvrez Google Lens ou TinEye pour retrouver la première publication de l'image.",
+      "reverseTodo": "Faites une recherche inversée (Google Lens, TinEye) pour retrouver la première publication de l'image.",
+      "linkCaseVerdict": "Ce lien est déjà dans le dossier MASO « {{title}} », verdict {{verdict}}.",
+      "linkCase": "Ce lien est déjà dans le dossier MASO « {{title}} ».",
+      "socialBlocked": "Publication {{network}} non lisible sans connexion : analysez sa capture d'écran, son image ou son texte.",
+      "socialPost": "Publication {{network}} : l'auteur du compte reste à identifier et à évaluer.",
+      "domainNew": "Le domaine {{domain}} a été créé il y a seulement {{days}} jours : signe classique d'un site opportuniste.",
+      "domainOld": "Le domaine {{domain}} existe depuis {{days}} jours : ce n'est pas un site créé pour l'occasion.",
+      "noHttps": "Le site n'utilise pas de connexion sécurisée (HTTPS).",
+      "sourceKnown": "Source connue de l'annuaire MASO : {{name}} (pas encore notée).",
+      "sourceScore": "Source connue de l'annuaire MASO : {{name}}, fiabilité {{score}}/10.",
+      "sourceUnknown": "Le site {{domain}} n'est pas dans l'annuaire des médias MASO.",
+      "pageDate": "Page publiée le {{date}} : comparez avec la date annoncée par la rumeur.",
+      "archived": "Page déjà archivée le {{date}} (Wayback Machine) : utile pour voir sa version d'origine.",
+      "figureGap": "Chiffre annoncé {{raw}} contre {{official}} pour « {{indicator}} » ({{year}}) : écart de {{percent}} %.",
+      "claimsToCheck": "{{count}} affirmation(s) précise(s) à vérifier (chiffres, dates, lieux, personnes).",
+      "videoEdited": "{{count}} changement(s) de plan : la vidéo est montée ; vérifiez chaque séquence.",
+      "videoKeyframes": "{{count}} image(s) clé(s) extraite(s) : faites leur recherche inversée pour retrouver la vidéo d'origine."
     }
   }
 }

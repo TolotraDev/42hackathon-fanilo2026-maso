@@ -1,11 +1,14 @@
 import { ArrowLeft, ExternalLink, Map as MapIcon } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import { Card, CaseStatusBadge, Textarea, VerdictBadge } from '@/components/ui'
+import { analyseApi, type FactCheckClaim } from '@/lib/analyseApi'
 import { reverseSearchLinks } from '@/lib/analysis/reverseSearch'
+import { imageFindings } from '@/lib/analysis/synthesis'
 import { AttachToCase } from './AttachToCase'
 import { FileDrop } from './FileDrop'
+import { SynthesisCard } from './SynthesisCard'
 import { takePendingMedia } from './pendingMedia'
 import { FactList, StepCard } from './StepCard'
 import { useImageAnalysis, type ImageSteps } from './useImageAnalysis'
@@ -42,7 +45,21 @@ export function ImageAnalysisPage() {
   const { t, i18n } = useTranslation()
   const [media, setMedia] = useState(() => takePendingMedia())
   const file = media?.file ?? null
-  const { steps } = useImageAnalysis(file)
+  const { steps, finished } = useImageAnalysis(file)
+  const sourceUrl = media?.sourceUrl ?? null
+  // Vérifications déjà publiées sur la même image (possible quand l'image a une adresse publique).
+  const [published, setPublished] = useState<{ url: string; claims: FactCheckClaim[]; available: boolean } | null>(null)
+  useEffect(() => {
+    if (!sourceUrl) return
+    let cancelled = false
+    analyseApi
+      .factcheckImage(sourceUrl, i18n.resolvedLanguage)
+      .then((result) => !cancelled && setPublished({ url: sourceUrl, claims: result.claims, available: result.available }))
+      .catch(() => !cancelled && setPublished({ url: sourceUrl, claims: [], available: false }))
+    return () => {
+      cancelled = true
+    }
+  }, [sourceUrl, i18n.resolvedLanguage])
   const stateSummary = useStateSummary()
   const [showMap, setShowMap] = useState(false)
   const [visual, setVisual] = useState(emptyVisualChecklist)
@@ -87,7 +104,25 @@ export function ImageAnalysisPage() {
           </Card>
         </div>
 
-        <ol className="space-y-3 lg:col-start-2 lg:row-span-2 lg:row-start-1" aria-label={t('verifier.stepsTitle')}>
+        <div className="min-w-0 space-y-3 lg:col-start-2 lg:row-span-2 lg:row-start-1">
+        {!rejected && (
+          <SynthesisCard
+            running={!finished}
+            claims={published?.url === sourceUrl ? published?.claims : []}
+            factcheckAvailable={!sourceUrl || published?.available !== false}
+            findings={imageFindings({
+              matches: matches.map((match) => ({ case_title: match.case_title, verdict: match.verdict, exact: match.exact })),
+              metadata: meta
+                ? { finding: meta.finding, software: meta.software, takenAt: meta.takenAt && formatDate(meta.takenAt), device: [meta.make, meta.model].filter(Boolean).join(' ') }
+                : undefined,
+              provenance: provenance?.available ? provenance : undefined,
+              elaClue: steps.recompression.clue,
+              ai: steps.ai_clue.state === 'done' ? steps.ai_clue.data : steps.ai_clue.state === 'unavailable' ? { available: false } : undefined,
+              sourceUrl,
+            })}
+          />
+        )}
+        <ol className="space-y-3" aria-label={t('verifier.stepsTitle')}>
           <li>
             <StepCard
               index={1}
@@ -311,6 +346,7 @@ export function ImageAnalysisPage() {
             </>
           )}
         </ol>
+        </div>
 
         <div className="space-y-4 lg:col-start-1 lg:row-start-2">
           {!rejected && steps.reception.state === 'done' && (

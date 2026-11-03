@@ -29,6 +29,10 @@ interface HealthResult {
 }
 
 async function call<T>(path: string, init: RequestInit = {}, timeoutMs = 30000): Promise<T> {
+  return (await request(path, init, timeoutMs)).json() as Promise<T>
+}
+
+async function request(path: string, init: RequestInit, timeoutMs: number): Promise<Response> {
   if (!BASE) throw new ServiceError('not_configured')
   if (typeof navigator !== 'undefined' && !navigator.onLine) throw new ServiceError('offline')
   if (Date.now() < unreachableUntil) throw new ServiceError('unreachable')
@@ -45,7 +49,7 @@ async function call<T>(path: string, init: RequestInit = {}, timeoutMs = 30000):
     const body = (await response.json().catch(() => null)) as { detail?: string } | null
     throw new ServiceError('rejected', body?.detail ?? String(response.status))
   }
-  return (await response.json()) as T
+  return response
 }
 
 const upload = (file: Blob, name = 'media') => {
@@ -97,6 +101,24 @@ export interface LinkResult {
   hosting: Attempt<{ available: boolean; ip: string; network?: string | null; organization?: string | null; country?: string | null }>
   archive: Attempt<{ archived: boolean; archive_url?: string; timestamp?: string }>
   tools: Record<'domain' | 'hosting' | 'archive', string>
+}
+
+/** Aperçu d'une page web (balises Open Graph). Une publication de réseau social peut être « bloquée » (connexion exigée). */
+export interface PageResult {
+  available: boolean
+  status?: number
+  final_url?: string
+  social: string | null
+  blocked: boolean
+  title?: string | null
+  description?: string | null
+  image?: string | null
+  video?: string | null
+  site_name?: string | null
+  published_at?: string | null
+  author?: string | null
+  error?: string
+  tool?: string
 }
 
 export interface FactCheckClaim {
@@ -164,6 +186,15 @@ export const analyseApi = {
     ),
   assist: (request: AssistRequest) => call<AssistResult>('/ai/assist', postJson(request), 70000),
   feeds: (urls: string[]) => call<{ items: FeedItem[]; errors: Array<{ url: string; error: string }> }>('/veille/rss', postJson({ urls }), 60000),
+  page: (url: string) => call<PageResult>('/link/page', postJson({ url }), 20000),
+  /** Télécharge une image ou une vidéo publique par son adresse (le navigateur ne le peut pas : CORS). */
+  fetchMedia: async (url: string, kind: 'image' | 'video'): Promise<File> => {
+    const blob = await (await request('/media/fetch', postJson({ url, kind }), kind === 'video' ? 120000 : 45000)).blob()
+    const name = decodeURIComponent(new URL(url).pathname.split('/').pop() || kind).slice(0, 80)
+    return new File([blob], name, { type: blob.type })
+  },
+  factcheckImage: (url: string, language?: string) =>
+    call<{ available: boolean; claims: FactCheckClaim[] }>(`/factcheck/image?${new URLSearchParams({ url, ...(language ? { language } : {}) })}`),
   factcheck: (query: string, language?: string) =>
     call<{ available: boolean; claims: FactCheckClaim[] }>(
       `/factcheck?${new URLSearchParams({ query, ...(language ? { language } : {}) })}`,

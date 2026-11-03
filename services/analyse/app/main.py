@@ -7,18 +7,19 @@ Chaque réponse est un ensemble de faits et d'indices ; aucun verdict n'est jama
 import shutil
 
 import httpx
-from fastapi import Depends, FastAPI, File, HTTPException, Query, Request, UploadFile
+from fastapi import Depends, FastAPI, File, HTTPException, Query, Request, Response, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
 from . import __version__
 from .assistant import FORMATS, FUNCTIONS, LANGUAGES, run_assistant
 from .config import settings
-from .factcheck import search_claims
+from .factcheck import search_claims, search_image
 from .image import ai_clue, read_provenance
 from .link import analyse_link, normalize_url, request_archive
 from .llm import LLMError, configured_provider, provider_ready
 from .netguard import UnsafeUrlError, check_url, new_client
+from .page import MediaTooLarge, fetch_media, read_page
 from .ratelimit import RateLimiter
 from .sniff import sniff_mime
 from .veille import read_feeds
@@ -101,6 +102,7 @@ def health() -> dict:
             "link": True,
             "assistant": provider_ready(configured_provider()),
             "veille": True,
+            "page": True,
             "ffmpeg_cli": shutil.which("ffmpeg") is not None,
         },
     }
@@ -162,6 +164,64 @@ def factcheck(
         return search_claims(client, settings.factcheck_api_key, query, language)
     except httpx.HTTPError:
         return {"available": False, "claims": [], "error": "factcheck_unreachable"}
+
+
+@app.get("/factcheck/image", dependencies=[Depends(rate_limited)])
+def factcheck_image(
+    url: str = Query(min_length=10, max_length=2048),
+    language: str | None = Query(default=None, pattern="^(fr|mg|en)$"),
+    client: httpx.Client = Depends(http_client),
+) -> dict:
+    try:
+        check_url(normalize_url(url))
+        return search_image(client, settings.factcheck_api_key, url, language)
+    except UnsafeUrlError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+    except httpx.HTTPError:
+        return {"available": False, "claims": [], "error": "factcheck_unreachable"}
+
+
+@app.post("/link/page", dependencies=[Depends(rate_limited)])
+def link_page(body: LinkRequest) -> dict:
+    """Titre, description, image et date d'une page publique (aperçu Open Graph)."""
+    try:
+        url = normalize_url(body.url)
+        check_url(url)
+    except UnsafeUrlError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+    with new_client(timeout=15) as client:
+        try:
+            return {"tool": "Lecture de la page (Open Graph)", **read_page(client, url)}
+        except UnsafeUrlError as error:
+            raise HTTPException(status_code=422, detail=str(error)) from error
+
+
+class MediaRequest(BaseModel):
+    url: str = Field(min_length=10, max_length=2048)
+    kind: str = Field(default="image", pattern="^(image|video)$")
+
+
+@app.post("/media/fetch", dependencies=[Depends(rate_limited)])
+def media_fetch(body: MediaRequest) -> Response:
+    """Récupère une image ou une vidéo publique par son adresse, pour l'analyser comme un fichier envoyé."""
+    try:
+        url = normalize_url(body.url)
+        check_url(url)
+    except UnsafeUrlError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+    with new_client(timeout=60) as client:
+        try:
+            data, _ = fetch_media(client, url, body.kind)
+        except UnsafeUrlError as error:
+            raise HTTPException(status_code=422, detail=str(error)) from error
+        except MediaTooLarge as error:
+            raise HTTPException(status_code=413, detail="file_too_large") from error
+        except httpx.HTTPError as error:
+            raise HTTPException(status_code=502, detail="media_unreachable") from error
+    mime = sniff_mime(data[:32])
+    if not mime or not mime.startswith(f"{body.kind}/"):
+        raise HTTPException(status_code=415, detail="unsupported_file_type")
+    return Response(content=data, media_type=mime, headers={"Cache-Control": "no-store"})
 
 
 @app.post("/ai/assist", dependencies=[Depends(rate_limited)])
