@@ -139,3 +139,65 @@ body {
     transition: none !important;
   }
 }
+
+/* ─── Veille : lignes du flux ─────────────────────────── */
+@keyframes veille-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.veille-in {
+  animation: veille-in 0.3s ease-out both;
+  animation-delay: calc(var(--i, 0) * 35ms);
+}
+
+.veille-row {
+  transition: background-color 0.18s ease-out, padding-left 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.veille-row:hover {
+  background-color: rgb(var(--cobalt) / 0.03);
+  padding-left: 6px;
+}
+
+.veille-dot {
+  position: relative;
+}
+.veille-dot::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 9999px;
+  background: currentColor;
+  opacity: 0.15;
+  transition: opacity 0.2s ease-out;
+}
+.veille-row:hover .veille-dot::after {
+  opacity: 0.3;
+}
+
+/* ─── Veille : chips de filtre ────────────────────────── */
+.veille-chip {
+  transition: background-color 0.18s ease-out, color 0.18s ease-out,
+              border-color 0.18s ease-out, transform 0.12s ease-out;
+}
+.veille-chip:active {
+  transform: scale(0.97);
+}
+
+/* ─── Veille : barres du résumé ───────────────────────── */
+.veille-bar {
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  transform-origin: left center;
+}
+
+/* ─── Veille : apparition en cascade (réutilise dashboard-rise) ─── */
+/* (rien à ajouter : on utilise dashboard-rise / dashboard-fade déjà définis) */
+
+@media (prefers-reduced-motion: reduce) {
+  .veille-in { animation: none !important; }
+  .veille-row,
+  .veille-row:hover,
+  .veille-chip,
+  .veille-chip:active,
+  .veille-bar { transition: none !important; transform: none !important; }
+  .veille-dot::after { transition: none !important; }
+}
