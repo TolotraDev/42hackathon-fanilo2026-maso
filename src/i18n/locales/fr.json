@@ -344,10 +344,10 @@
         "corroboration": "Ses informations sont-elles confirmées par d'autres sources ?"
       },
       "scoreLabel": {
-        "none": "Non évalué",
         "0": "Défavorable",
         "1": "Partiel",
-        "2": "Favorable"
+        "2": "Favorable",
+        "none": "Non évalué"
       },
       "justification": "Justification (obligatoire)",
       "missingJustification": "Chaque critère évalué doit être justifié.",
@@ -1168,7 +1168,10 @@
     "subtitle": "Rumeurs, images et chiffres vérifiés par les rédactions malgaches. Vous avez vu passer un contenu douteux ? Signalez-le, sans compte.",
     "cta": {
       "submit": "Signaler un contenu",
-      "alreadyChecked": "Déjà vérifié ? Tester une image ou un lien"
+      "alreadyChecked": "Déjà vérifié ? Tester une image ou un lien",
+      "submitHint": "Sans compte, en une minute",
+      "checkTitle": "Déjà vérifié ?",
+      "checkHint": "Testez une image ou un lien"
     },
     "filter": {
       "query": "Mot-clé",
@@ -1308,6 +1311,35 @@
       "invalid_file": "Fichier non accepté (JPEG, PNG ou WebP, 5 Mo au maximum).",
       "rate_limited": "Trop de signalements envoyés depuis cette connexion. Réessayez dans une heure.",
       "upload_failed": "Le signalement est enregistré, mais l'image n'a pas pu être envoyée."
-    }
+    },
+    "space": "Espace public",
+    "kicker": "Vérifié par des journalistes",
+    "heroTitle": "Ne partagez que ce qui est vrai.",
+    "heroSubtitle": "Rumeurs, images et chiffres vérifiés par les rédactions malgaches. Cherchez une vérification ou signalez un contenu douteux, sans compte.",
+    "staffShort": "Rédaction",
+    "filters": "Filtres",
+    "quick": {
+      "title": "Que voulez-vous faire ?",
+      "submit": "Envoyez une image, un lien ou un message suspect.",
+      "track": "Suivez votre signalement avec son code.",
+      "verify": "Contrôlez l’authenticité d’un rapport par QR."
+    },
+    "readReport": "Lire le rapport",
+    "how": {
+      "title": "Comment ça marche",
+      "report": {
+        "title": "Vous signalez",
+        "text": "Une image, un lien ou un message douteux, sans compte."
+      },
+      "check": {
+        "title": "Des journalistes vérifient",
+        "text": "Preuves, sources et contacts, relus par un rédacteur en chef."
+      },
+      "publish": {
+        "title": "Le rapport est publié",
+        "text": "Signé, partageable et vérifiable par QR code."
+      }
+    },
+    "quickVerdicts": "Accès rapide :"
   }
 }

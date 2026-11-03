@@ -1,4 +1,4 @@
-import { CircleAlert, Copy, MessageCircle, Share2 } from 'lucide-react'
+import { ChevronRight, CircleAlert, Copy, MessageCircle, Share2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
@@ -20,19 +20,25 @@ export function ReportCardView({ card, to }: { card: ReportCard; to?: string }) 
   const { t } = useTranslation()
   const formatDate = useFormatDate()
   return (
-    <Link to={to ?? `/portail/rapports/${card.public_id}`} className="block rounded-2xl focus-visible:outline-2 focus-visible:outline-cobalt">
-      <Card className="h-full space-y-2 p-4 transition hover:border-cobalt">
+    <Link to={to ?? `/portail/rapports/${card.public_id}`} className="group block h-full rounded-2xl focus-visible:outline-2 focus-visible:outline-cobalt">
+      <Card className="flex h-full flex-col gap-2 p-4 transition duration-300 group-hover:-translate-y-0.5 group-hover:border-cobalt group-hover:shadow-[0_14px_28px_rgba(10,47,79,0.12)] dark:border-white/10 dark:bg-[#0F2C46]">
         <div className="flex flex-wrap items-center gap-1.5">
           <VerdictBadge verdict={card.verdict} />
           {card.reason && <Badge tone="info">{t(`portail.reason.${card.reason}`)}</Badge>}
           {card.corrected && <Badge>{t('portail.corrected')}</Badge>}
         </div>
-        <h3 className="font-display text-base font-bold leading-snug text-navy dark:text-ink">{card.title}</h3>
-        {card.claim && <p className="line-clamp-2 text-sm italic text-ink-muted">« {card.claim} »</p>}
-        <p className="line-clamp-3 text-sm text-ink">{card.summary}</p>
-        <p className="text-xs text-ink-muted">
-          {[formatDate(card.published_at), card.newsroom, card.region, card.theme].filter(Boolean).join(' · ')} · {card.public_id}
-        </p>
+        <h3 className="font-display text-base font-bold leading-snug text-navy dark:text-white">{card.title}</h3>
+        {card.claim && <p className="line-clamp-2 border-l-2 border-cobalt/40 pl-2 text-sm italic text-ink-muted dark:text-white/65">« {card.claim} »</p>}
+        <p className="line-clamp-3 text-sm text-ink dark:text-white/85">{card.summary}</p>
+        <div className="mt-auto flex items-end justify-between gap-2 border-t border-line pt-2 dark:border-white/10">
+          <p className="min-w-0 text-xs text-ink-muted dark:text-white/55">
+            {[formatDate(card.published_at), card.newsroom, card.region, card.theme].filter(Boolean).join(' · ')} · {card.public_id}
+          </p>
+          <span className="inline-flex shrink-0 items-center gap-0.5 text-xs font-semibold text-cobalt">
+            {t('portail.readReport')}
+            <ChevronRight className="size-3.5 transition group-hover:translate-x-0.5" aria-hidden />
+          </span>
+        </div>
       </Card>
     </Link>
   )

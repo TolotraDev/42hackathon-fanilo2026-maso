@@ -344,10 +344,10 @@
         "corroboration": "Hamafisin'ny loharano hafa ve ny vaovaony ?"
       },
       "scoreLabel": {
-        "none": "Tsy notombanana",
         "0": "Ratsy",
         "1": "Ampahany",
-        "2": "Tsara"
+        "2": "Tsara",
+        "none": "Tsy notombanana"
       },
       "justification": "Fanazavana (tsy maintsy atao)",
       "missingJustification": "Tsy maintsy hazavaina ny fepetra rehetra notombanana.",
@@ -1168,7 +1168,10 @@
     "subtitle": "Tsaho, sary ary tarehimarika nohamarinin'ny tranom-pifandraisana malagasy. Nahita zavatra mampiahiahy ianao ? Tatitrao, tsy mila kaonty.",
     "cta": {
       "submit": "Hitatitra votoaty",
-      "alreadyChecked": "Efa voamarina ve ? Andramo amin'ny sary na rohy"
+      "alreadyChecked": "Efa voamarina ve ? Andramo amin'ny sary na rohy",
+      "submitHint": "Tsy mila kaonty, iray minitra",
+      "checkTitle": "Efa voamarina ve ?",
+      "checkHint": "Andramo amin’ny sary na rohy"
     },
     "filter": {
       "query": "Teny fanalahidy",
@@ -1308,6 +1311,35 @@
       "invalid_file": "Rakitra tsy ekena (JPEG, PNG na WebP, 5 Mo farafahabetsany).",
       "rate_limited": "Be loatra ny tatitra nalefa avy amin'ity fifandraisana ity. Andramo indray afaka adiny iray.",
       "upload_failed": "Voatahiry ny tatitra, saingy tsy lasa ny sary."
-    }
+    },
+    "space": "Toerana ho an’ny besinimaro",
+    "kicker": "Nohamarinin’ny mpanao gazety",
+    "heroTitle": "Izay marina ihany no zarao.",
+    "heroSubtitle": "Tsaho, sary ary isa nohamarinin’ny tranon-gazety malagasy. Mitadiava fanamarinana na tatero ny votoaty mampiahiahy, tsy mila kaonty.",
+    "staffShort": "Mpanoratra",
+    "filters": "Sivana",
+    "quick": {
+      "title": "Inona no tianao hatao ?",
+      "submit": "Alefaso ny sary, rohy na hafatra mampiahiahy.",
+      "track": "Arahio amin’ny kaodiny ny tatitrao.",
+      "verify": "Hamarino amin’ny QR ny maha-tena izy ny tatitra."
+    },
+    "readReport": "Hamaky ny tatitra",
+    "how": {
+      "title": "Ahoana no fiasany",
+      "report": {
+        "title": "Mitatitra ianao",
+        "text": "Sary, rohy na hafatra mampiahiahy, tsy mila kaonty."
+      },
+      "check": {
+        "title": "Manamarina ny mpanao gazety",
+        "text": "Porofo, loharano ary fifandraisana, hamarinin’ny tonian-dahatsoratra."
+      },
+      "publish": {
+        "title": "Navoaka ny tatitra",
+        "text": "Voasonia, azo zaraina ary azo hamarinina amin’ny QR."
+      }
+    },
+    "quickVerdicts": "Fidirana haingana :"
   }
 }
