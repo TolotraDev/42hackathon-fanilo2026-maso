@@ -201,3 +201,30 @@ body {
   .veille-bar { transition: none !important; transform: none !important; }
   .veille-dot::after { transition: none !important; }
 }
+
+/* --- Barre de défilement personnalisée (Scrollbar) --- */
+.custom-scrollbar::-webkit-scrollbar {
+  height: 8px; /* Hauteur de la barre horizontale */
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent; /* Fond transparent pour s'intégrer */
+  border-radius: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgb(var(--line)); /* Gris de ta charte par défaut */
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgb(var(--cobalt) / 0.6); /* Bleu Cobalt transparent au survol */
+}
+
+/* Pour Firefox */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(var(--line)) transparent;
+}
