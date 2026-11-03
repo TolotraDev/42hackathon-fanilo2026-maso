@@ -62,10 +62,21 @@ export async function getSetting<K extends SettingKey>(key: K): Promise<AppSetti
       return DEFAULT_SETTINGS[key]
     }
   }
-  const { data, error } = await supabase.from('app_settings').select('value').eq('key', key).maybeSingle()
-  // Table absente (migration pas encore appliquée) ou pas de valeur : valeurs par défaut.
-  if (error || !data) return DEFAULT_SETTINGS[key]
-  return data.value as AppSettings[K]
+  const stored = await loadRemote()
+  return (stored[key] as AppSettings[K] | undefined) ?? DEFAULT_SETTINGS[key]
+}
+
+// Tous les paramètres en une requête, gardés pour la session : les écrans ne réinterrogent pas le serveur.
+// Table absente (migration pas encore appliquée) ou illisible : valeurs par défaut, sans nouvelle requête.
+let remoteSettings: Promise<Partial<AppSettings>> | null = null
+
+function loadRemote(): Promise<Partial<AppSettings>> {
+  remoteSettings ??= (async () => {
+    const { data, error } = await supabase!.from('app_settings').select('key, value')
+    if (error) return {}
+    return Object.fromEntries((data ?? []).map((row) => [row.key, row.value])) as Partial<AppSettings>
+  })()
+  return remoteSettings
 }
 
 export async function setSetting<K extends SettingKey>(key: K, value: AppSettings[K]): Promise<void> {
@@ -75,6 +86,7 @@ export async function setSetting<K extends SettingKey>(key: K, value: AppSetting
   }
   const { error } = await supabase.from('app_settings').upsert({ key, value })
   if (error) throw error
+  remoteSettings = null
 }
 
 /** Remplit un modèle sans IA avec les éléments du dossier. */

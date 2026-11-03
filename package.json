@@ -13,9 +13,9 @@
     "db:start": "npx supabase start",
     "db:reset": "npx supabase db reset",
     "test:db": "npx supabase test db",
-    "service:install": "cd services/analyse && python3 -m venv .venv && .venv/bin/pip install -r requirements-dev.txt",
-    "service:dev": "cd services/analyse && .venv/bin/uvicorn app.main:app --reload --port 8000",
-    "service:test": "cd services/analyse && .venv/bin/python -m pytest -q"
+    "service:install": "node scripts/service.mjs install",
+    "service:dev": "node scripts/service.mjs dev",
+    "service:test": "node scripts/service.mjs test"
   },
   "dependencies": {
     "@fontsource/inter": "^5.3.0",
