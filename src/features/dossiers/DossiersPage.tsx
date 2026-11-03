@@ -52,16 +52,20 @@ function CaseCard({ item, compact = false }: { item: CaseRecord; compact?: boole
     <button
       type="button"
       onClick={() => navigate(`/dossiers/${item.id}`)}
-      className="block w-full text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cobalt rounded-xl"
+      className="block h-full w-full text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cobalt rounded-xl"
     >
       <Card
         className={cn(
-          'space-y-2.5 border-l-4 p-3.5 transition-all duration-200 hover:border-cobalt hover:shadow-sm',
+          // h-full et flex flex-col pour forcer l'étirement de la carte
+          'flex h-full flex-col space-y-2.5 border-l-4 p-3.5 transition-all duration-200 hover:border-cobalt hover:shadow-sm',
           TONE_BORDERS[CASE_STATUS_TONES[item.status]],
         )}
       >
         <div className="flex items-start justify-between gap-2">
-          <h3 className="text-sm font-semibold leading-snug text-ink">{item.title}</h3>
+          {/* line-clamp-2 empêche le titre de prendre plus de 2 lignes */}
+          <h3 className="line-clamp-2 text-sm font-semibold leading-snug text-ink">
+            {item.title}
+          </h3>
           {!compact && <CaseStatusBadge status={item.status} />}
         </div>
         {item.checklistTotal > 0 && (
@@ -80,7 +84,9 @@ function CaseCard({ item, compact = false }: { item: CaseRecord; compact?: boole
             />
           </div>
         )}
-        <div className="flex flex-wrap items-center gap-1.5 text-[11px] text-ink-muted">
+        
+        {/* mt-auto pousse le pied de carte tout en bas */}
+        <div className="mt-auto flex flex-wrap items-center gap-1.5 pt-2 text-[11px] text-ink-muted">
           <Badge
             tone={
               item.priority === 1 ? 'danger' : item.priority === 2 ? 'warning' : 'neutral'
@@ -268,9 +274,9 @@ export function DossiersPage() {
         </div>
       </div>
 
-      {/* Filtres */}
+      {/* Filtres (sans bordure supérieure) */}
       <Card
-        className="dashboard-rise grid grid-cols-2 gap-2 border-t-4 border-t-white/20 p-3 shadow-sm sm:grid-cols-4"
+        className="dashboard-rise grid grid-cols-2 gap-2 p-3 shadow-sm sm:grid-cols-4"
         style={{ '--i': 4 } as CSSProperties}
       >
         <Input
@@ -344,17 +350,20 @@ export function DossiersPage() {
             ]}
             className="lg:max-w-sm"
           />
-          <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
+          
+          {/* items-stretch et h-full pour l'uniformité */}
+          <div className="grid grid-cols-1 items-stretch gap-3 md:grid-cols-2 xl:grid-cols-3">
             {listed.map((item, index) => (
               <div
                 key={item.id}
-                className="dashboard-rise"
+                className="dashboard-rise h-full"
                 style={{ '--i': Math.min(index + 5, 12) } as CSSProperties}
               >
                 <CaseCard item={item} />
               </div>
             ))}
           </div>
+          
           {listed.length === 0 && (
             <p className="dashboard-fade py-10 text-center text-sm text-ink-muted">
               {t('common.noResult')}
