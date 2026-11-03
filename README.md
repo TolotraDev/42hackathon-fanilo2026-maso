@@ -4,6 +4,28 @@
 
 Hackathon FANILO 2026 · 42 Antananarivo · Dépôt `42hackathon-fanilo2026-maso`
 
+## Liens
+
+| | |
+|---|---|
+| Dépôt GitHub | https://github.com/TolotraDev/42hackathon-fanilo2026-maso (branche `main`) |
+| Application en ligne (PWA + web) | https://42hackathon-fanilo2026-maso.vercel.app |
+| API du service d'analyse | https://maso-analyse-ixf4.onrender.com/health |
+| Guide complet pas à pas | [docs/GUIDE_COMPLET.md](docs/GUIDE_COMPLET.md) |
+| Cahier des charges | [docs/CAHIER_DES_CHARGES.md](docs/CAHIER_DES_CHARGES.md) |
+
+## État d'avancement
+
+**Prototype fonctionnel, déployé et démontrable.** Les 8 modules prévus sont réalisés et testés (tests automatiques front, service et base de données, parcours complet testé dans un navigateur).
+
+| Fonctionne | Partiel | Pas encore fait |
+|---|---|---|
+| Analyse image, lien, texte, vidéo avec indices sourcés | Lecture des publications Facebook / Instagram privées : le journaliste colle le texte ou dépose la capture | Chiffrement des sources confidentielles (Supabase Vault) |
+| Circuit journaliste → fact-checker → rédacteur en chef → publication signée | Indice IA : modèle faillible sur images très compressées | Notifications push quand l'application est fermée |
+| Portail public, signalement sans compte, vérification QR | Invitation par e-mail : limitée par le service d'envoi de Supabase (quelques e-mails par heure sans SMTP propre) | Relecture native des traductions malgaches |
+| Mode hors connexion (dossiers, annuaire, statistiques) | Aperçu de partage Facebook / WhatsApp générique (pas de rendu serveur) | |
+| Installation sur téléphone (PWA), FR / MG / EN | | |
+
 ## Problème & solution
 
 **Problème.** Photos anciennes présentées comme récentes, vidéos d'un autre pays, chiffres truqués, contenus générés par IA : à Madagascar, ces contenus circulent sur Facebook, WhatsApp et TikTok, en malgache et en français. Les journalistes ont des outils dispersés et en anglais, peu d'accès aux experts et aux chiffres officiels, une connexion instable et aucune traçabilité de leurs vérifications.
@@ -69,6 +91,12 @@ Avancement par module : voir [docs/MODULES.md](docs/MODULES.md#avancement).
   - **Modèles sans IA** par format et par langue (remplis avec l'affirmation, le titre et le verdict du dossier) et **glossaire FR / MG / EN**
   - **Analyse de texte** (M6), sur l'appareil et hors ligne : affirmations vérifiables (chiffres, dates, lieux, personnes, citations), signaux de manipulation (urgence, appel au partage, absence de source, chiffres non sourcés, ton alarmiste), **rapprochement des chiffres avec les statistiques officielles**, vérifications existantes, ajout au dossier
   - **Veille** (M2 / W3) : signalements du public et **flux RSS** réels (lus par le serveur, protégé contre les adresses internes et le XML malveillant), **niveaux par règles de mots-clés**, regroupement des rumeurs en tendances, **carte des régions** (Leaflet), filtres, *Prendre en charge* qui crée le dossier pré-rempli, 50 dernières alertes consultables hors ligne
+- [x] Après les modules — circuit de vérification complet
+  - **Mettre en analyse** : chaque preuve (image, lien) et l'affirmation du dossier sont analysées automatiquement ; le journaliste **valide** le rapport (enregistré comme preuve) ou l'**exporte en PDF**
+  - **Fact-checker** : vérifie le rapport, l'**envoie au rédacteur en chef** avec son verdict et sa note, ou le **renvoie au journaliste** avec un motif (« À refaire »)
+  - **Rédacteur en chef** : rapport public **proposé automatiquement** (modifiable), publication signée ; la page publique indique le rédacteur en chef qui l'a publiée
+  - **Photos, vidéos et liens vérifiés montrés au public**, obligatoires pour publier ; les autres preuves restent privées
+  - Invitation d'une personne de l'annuaire depuis sa fiche ; bouton d'installation de l'application fonctionnel sur tous les appareils
 - [x] MOD-08 — Profil, badge QR, paramètres, audit, tests et livraison
   - **Profil** (M14) : langue, thème, **mode économie de données**, **packs hors ligne** (annuaire, statistiques, sources), **notifications sur l'appareil**, **code PIN** (empreinte PBKDF2 sur l'appareil, verrouillage au lancement et après 5 min en arrière-plan), déconnexion
   - **Badge de presse avec QR** : émis et révoqué par l'administration (W12), affiché dans le profil, **vérifiable par le public** sur le portail (valide, révoqué, expiré, compte suspendu)
@@ -80,6 +108,13 @@ React · TypeScript · Vite · Tailwind CSS · vite-plugin-pwa · react-i18next 
 Supabase : PostgreSQL, Auth, RLS, Storage, Edge Functions (Deno) · tests pgTAP
 Analyses : exifr, Web Crypto, Canvas (navigateur) · Recharts · API Banque mondiale · service Python FastAPI : c2pa-python, PyAV (FFmpeg), RDAP, Wayback Machine, Google Fact Check
 Hors connexion : Dexie (IndexedDB), service worker Workbox · Export : jsPDF.
+
+**Choix techniques, en bref :**
+- **PWA** plutôt qu'une application native : une seule base de code pour le téléphone et le web, installable sans magasin d'applications, utilisable hors connexion.
+- **Supabase** : PostgreSQL avec droits appliqués **par la base** (RLS, fonctions contrôlées) — les règles métier (personne ne valide son propre travail, seul le rédacteur en chef publie) ne peuvent pas être contournées par l'interface.
+- **Service Python séparé** (FastAPI) pour ce qui ne peut pas tourner dans le navigateur : provenance C2PA, vidéo, lecture de liens (protégée contre les adresses internes), détecteur d'images IA local (ONNX, sans clé ni crédit).
+- **Analyses dans le navigateur** quand c'est possible (empreintes, métadonnées, recompression) : elles marchent hors ligne et l'image ne quitte pas l'appareil.
+- **IA encadrée** : elle ne rend jamais de verdict ; l'assistant ne garde que les phrases appuyées sur les extraits du dossier (contrôle « zéro invention » côté serveur).
 
 ## Installation & lancement
 
